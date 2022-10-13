@@ -19,5 +19,5 @@ npm run package
 curl -L https://raw.githubusercontent.com/fumikito/wp-readme/master/wp-readme.php | php
 
 # Change version string.
-sed -i.bak "s/Version: .*/Version: ${VERSION}/g" ./tarosky-sitemap.php
+sed -i.bak "s/Version: .*/Version: ${VERSION}/g" ./taro-sitemap.php
 sed -i.bak "s/^Stable Tag: .*/Stable Tag: ${VERSION}/g" ./readme.txt

@@ -58,6 +58,7 @@ class Setting extends Singleton {
 				// Description.
 				echo wp_kses_post( sprintf(
 					// translators: %1$s is URL, %2$s is robotx.txt url.
+
 					__( 'The sitemap URL are listed below. You should register these URLs at <a href="%1$s" target="_blank" rel="noopener noreferrer">Google Search Console</a>. They also appear in <a href="%2$s">robots.txt</a>.', 'tsmap' ),
 					'https://search.google.com/search-console',
 					home_url( 'robots.txt' )
