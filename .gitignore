@@ -1,0 +1,8 @@
+/vendor/
+composer.lock
+/wordpress/
+package-lock.json
+wp-dependencies.json
+/dist/
+/node_modules/
+/.idea/

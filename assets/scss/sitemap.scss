@@ -1,0 +1,85 @@
+/*!
+ * Sitemap stylesheet
+ *
+ * @handle tsmap-sitemap
+ */
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.sitemap {
+	margin: 40px auto 40px;
+	padding: 40px;
+	max-width: 700px;
+	border: 1px solid #eee;
+	border-radius: 2px;
+
+	&-header {
+		background-color: #fefefe;
+		padding: 0 0 20px;
+		text-align: center;
+		border-bottom: 1px solid #eee;
+
+		h1 {
+			margin: 0;
+		}
+	}
+
+	&-toc {
+		padding: 0;
+	}
+
+	&-item {
+		padding: 20px 0;
+		border-bottom: 1px solid #eee;
+		list-style-position: inside;
+		word-break: break-all;
+		word-wrap: break-word;
+
+		&::after {
+			content: "";
+			display: block;
+			clear: both;
+			height: 0;
+		}
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	&-lastmod {
+		display: block;
+		margin: 10px 0;
+		font-size: 0.8em;
+		font-family: monospace;
+		color: #666;
+	}
+
+	a:link {
+		text-decoration: underline;
+		color: #06c;
+	}
+	a:visited {
+		text-decoration: underline;
+		color: #a990e2;
+	}
+
+	a:hover,
+	a:active {
+		text-decoration: none;
+		color: #70a3d5;
+	}
+
+	&-image {
+		width: auto;
+		height: auto;
+		margin: 0 10px 10px 0;
+		max-width: 120px;
+		display: block;
+		float: left;
+	}
+}
