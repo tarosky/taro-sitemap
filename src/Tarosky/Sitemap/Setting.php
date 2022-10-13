@@ -53,13 +53,20 @@ class Setting extends Singleton {
 			</form>
 			<hr style="margin: 40px 0;" />
 			<h2><?php esc_html_e( 'Sitemap URL', 'tsmap' ); ?></h2>
-			<?php echo wp_kses_post( sprintf(
-				// translators: %1$s is URL, %2$s is robotx.txt url.
-				__( '<p>The sitemap URL are listed below. You should register these URLs at <a href="%1$s" target="_blank" rel="noopener noreferrer">Google Search Console</a>. They also appear in <a href="%2$s">robots.txt</a>.</p>', 'tsmap' ),
-				'https://search.google.com/search-console',
-				home_url( 'robots.txt' )
-			) ); ?>
+			<p>
+				<?php
+				// Description.
+				echo wp_kses_post( sprintf(
+					// translators: %1$s is URL, %2$s is robotx.txt url.
+					__( 'The sitemap URL are listed below. You should register these URLs at <a href="%1$s" target="_blank" rel="noopener noreferrer">Google Search Console</a>. They also appear in <a href="%2$s">robots.txt</a>.', 'tsmap' ),
+					'https://search.google.com/search-console',
+					home_url( 'robots.txt' )
+				) );
+				?>
+			</p>
+
 			<?php
+			// Display URL.
 			$urls = Registry::get_registered_sitemap_urls();
 			if ( empty( $urls ) ) {
 				printf(
