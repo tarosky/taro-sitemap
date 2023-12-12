@@ -30,7 +30,7 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 		global $wpdb;
 		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
 		$where_clause = apply_filters( 'taro_sitemap_attachment_query_where', '' );
-		$query = <<<SQL
+		$query        = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from p1.post_date ) as date,
 			    COUNT( p1.ID ) AS total
@@ -44,7 +44,7 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 			  {$where_clause}
 			GROUP BY EXTRACT( YEAR_MONTH from p1.post_date )
 SQL;
-		$urls  = [];
+		$urls         = [];
 		// Already escaped.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $wpdb->get_results( $query ) as $row ) {
