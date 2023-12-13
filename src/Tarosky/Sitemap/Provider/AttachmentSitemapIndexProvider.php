@@ -28,19 +28,23 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 	 */
 	protected function get_urls() {
 		global $wpdb;
-		$query = <<<SQL
+		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
+		$where_clause = apply_filters( 'taro_sitemap_attachment_query_where', '' );
+		$query        = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from p1.post_date ) as date,
 			    COUNT( p1.ID ) AS total
 			FROM {$wpdb->posts} AS p1
 			LEFT JOIN {$wpdb->posts} AS p2
 			ON p1.post_parent = p2.ID
+			{$join_clause}
 			WHERE p1.post_type = 'attachment'
 			  AND p1.post_mime_type LIKE 'image%'
 			  AND p2.post_status = 'publish'
+			  {$where_clause}
 			GROUP BY EXTRACT( YEAR_MONTH from p1.post_date )
 SQL;
-		$urls  = [];
+		$urls         = [];
 		// Already escaped.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $wpdb->get_results( $query ) as $row ) {

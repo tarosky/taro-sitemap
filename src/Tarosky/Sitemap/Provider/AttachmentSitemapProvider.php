@@ -31,21 +31,25 @@ class AttachmentSitemapProvider extends PostSitemapProvider {
 	 */
 	protected function get_urls() {
 		global $wpdb;
-		$year     = get_query_var( 'year' );
-		$month    = get_query_var( 'monthnum' );
-		$from     = sprintf( '%04d-%02d-01 00:00:00', $year, $month );
-		$to       = ( new \DateTimeImmutable )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
-		$per_page = $this->option()->posts_per_page;
-		$offset   = ( max( 1, get_query_var( 'paged' ) ) - 1 ) * $per_page;
-		$query    = <<<SQL
+		$year         = get_query_var( 'year' );
+		$month        = get_query_var( 'monthnum' );
+		$from         = sprintf( '%04d-%02d-01 00:00:00', $year, $month );
+		$to           = ( new \DateTimeImmutable )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
+		$per_page     = $this->option()->posts_per_page;
+		$offset       = ( max( 1, get_query_var( 'paged' ) ) - 1 ) * $per_page;
+		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
+		$where_clause = apply_filters( 'taro_sitemap_attachment_query_where', '' );
+		$query        = <<<SQL
 			SELECT p1.* FROM {$wpdb->posts} AS p1
 			LEFT JOIN {$wpdb->posts} AS p2
 			ON p1.post_parent = p2.ID
+			{$join_clause}
 			WHERE p1.post_type = 'attachment'
 			  AND p1.post_status = 'inherit'
 			  AND p1.post_date BETWEEN %s AND %s
 			  AND p1.post_mime_type LIKE ':::image:::'
 			  AND p2.post_status = 'publish'
+			  {$where_clause}
 			ORDER BY p1.post_date DESC
 			LIMIT %d, %d
 SQL;

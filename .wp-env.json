@@ -1,6 +1,7 @@
 {
 	"plugins": [ "." ],
 	"themes": [
-		"https://downloads.wordpress.org/theme/twentytwenty.latest-stable.zip"
+		"https://downloads.wordpress.org/theme/twentytwenty.latest-stable.zip",
+		"https://downloads.wordpress.org/theme/stacks.latest-stable.zip"
 	]
 }
