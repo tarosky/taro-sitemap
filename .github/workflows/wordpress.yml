@@ -68,7 +68,7 @@ jobs:
       - name: Check JS & CSS syntax
         run: npm test
 
-  check-status:
+  status-check:
     name: Status Check
     runs-on: ubuntu-latest
     needs: [ test, assets ]
