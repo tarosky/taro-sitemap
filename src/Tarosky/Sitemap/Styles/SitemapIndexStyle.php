@@ -62,6 +62,4 @@ class SitemapIndexStyle extends SitemapStylePattern {
 		</xsl:stylesheet>
 		<?php
 	}
-
-
 }

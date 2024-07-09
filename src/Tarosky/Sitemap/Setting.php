@@ -32,7 +32,7 @@ class Setting extends Singleton {
 	 * @return void
 	 */
 	public function add_menu_page() {
-		add_submenu_page( 'tools.php', __( 'Sitemap', 'tsmap' ), __( 'Sitemap', 'tsmap' ), 'manage_options', 'tsmap', [ $this, 'render_page' ] );
+		add_submenu_page( 'tools.php', __( 'Sitemap & SEO', 'tsmap' ), __( 'Sitemap & SEO', 'tsmap' ), 'manage_options', 'tsmap', [ $this, 'render_page' ] );
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Setting extends Singleton {
 	public function render_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Sitemap Setting', 'tsmap' ); ?></h1>
+			<h1><?php esc_html_e( 'Sitemap & SEO Setting', 'tsmap' ); ?></h1>
 			<form method="post" action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>">
 				<?php
 				settings_fields( 'tsmap' );
@@ -98,12 +98,32 @@ class Setting extends Singleton {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return;
 		}
-		// Register sections.
-		add_settings_section( 'tsmap_setting_default', __( 'Setting', 'tsmap' ), function() {
-
-		}, 'tsmap' );
+		foreach ( [
+			[ 'default', __( 'Sitemap', 'tsmap' ), __( 'Setting for Sitemap.', 'tsmap' ) ],
+			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies. This affects the appearance on search engines.', 'tsmap' ) ],
+			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
+			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
+			[ 'ogp', __( 'OGP', 'tsmap' ), __( 'OGP setting. Displayed on social media.', 'tsmap' ) ],
+		] as list( $key, $title, $description ) ) {
+			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
+				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
+			}, 'tsmap' );
+		}
+		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
+			return [
+				'value' => $post_type->name,
+				'label' => $post_type->label,
+			];
+		}, get_post_types( [ 'public' => true ], OBJECT ) ) );
+		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function ( \WP_Taxonomy $taxonomy ) {
+			return [
+				'value' => $taxonomy->name,
+				'label' => $taxonomy->label,
+			];
+		}, get_taxonomies( [ 'public' => true ], OBJECT ) ) );
 		// Register setting.
 		foreach ( [
+			// Sitemap features.
 			[
 				'id'    => 'disable_core',
 				'title' => __( 'Core Sitemap', 'tsmap' ),
@@ -115,12 +135,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in site map.', 'tsmap' ),
-				'options' => array_map( function( $post_type ) {
-					return [
-						'value' => $post_type->name,
-						'label' => $post_type->label,
-					];
-				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+				'options' => $post_types,
 			],
 			[
 				'id'          => 'posts_per_page',
@@ -154,28 +169,195 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in news sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in news site map.', 'tsmap' ),
-				'options' => array_map( function( $post_type ) {
-					return [
-						'value' => $post_type->name,
-						'label' => $post_type->label,
-					];
-				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+				'options' => $post_types,
 			],
 			[
 				'id'      => 'taxonomies',
 				'title'   => __( 'Taxonomies in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check taxonomy archive in site map.', 'tsmap' ),
-				'options' => array_map( function( \WP_Taxonomy $taxonomy ) {
-					return [
-						'value' => $taxonomy->name,
-						'label' => $taxonomy->label,
-					];
-				}, get_taxonomies( [ 'public' => true ], OBJECT ) ),
+				'options' => $taxonomies,
 			],
+			// No Index.
+			[
+				'id'      => 'noindex_posts',
+				'section' => 'noindex',
+				'title'   => __( 'No Indexable Post Types', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each post in checked post types will have noindex meta box.', 'tsmap' ),
+				'options' => $post_types,
+			],
+			[
+				'id'      => 'noindex_terms',
+				'section' => 'noindex',
+				'title'   => __( 'No Indexable Taxonomies', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each term in checked taxonomies will have noindex setting field.', 'tsmap' ),
+				'options' => $taxonomies,
+			],
+			[
+				'id'          => 'noindex_archive_limit',
+				'section'     => 'noindex',
+				'title'       => __( 'Noindex Archive', 'tsmap' ),
+				'type'        => 'number',
+				'label'       => __( 'Archive page greater than this number will be noindex.', 'tsmap' ),
+				'placeholder' => __( 'e.g. 6', 'tsmap' ),
+			],
+			[
+				'id'      => 'noindex_other',
+				'section' => 'noindex',
+				'title'   => __( 'Other Page', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Miscellaneous pages to be no-indexed.', 'tsmap' ),
+				'options' => [
+					[
+						'value' => 'search',
+						'label' => __( 'Search Results', 'tsmap' ),
+					],
+					[
+						'value' => '404',
+						'label' => __( '404 Page', 'tsmap' ),
+					],
+					[
+						'value' => 'attachment',
+						'label' => __( 'Attachment page', 'tsmap' ),
+					],
+				],
+			],
+			[
+				'id'          => 'canonical_priority',
+				'section'     => 'canonical',
+				'title'       => __( 'Canonical Priority', 'tsmap' ),
+				'type'        => 'number',
+				'label'       => __( 'To leverage search engines crawling, change priority to lower number. 1 is the best.', 'tsmap' ),
+				'placeholder' => __( 'Default. 10', 'tsmap' ),
+			],
+			[
+				'id'      => 'canonical_archive',
+				'section' => 'canonical',
+				'title'   => __( 'Canonical For Archive', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'WordPress has canonical link only for singular pages. This option provides canonical features to archive pages.', 'tsmap' ),
+				'options' => [
+					[
+						'value' => 'taxonomies',
+						'label' => __( 'Taxonomy Page', 'tsmap' ),
+					],
+					[
+						'value' => 'author',
+						'label' => __( 'Author Archive', 'tsmap' ),
+					],
+					[
+						'value' => 'home',
+						'label' => __( 'Blog Archive', 'tsmap' ),
+					],
+					[
+						'value' => 'post_type',
+						'label' => __( 'Post Type Archive', 'tsmap' ),
+					],
+				],
+			],
+			[
+				'id'          => 'separator',
+				'section'     => 'meta',
+				'title'       => __( 'Separator', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Separator for document title.', 'tsmap' ),
+				'placeholder' => __( 'Default. -', 'tsmap' ),
+			],
+			[
+				'id'      => 'post_desc',
+				'section' => 'meta',
+				'title'   => __( 'Post Description', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
+				'options' => $post_types,
+			],
+			[
+				'id'      => 'auto_desc',
+				'section' => 'meta',
+				'title'   => __( 'Description', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'The strategy for display description.', 'tsmap' ),
+				'options' => [
+					[
+						'label' => __( 'Do nothing', 'tsmap' ),
+						'value' => '',
+					],
+					[
+						'label' => __( 'Automatic Generate', 'tsmap' ),
+						'value' => 'auto',
+					],
+					[
+						'label' => __( 'Display if specified(excerpt, description, etc.)', 'tsmap' ),
+						'value' => 'manual',
+					],
+				],
+			],
+			[
+				'id'      => 'front_desc',
+				'section' => 'meta',
+				'title'   => __( 'Front page', 'tsmap' ),
+				'type'    => 'textarea',
+				'label'   => __( 'Description for front page.', 'tsmap' ),
+			],
+			[
+				'id'      => 'ogp',
+				'section' => 'ogp',
+				'title'   => __( 'Render OGP', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Display OGP in head tag.', 'tsmap' ),
+			],
+			[
+				'id'      => 'default_image',
+				'section' => 'ogp',
+				'title'   => __( 'Default Image', 'tsmap' ),
+				'type'    => 'number',
+				'label'   => __( 'Attachment ID of default image. This image is used for page without featured image..', 'tsmap' ),
+			],
+			[
+				'id'      => 'fb_app_id',
+				'section' => 'ogp',
+				'title'   => __( 'Facebook App ID', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'Facebook App ID. Required for Facebook page and retargeting ad', 'tsmap' ),
+			],
+			[
+				'id'      => 'fb_page_url',
+				'section' => 'ogp',
+				'title'   => __( 'Facebook Page URL', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'Displayed as Author of this site in Facebook.', 'tsmap' ),
+			],
+			[
+				'id'      => 'twitter_account',
+				'section' => 'ogp',
+				'title'   => __( 'X(ex-Twitter) screen name', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'e.g. @elonmask', 'tsmap' ),
+			],
+			[
+				'id'      => 'twitter_size',
+				'section' => 'ogp',
+				'title'   => __( 'X card size', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'Card size shared on X.', 'tsmap' ),
+				'options' => [
+					[
+						'label' => 'summary_large_image',
+						'value' => 'summary_large_image',
+					],
+					[
+						'label' => 'summary',
+						'value' => '',
+					],
+				],
+			],
+
 		] as $setting ) {
-			$id = 'tsmap_' . $setting['id'];
-			add_settings_field( $id, $setting['title'], function() use ( $id, $setting ) {
+			$id      = 'tsmap_' . $setting['id'];
+			$section = $setting['section'] ?? 'default';
+			add_settings_field( $id, $setting['title'], function () use ( $id, $setting ) {
 				$value = get_option( $id );
 				switch ( $setting['type'] ) {
 					case 'number':
@@ -187,9 +369,14 @@ class Setting extends Singleton {
 							esc_attr( $id ),
 							esc_attr( $setting['placeholder'] ?? '' )
 						);
-						if ( ! empty( $setting['label'] ) ) {
-							printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
-						}
+						break;
+					case 'textarea':
+						printf(
+							'<textarea name="%1$s" placeholder="%2$s" rows="3" style="width:100%%; box-sizing: border-box;">%3$s</textarea>',
+							esc_attr( $id ),
+							esc_attr( $setting['placeholder'] ?? '' ),
+							esc_textarea( $value )
+						);
 						break;
 					case 'bool':
 						printf(
@@ -223,9 +410,24 @@ class Setting extends Singleton {
 						}
 						break;
 				}
-			}, 'tsmap', 'tsmap_setting_default' );
+				if ( ! empty( $setting['label'] ) && 'bool' !== $setting['type'] ) {
+					printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
+				}
+				if ( 'default_image' === $setting['id'] ) {
+					$attachment = $value ? get_post( $value ) : null;
+					if ( $attachment ) {
+						printf(
+							'<figure>%s<figcaption>%s%s</figcaption></figure>',
+							wp_get_attachment_image( $attachment->ID, 'thumbnail' ),
+							esc_html__( 'Preview: ', 'tsmap' ),
+							esc_html( $attachment->post_title )
+						);
+					}
+				}
+			}, 'tsmap', 'tsmap_setting_' . $section );
 
 			register_setting( 'tsmap', $id );
+
 		}
 	}
 

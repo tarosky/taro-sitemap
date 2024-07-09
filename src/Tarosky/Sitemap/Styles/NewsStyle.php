@@ -66,6 +66,4 @@ class NewsStyle extends SitemapStylePattern {
 		</xsl:stylesheet>
 		<?php
 	}
-
-
 }

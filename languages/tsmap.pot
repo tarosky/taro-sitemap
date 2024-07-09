@@ -1,0 +1,366 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Taro Sitemap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-09 21:56+0900\n"
+"PO-Revision-Date: 2014-04-02 22:50+0900\n"
+"Last-Translator: Takahashi Fumiki <info@takahashifumiki.com>\n"
+"Language-Team: TAROSKY INC <info@tarosky.co.jp>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_x:1,2c;_n:1,2;_e;esc_html_e;esc_html__;"
+"esc_attr__;esc_attr_e;_ex:1,2c\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"X-Poedit-SearchPathExcluded-3: wordpress\n"
+"X-Poedit-SearchPathExcluded-4: dist\n"
+
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:123
+#, php-format
+msgid "Search results for: %s"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:125
+msgid "Page not found."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/PostDescription.php:50
+msgid "Meta Description"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/PostNoindex.php:52
+msgid "Hide this post from search engines"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:30
+msgid "Make this term noindex for search engines."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:61
+#: src/Tarosky/Sitemap/Setting.php:103
+msgid "Noindex"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/PostMetaBoxes.php:60
+msgid "SEO Setting"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:35
+msgid "Sitemap & SEO"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:46
+msgid "Sitemap & SEO Setting"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:55
+msgid "Sitemap URL"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:62
+#, php-format
+msgid ""
+"The sitemap URL are listed below. You should register these URLs at <a "
+"href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Google Search "
+"Console</a>. They also appear in <a href=\"%2$s\">robots.txt</a>."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:75
+msgid "No sitemaps are available."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:102
+msgid "Sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:102
+msgid "Setting for Sitemap."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:103
+msgid ""
+"Add options of noindex for posts and taxonomies. This affects the "
+"appearance on search engines."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:104
+msgid "Canonical"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:104
+msgid "Canonical URL related features."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:105
+msgid "Meta"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:105
+msgid "Additional setting for <code>&lt;head&gt;</code> tag."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid "OGP"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid "OGP setting. Displayed on social media."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:129
+msgid "Core Sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:131
+msgid "Disable core sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:135
+msgid "Post types in Sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:137
+msgid "Please check post type to be included in site map."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:142
+msgid "Posts per page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:144
+msgid "Number of posts per each sitemap. Should be under 5,000."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:149
+msgid "Attachment"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:151
+msgid "How attachments appear in sitemap."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:155
+msgid "Not displayed."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:159
+msgid "In post sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:163
+msgid "Create attachment page sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:169
+msgid "Post types in news sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:171
+msgid "Please check post type to be included in news site map."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:176
+msgid "Taxonomies in Sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:178
+msgid "Please check taxonomy archive in site map."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:185
+msgid "No Indexable Post Types"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:187
+msgid "Each post in checked post types will have noindex meta box."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:193
+msgid "No Indexable Taxonomies"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:195
+msgid "Each term in checked taxonomies will have noindex setting field."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:201
+msgid "Noindex Archive"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:203
+msgid "Archive page greater than this number will be noindex."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:204
+msgid "e.g. 6"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:209
+msgid "Other Page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:211
+msgid "Miscellaneous pages to be no-indexed."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:215
+msgid "Search Results"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:219
+msgid "404 Page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:223
+msgid "Attachment page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:230
+msgid "Canonical Priority"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:232
+msgid ""
+"To leverage search engines crawling, change priority to lower number. 1 is "
+"the best."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:233
+msgid "Default. 10"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:238
+msgid "Canonical For Archive"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:240
+msgid ""
+"WordPress has canonical link only for singular pages. This option provides "
+"canonical features to archive pages."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:244
+msgid "Taxonomy Page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:248
+msgid "Author Archive"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:252
+msgid "Blog Archive"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:256
+msgid "Post Type Archive"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:263
+msgid "Separator"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:265
+msgid "Separator for document title."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:266
+msgid "Default. -"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:271
+msgid "Post Description"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:273
+msgid "Each post in checked post type will have post description field."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:279
+msgid "Description"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:281
+msgid "The strategy for display description."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:284
+msgid "Do nothing"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:288
+msgid "Automatic Generate"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:292
+msgid "Display if specified(excerpt, description, etc.)"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:300
+msgid "Front page"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:302
+msgid "Description for front page."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:307
+msgid "Render OGP"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:309
+msgid "Display OGP in head tag."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:314
+msgid "Default Image"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:316
+msgid ""
+"Attachment ID of default image. This image is used for page without "
+"featured image.."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:321
+msgid "Facebook App ID"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:323
+msgid "Facebook App ID. Required for Facebook page and retargeting ad"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:328
+msgid "Facebook Page URL"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:330
+msgid "Displayed as Author of this site in Facebook."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:335
+msgid "X(ex-Twitter) screen name"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:337
+msgid "e.g. @elonmask"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:342
+msgid "X card size"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:344
+msgid "Card size shared on X."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:422
+msgid "Preview: "
+msgstr ""

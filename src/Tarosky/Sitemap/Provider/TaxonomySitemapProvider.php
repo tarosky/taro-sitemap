@@ -31,7 +31,7 @@ class TaxonomySitemapProvider extends SitemapProvider {
 	 */
 	protected function get_urls() {
 		global $wpdb;
-		$in_clause = implode( ', ', array_map( function( $taxonomy ) use ( $wpdb ) {
+		$in_clause = implode( ', ', array_map( function ( $taxonomy ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $taxonomy );
 		}, $this->option()->taxonomies ) );
 		$per_page  = $this->option()->posts_per_page;

@@ -45,6 +45,4 @@ class NewsSitemapIndexProvider extends SitemapIndexProvider {
 		}
 		return $urls;
 	}
-
-
 }

@@ -25,5 +25,4 @@ trait Ping {
 		}
 		return true;
 	}
-
 }

@@ -54,8 +54,8 @@ class PostSitemapProvider extends SitemapProvider {
 		$year      = get_query_var( 'year' );
 		$month     = get_query_var( 'monthnum' );
 		$from      = sprintf( '%04d-%02d-01 00:00:00', $year, $month );
-		$to        = ( new \DateTimeImmutable )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
-		$in_clause = implode( ', ', array_map( function( $post_type ) use ( $wpdb ) {
+		$to        = ( new \DateTimeImmutable() )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
+		$in_clause = implode( ', ', array_map( function ( $post_type ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $post_type );
 		}, $this->option()->post_types ) );
 		$per_page  = $this->option()->posts_per_page;
@@ -79,7 +79,7 @@ SQL;
 		$images = [];
 		if ( 'post' === $this->option()->attachment_sitemap ) {
 			// Includes attachment sitemaps.
-			$post_ids         = array_map( function( $post ) {
+			$post_ids         = array_map( function ( $post ) {
 				return $post->ID;
 			}, $results );
 			$attachment_in    = implode( ', ', $post_ids );

@@ -11,25 +11,24 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "test": [
-            "phpcs --config-set installed_paths $(pwd)/vendor/wp-coding-standards/wpcs",
-            "phpcs --standard=phpcs.ruleset.xml $(find ./ -name '*.php')"
-        ],
-        "fix": [
-            "phpcs --config-set installed_paths $(pwd)/vendor/wp-coding-standards/wpcs",
-            "phpcbf --standard=phpcs.ruleset.xml $(find ./ -name '*.php')"
-        ]
+        "lint": "phpcs --standard=phpcs.ruleset.xml $(find ./ -name '*.php')",
+        "fix": "phpcbf --standard=phpcs.ruleset.xml $(find ./ -name '*.php')"
     },
     "require": {
         "php": "^7.2|^8"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.0",
-        "wp-coding-standards/wpcs": "^2.0"
+        "wp-coding-standards/wpcs": "^3.0"
     },
     "autoload": {
         "psr-0": {
             "Tarosky\\Sitemap": "src"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }

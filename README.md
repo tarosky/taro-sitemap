@@ -1,10 +1,10 @@
 # Tarosky Sitemap
 
-Contributors: Takahashi_Fumiki,tarosky  
+Contributors: tarosky, Takahashi_Fumiki
 Tags: sitemap,google,news  
-Requires at least: 5.7  
+Requires at least: 5.9  
 Requires PHP: 7.2  
-Tested up to: 6.0  
+Tested up to: 6.5  
 Stable Tag: nightly
 
 Sitemap plugin.
@@ -76,6 +76,12 @@ add_filter( 'hms_news_sitemap_query_args', function( $query_args ) {
 Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap). 
 
 ## Changelog
+
+### 2.0.0
+
+* Add noindex setting.
+* Add OGP setting.
+* Add meta setting.
 
 ### 1.0.0
 

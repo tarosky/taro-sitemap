@@ -26,6 +26,7 @@ defined( 'ABSPATH' ) || die();
 function tsmap_init() {
 	load_plugin_textdomain( 'tsmap', false, basename( __DIR__ ) . '/languages' );
 	require __DIR__ . '/vendor/autoload.php';
+
 	// Root Controllers.
 	\Tarosky\Sitemap\Setting::get_instance();
 	\Tarosky\Sitemap\Registry::get_instance();
@@ -46,6 +47,27 @@ function tsmap_init() {
 	\Tarosky\Sitemap\Styles\SitemapStyle::get_instance();
 	\Tarosky\Sitemap\Styles\NewsStyle::get_instance();
 
+	// Meta boxes.
+	\Tarosky\Sitemap\Seo\PostMetaBoxes::get_instance();
+	\Tarosky\Sitemap\Seo\TermMetaBoxes::get_instance();
+
+	// SEO Features.
+	// 1. noindex.
+	\Tarosky\Sitemap\Seo\Features\NoIndexArchive::get_instance();
+	\Tarosky\Sitemap\Seo\Features\OtherNoindex::get_instance();
+	\Tarosky\Sitemap\Seo\Features\PostNoindex::get_instance();
+	\Tarosky\Sitemap\Seo\Features\TermNoindex::get_instance();
+	// 2. Canonical
+	\Tarosky\Sitemap\Seo\Features\CanonicalPriority::get_instance();
+	\Tarosky\Sitemap\Seo\Features\CanonicalArchive::get_instance();
+	// 3. Meta
+	\Tarosky\Sitemap\Seo\Features\MetaSeparator::get_instance();
+	\Tarosky\Sitemap\Seo\Features\PostDescription::get_instance();
+	\Tarosky\Sitemap\Seo\Features\AutoDescription::get_instance();
+	// 4. OGP
+	\Tarosky\Sitemap\Seo\Features\OgpGenerator::get_instance();
+
+	// Register assets.
 	add_action( 'init', 'tsmap_register_assets' );
 }
 

@@ -93,7 +93,7 @@ trait QueryArgsHelper {
 		if ( empty( $post_types ) ) {
 			return [];
 		}
-		$in_clause = implode( ', ', array_map( function( $post_type ) use ( $wpdb ) {
+		$in_clause = implode( ', ', array_map( function ( $post_type ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $post_type );
 		}, $post_types ) );
 		$query     = <<<SQL

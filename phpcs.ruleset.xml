@@ -17,9 +17,9 @@
 		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
 		<exclude name="WordPress.WP.I18n.SingleUnderscoreGetTextFunction" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
-		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+		<exclude name="Universal.Operators.DisallowShortTernary.Found" />
 		<exclude name="WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC" />
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments"/>

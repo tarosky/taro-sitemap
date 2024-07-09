@@ -29,7 +29,7 @@ class TaxonomySitemapIndexProvider extends SitemapIndexProvider {
 	protected function get_urls() {
 		$per_page = $this->option()->posts_per_page;
 		global $wpdb;
-		$in_clause = implode( ', ', array_map( function( $taxonomy ) use ( $wpdb ) {
+		$in_clause = implode( ', ', array_map( function ( $taxonomy ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $taxonomy );
 		}, $this->option()->taxonomies ) );
 		$query     = <<<SQL
