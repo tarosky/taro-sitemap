@@ -26,7 +26,7 @@ abstract class AbstractFeaturePattern extends Singleton {
 	 *
 	 * @return bool
 	 */
-	abstract protected function is_active():bool;
+	abstract protected function is_active(): bool;
 
 	/**
 	 * Register hooks.

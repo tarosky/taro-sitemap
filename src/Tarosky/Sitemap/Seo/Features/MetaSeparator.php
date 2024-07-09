@@ -21,7 +21,7 @@ class MetaSeparator extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function register_hooks() {
-		add_filter( 'document_title_separator', function( $sep ) {
+		add_filter( 'document_title_separator', function ( $sep ) {
 			return (string) $this->option( 'separator' );
 		} );
 	}

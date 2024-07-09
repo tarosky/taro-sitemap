@@ -24,9 +24,9 @@ class OtherNoindex extends RobotsFilterPattern {
 	 * {@inheritDoc}
 	 */
 	public function wp_robots( $robots ) {
-		$noindex = false;
+		$noindex  = false;
 		$nofollow = false;
-		$options = $this->option( 'noindex_other' );
+		$options  = $this->option( 'noindex_other' );
 		if ( is_search() ) {
 			$noindex  = in_array( 'search', $options, true );
 			$nofollow = $noindex;
@@ -36,7 +36,7 @@ class OtherNoindex extends RobotsFilterPattern {
 			$noindex = in_array( 'attachment', $options, true );
 		}
 		if ( $noindex ) {
-			$robots['noindex']  = true;
+			$robots['noindex'] = true;
 		}
 		if ( $nofollow ) {
 			$robots['nofollow'] = true;

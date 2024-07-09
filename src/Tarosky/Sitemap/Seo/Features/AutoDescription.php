@@ -30,7 +30,7 @@ class AutoDescription extends AbstractFeaturePattern {
 	 * @return void
 	 */
 	public function render_description() {
-		$description = $this->get_description();
+		$description        = $this->get_description();
 		$description_length = apply_filters( 'tsmap_auto_description_length', 140 );
 		// see: {wp_trim_words()}
 		$text = trim( preg_replace( "/[\n\r\t ]+/", ' ', $description ), ' ' );
@@ -42,7 +42,7 @@ class AutoDescription extends AbstractFeaturePattern {
 			array_pop( $words_array );
 			$words_array[] = '…';
 		}
-		printf( '<meta name="description" content="%s" />', esc_attr( implode(  '', $words_array ) ) );
+		printf( '<meta name="description" content="%s" />', esc_attr( implode( '', $words_array ) ) );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class AutoDescription extends AbstractFeaturePattern {
 	 */
 	public function get_post_desc( $post = null ) {
 		$fixed_desc = '';
-		$post = get_post( $post );
+		$post       = get_post( $post );
 		if ( ! $post ) {
 			return $fixed_desc;
 		}
@@ -120,6 +120,7 @@ class AutoDescription extends AbstractFeaturePattern {
 				}
 			}
 		} elseif ( is_search() ) {
+			// translators: %s search query.
 			$fixed_desc = sprintf( __( 'Search results for: %s', 'tsmap' ), get_search_query() );
 		} elseif ( is_404() ) {
 			$fixed_desc = __( 'Page not found.', 'tsmap' );

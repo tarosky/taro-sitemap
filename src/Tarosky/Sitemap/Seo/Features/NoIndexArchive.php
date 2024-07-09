@@ -34,7 +34,7 @@ class NoIndexArchive extends RobotsFilterPattern {
 		}
 		$max = (int) $this->option( 'noindex_archive_limit' );
 		if ( $max < $cur_page ) {
-			$robots['noindex']  = true;
+			$robots['noindex'] = true;
 		}
 		return $robots;
 	}

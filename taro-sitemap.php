@@ -67,7 +67,6 @@ function tsmap_init() {
 	// 4. OGP
 	\Tarosky\Sitemap\Seo\Features\OgpGenerator::get_instance();
 
-
 	// Register assets.
 	add_action( 'init', 'tsmap_register_assets' );
 }

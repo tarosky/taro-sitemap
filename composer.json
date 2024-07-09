@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "test": "phpcs --standard=phpcs.ruleset.xml $(find ./ -name '*.php')",
+        "lint": "phpcs --standard=phpcs.ruleset.xml $(find ./ -name '*.php')",
         "fix": "phpcbf --standard=phpcs.ruleset.xml $(find ./ -name '*.php')"
     },
     "require": {

@@ -109,13 +109,13 @@ class Setting extends Singleton {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 			}, 'tsmap' );
 		}
-		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function( $post_type ) {
+		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
 			return [
 				'value' => $post_type->name,
 				'label' => $post_type->label,
 			];
 		}, get_post_types( [ 'public' => true ], OBJECT ) ) );
-		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function( \WP_Taxonomy $taxonomy ) {
+		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function ( \WP_Taxonomy $taxonomy ) {
 			return [
 				'value' => $taxonomy->name,
 				'label' => $taxonomy->label,
@@ -201,7 +201,7 @@ class Setting extends Singleton {
 				'title'       => __( 'Noindex Archive', 'tsmap' ),
 				'type'        => 'number',
 				'label'       => __( 'Archive page greater than this number will be noindex.', 'tsmap' ),
-				'placeholder' => __( 'e.g. 6', 'tsmap' )
+				'placeholder' => __( 'e.g. 6', 'tsmap' ),
 			],
 			[
 				'id'      => 'noindex_other',
@@ -230,7 +230,7 @@ class Setting extends Singleton {
 				'title'       => __( 'Canonical Priority', 'tsmap' ),
 				'type'        => 'number',
 				'label'       => __( 'To leverage search engines crawling, change priority to lower number. 1 is the best.', 'tsmap' ),
-				'placeholder' => __( 'Default. 10', 'tsmap' )
+				'placeholder' => __( 'Default. 10', 'tsmap' ),
 			],
 			[
 				'id'      => 'canonical_archive',
@@ -263,23 +263,23 @@ class Setting extends Singleton {
 				'title'       => __( 'Separator', 'tsmap' ),
 				'type'        => 'text',
 				'label'       => __( 'Separator for document title.', 'tsmap' ),
-				'placeholder' => __( 'Default. -', 'tsmap' )
+				'placeholder' => __( 'Default. -', 'tsmap' ),
 			],
 			[
-				'id'          => 'post_desc',
-				'section'     => 'meta',
-				'title'       => __( 'Post Description', 'tsmap' ),
-				'type'        => 'checkbox',
-				'label'       => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
-				'options'     => $post_types,
+				'id'      => 'post_desc',
+				'section' => 'meta',
+				'title'   => __( 'Post Description', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
+				'options' => $post_types,
 			],
 			[
-				'id'          => 'auto_desc',
-				'section'     => 'meta',
-				'title'       => __( 'Description', 'tsmap' ),
-				'type'        => 'radio',
-				'label'       => __( 'The strategy for display description.', 'tsmap' ),
-				'options'     => [
+				'id'      => 'auto_desc',
+				'section' => 'meta',
+				'title'   => __( 'Description', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'The strategy for display description.', 'tsmap' ),
+				'options' => [
 					[
 						'label' => __( 'Do nothing', 'tsmap' ),
 						'value' => '',
@@ -291,58 +291,58 @@ class Setting extends Singleton {
 					[
 						'label' => __( 'Display if specified(excerpt, description, etc.)', 'tsmap' ),
 						'value' => 'manual',
-					]
+					],
 				],
 			],
 			[
-				'id'          => 'front_desc',
-				'section'     => 'meta',
-				'title'       => __( 'Front page', 'tsmap' ),
-				'type'        => 'textarea',
-				'label'       => __( 'Description for front page.', 'tsmap' ),
+				'id'      => 'front_desc',
+				'section' => 'meta',
+				'title'   => __( 'Front page', 'tsmap' ),
+				'type'    => 'textarea',
+				'label'   => __( 'Description for front page.', 'tsmap' ),
 			],
 			[
-				'id'          => 'ogp',
-				'section'     => 'ogp',
-				'title'       => __( 'Render OGP', 'tsmap' ),
-				'type'        => 'bool',
-				'label'       => __( 'Display OGP in head tag.', 'tsmap' ),
+				'id'      => 'ogp',
+				'section' => 'ogp',
+				'title'   => __( 'Render OGP', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Display OGP in head tag.', 'tsmap' ),
 			],
 			[
-				'id'          => 'default_image',
-				'section'     => 'ogp',
-				'title'       => __( 'Default Image', 'tsmap' ),
-				'type'        => 'number',
-				'label'       => __( 'Attachment ID of default image. This image is used for page without featured image..', 'tsmap' ),
+				'id'      => 'default_image',
+				'section' => 'ogp',
+				'title'   => __( 'Default Image', 'tsmap' ),
+				'type'    => 'number',
+				'label'   => __( 'Attachment ID of default image. This image is used for page without featured image..', 'tsmap' ),
 			],
 			[
-				'id'          => 'fb_app_id',
-				'section'     => 'ogp',
-				'title'       => __( 'Facebook App ID', 'tsmap' ),
-				'type'        => 'text',
-				'label'       => __( 'Facebook App ID. Required for Facebook page and retargeting ad', 'tsmap' ),
+				'id'      => 'fb_app_id',
+				'section' => 'ogp',
+				'title'   => __( 'Facebook App ID', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'Facebook App ID. Required for Facebook page and retargeting ad', 'tsmap' ),
 			],
 			[
-				'id'          => 'fb_page_url',
-				'section'     => 'ogp',
-				'title'       => __( 'Facebook Page URL', 'tsmap' ),
-				'type'        => 'text',
-				'label'       => __( 'Displayed as Author of this site in Facebook.', 'tsmap' ),
+				'id'      => 'fb_page_url',
+				'section' => 'ogp',
+				'title'   => __( 'Facebook Page URL', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'Displayed as Author of this site in Facebook.', 'tsmap' ),
 			],
 			[
-				'id'          => 'twitter_account',
-				'section'     => 'ogp',
-				'title'       => __( 'X(ex-Twitter) screen name', 'tsmap' ),
-				'type'        => 'text',
-				'label'       => __( 'e.g. @elonmask', 'tsmap' ),
+				'id'      => 'twitter_account',
+				'section' => 'ogp',
+				'title'   => __( 'X(ex-Twitter) screen name', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'e.g. @elonmask', 'tsmap' ),
 			],
 			[
-				'id'          => 'twitter_size',
-				'section'     => 'ogp',
-				'title'       => __( 'X card size', 'tsmap' ),
-				'type'        => 'radio',
-				'label'       => __( 'Card size shared on X.', 'tsmap' ),
-				'options'    => [
+				'id'      => 'twitter_size',
+				'section' => 'ogp',
+				'title'   => __( 'X card size', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'Card size shared on X.', 'tsmap' ),
+				'options' => [
 					[
 						'label' => 'summary_large_image',
 						'value' => 'summary_large_image',
@@ -357,7 +357,7 @@ class Setting extends Singleton {
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
 			$section = $setting['section'] ?? 'default';
-			add_settings_field( $id, $setting['title'], function() use ( $id, $setting ) {
+			add_settings_field( $id, $setting['title'], function () use ( $id, $setting ) {
 				$value = get_option( $id );
 				switch ( $setting['type'] ) {
 					case 'number':

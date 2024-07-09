@@ -25,7 +25,7 @@ class TermMetaBoxes extends Singleton {
 	 */
 	public function admin_init() {
 		foreach ( $this->get_taxonomies() as $taxonomy ) {
-			add_action( "{$taxonomy}_term_edit_form_top", [ $this, 'nonce_field'] );
+			add_action( "{$taxonomy}_term_edit_form_top", [ $this, 'nonce_field' ] );
 			add_action( "{$taxonomy}_edit_form_fields", [ $this, 'render_field' ] );
 		}
 	}

@@ -29,9 +29,9 @@ class OgpGenerator extends AbstractFeaturePattern {
 	 * Render ns.
 	 */
 	public function language_attributes() {
-		$ns = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
-		$ns []= 'og: http://ogp.me/ns#';
-		$ns []= 'fb: http://ogp.me/ns/fb#';
+		$ns    = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
+		$ns [] = 'og: http://ogp.me/ns#';
+		$ns [] = 'fb: http://ogp.me/ns/fb#';
 		printf( ' prefix="%s"', esc_attr( implode( ' ', $ns ) ) );
 	}
 
@@ -41,10 +41,10 @@ class OgpGenerator extends AbstractFeaturePattern {
 	 * @return void
 	 */
 	public function render_ogp() {
-		$ogp = [];
-		$ogp['og:title'] = wp_get_document_title();
-		$ogp['og:type']  = is_front_page() ? 'website' : 'article';
-		$ogp['og:locale'] = get_locale();
+		$ogp                 = [];
+		$ogp['og:title']     = wp_get_document_title();
+		$ogp['og:type']      = is_front_page() ? 'website' : 'article';
+		$ogp['og:locale']    = get_locale();
 		$ogp['og:site_name'] = get_bloginfo( 'name' );
 		// Set URL.
 		if ( is_front_page() ) {
@@ -55,7 +55,7 @@ class OgpGenerator extends AbstractFeaturePattern {
 			$url = get_permalink( get_option( 'page_for_posts' ) );
 		} elseif ( is_tag() || is_category() || is_tax() ) {
 			$term = get_queried_object();
-			if ( is_a( $term, 'WP_Term') ) {
+			if ( is_a( $term, 'WP_Term' ) ) {
 				$url = get_term_link( $term );
 			}
 		} elseif ( is_author() ) {
@@ -89,7 +89,7 @@ class OgpGenerator extends AbstractFeaturePattern {
 			$ogp['article:publisher'] = $this->option( 'fb_page_url' );
 		}
 		// twitter
-		$ogp['twitter:card'] = 'summary_large_image' === $this->option('twitter_size' ) ? 'summary_large_image' : 'summary';
+		$ogp['twitter:card'] = 'summary_large_image' === $this->option( 'twitter_size' ) ? 'summary_large_image' : 'summary';
 		if ( $this->option( 'twitter_account' ) ) {
 			$ogp['twitter:site'] = $this->option( 'twitter_account' );
 		}
@@ -103,6 +103,5 @@ class OgpGenerator extends AbstractFeaturePattern {
 			}
 			printf( '<meta %s="%s" content="%s" />' . PHP_EOL, $property, $key, esc_attr( $value ) );
 		}
-
 	}
 }

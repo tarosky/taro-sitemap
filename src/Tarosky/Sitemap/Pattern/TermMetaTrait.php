@@ -13,7 +13,7 @@ trait TermMetaTrait {
 	 *
 	 * @return string[]
 	 */
-	abstract protected function taxonomies():array;
+	abstract protected function taxonomies(): array;
 
 	/**
 	 * Initialize.
@@ -35,7 +35,7 @@ trait TermMetaTrait {
 	 */
 	public function has_term_meta( $taxonomies ) {
 		foreach ( $this->taxonomies() as $taxonomy ) {
-			if ( ! in_array( $taxonomy, $taxonomies, true) ) {
+			if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
 				$taxonomies[] = $taxonomy;
 			}
 		}
@@ -61,7 +61,7 @@ trait TermMetaTrait {
 	 *
 	 * @return string
 	 */
-	abstract protected function label():string;
+	abstract protected function label(): string;
 
 	/**
 	 * Render field area.
@@ -69,7 +69,7 @@ trait TermMetaTrait {
 	 * @param \WP_Term $term Term object.
 	 * @return string
 	 */
-	abstract protected function get_field( \WP_Term $term ):string;
+	abstract protected function get_field( \WP_Term $term ): string;
 
 	/**
 	 * Save if meta box is available.
@@ -89,7 +89,7 @@ trait TermMetaTrait {
 	 * @param int $term_id Save term meta. Taxonomy is already validated.
 	 * @return void
 	 */
-	abstract protected function do_save( $term_id ):void;
+	abstract protected function do_save( $term_id ): void;
 
 	/**
 	 * Is active taxonomy?

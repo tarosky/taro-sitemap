@@ -13,7 +13,7 @@ trait PostMetaBoxTrait {
 	 * @param string $post_type
 	 * @return bool
 	 */
-	abstract public function is_active_post_type( $post_type ):bool;
+	abstract public function is_active_post_type( $post_type ): bool;
 
 	protected function add_meta_box( $priority = 11 ) {
 		add_filter( 'tsmap_has_meta_box', [ $this, 'has_meta_box' ], $priority, 2 );
@@ -53,7 +53,7 @@ trait PostMetaBoxTrait {
 	 * @param \WP_Post $post Post object.
 	 * @return void
 	 */
-	abstract protected function render_meta_box( $post ):void;
+	abstract protected function render_meta_box( $post ): void;
 
 	/**
 	 * Save if meta box is available.
@@ -73,5 +73,5 @@ trait PostMetaBoxTrait {
 	 * @param \WP_Post $post Save post field.
 	 * @return void
 	 */
-	abstract protected function do_save( $post ):void;
+	abstract protected function do_save( $post ): void;
 }

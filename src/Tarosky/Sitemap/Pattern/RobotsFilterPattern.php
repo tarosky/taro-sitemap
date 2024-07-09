@@ -12,7 +12,7 @@ abstract class RobotsFilterPattern extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function register_hooks() {
-		add_filter( 'wp_robots', [ $this, 'wp_robots' ]);
+		add_filter( 'wp_robots', [ $this, 'wp_robots' ] );
 	}
 
 	/**
