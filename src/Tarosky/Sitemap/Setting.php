@@ -103,6 +103,7 @@ class Setting extends Singleton {
 			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies. This affects the appearance on search engines.', 'tsmap' ) ],
 			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
 			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
+			[ 'ogp', __( 'OGP', 'tsmap' ), __( 'OGP setting. Displayed on social media.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
@@ -300,6 +301,59 @@ class Setting extends Singleton {
 				'type'        => 'textarea',
 				'label'       => __( 'Description for front page.', 'tsmap' ),
 			],
+			[
+				'id'          => 'ogp',
+				'section'     => 'ogp',
+				'title'       => __( 'Render OGP', 'tsmap' ),
+				'type'        => 'bool',
+				'label'       => __( 'Display OGP in head tag.', 'tsmap' ),
+			],
+			[
+				'id'          => 'default_image',
+				'section'     => 'ogp',
+				'title'       => __( 'Default Image', 'tsmap' ),
+				'type'        => 'number',
+				'label'       => __( 'Attachment ID of default image. This image is used for page without featured image..', 'tsmap' ),
+			],
+			[
+				'id'          => 'fb_app_id',
+				'section'     => 'ogp',
+				'title'       => __( 'Facebook App ID', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Facebook App ID. Required for Facebook page and retargeting ad', 'tsmap' ),
+			],
+			[
+				'id'          => 'fb_page_url',
+				'section'     => 'ogp',
+				'title'       => __( 'Facebook Page URL', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Displayed as Author of this site in Facebook.', 'tsmap' ),
+			],
+			[
+				'id'          => 'twitter_account',
+				'section'     => 'ogp',
+				'title'       => __( 'X(ex-Twitter) screen name', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'e.g. @elonmask', 'tsmap' ),
+			],
+			[
+				'id'          => 'twitter_size',
+				'section'     => 'ogp',
+				'title'       => __( 'X card size', 'tsmap' ),
+				'type'        => 'radio',
+				'label'       => __( 'Card size shared on X.', 'tsmap' ),
+				'options'    => [
+					[
+						'label' => 'summary_large_image',
+						'value' => 'summary_large_image',
+					],
+					[
+						'label' => 'summary',
+						'value' => '',
+					],
+				],
+			],
+
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
 			$section = $setting['section'] ?? 'default';
@@ -356,8 +410,19 @@ class Setting extends Singleton {
 						}
 						break;
 				}
-				if ( ! empty( $setting['label'] ) ) {
+				if ( ! empty( $setting['label'] ) && 'bool' !== $setting['label'] ) {
 					printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
+				}
+				if ( 'default_image' === $setting['id'] ) {
+					$attachment = $value ? get_post( $value ) : null;
+					if ( $attachment ) {
+						printf(
+							'<figure>%s<figcaption>%s%s</figcaption></figure>',
+							wp_get_attachment_image( $attachment->ID, 'thumbnail' ),
+							esc_html__( 'Preview: ', 'tsmap' ),
+							esc_html( $attachment->post_title )
+						);
+					}
 				}
 			}, 'tsmap', 'tsmap_setting_' . $section );
 

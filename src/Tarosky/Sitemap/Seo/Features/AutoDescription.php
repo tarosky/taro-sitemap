@@ -4,7 +4,6 @@ namespace Tarosky\Sitemap\Seo\Features;
 
 
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
-use Tarosky\Sitemap\Seo\PostMetaBoxes;
 
 /**
  * Change title separator.
@@ -111,6 +110,14 @@ class AutoDescription extends AbstractFeaturePattern {
 			$user = get_queried_object();
 			if ( $user && is_a( $user, 'WP_User' ) ) {
 				$fixed_desc = $user->user_description;
+			}
+		} elseif ( is_post_type_archive() ) {
+			$post_type = get_query_var( 'post_type' );
+			if ( $post_type && post_type_exists( $post_type ) ) {
+				$object = get_post_type_object( $post_type );
+				if ( $object->description ) {
+					$fixed_desc = $object->description;
+				}
 			}
 		} elseif ( is_search() ) {
 			$fixed_desc = sprintf( __( 'Search results for: %s', 'tsmap' ), get_search_query() );

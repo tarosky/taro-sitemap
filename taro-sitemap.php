@@ -64,6 +64,8 @@ function tsmap_init() {
 	\Tarosky\Sitemap\Seo\Features\MetaSeparator::get_instance();
 	\Tarosky\Sitemap\Seo\Features\PostDescription::get_instance();
 	\Tarosky\Sitemap\Seo\Features\AutoDescription::get_instance();
+	// 4. OGP
+	\Tarosky\Sitemap\Seo\Features\OgpGenerator::get_instance();
 
 
 	// Register assets.
