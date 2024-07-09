@@ -100,7 +100,8 @@ class Setting extends Singleton {
 		}
 		foreach ( [
 			[ 'default', __( 'Sitemap', 'tsmap' ), __( 'Setting for Sitemap.', 'tsmap' ) ],
-			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies.', 'tsmap' ) ]
+			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies.', 'tsmap' ) ],
+			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
 				printf( '<p class="description">%s</p>', esc_html( $description ) );
@@ -234,8 +235,39 @@ class Setting extends Singleton {
 					],
 				],
 			],
-
-
+			[
+				'id'          => 'canonical_priority',
+				'section'     => 'canonical',
+				'title'       => __( 'Canonical Priority', 'tsmap' ),
+				'type'        => 'number',
+				'label'       => __( 'To leverage search engines crawling, change priority to lower number. 1 is the best.', 'tsmap' ),
+				'placeholder' => __( 'Default. 10', 'tsmap' )
+			],
+			[
+				'id'      => 'canonical_archive',
+				'section' => 'canonical',
+				'title'   => __( 'Canonical For Archive', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'WordPress has canonical link only for singular pages. This option provides canonical features to archive pages.', 'tsmap' ),
+				'options' => [
+					[
+						'value' => 'taxonomies',
+						'label' => __( 'Taxonomy Page', 'tsmap' ),
+					],
+					[
+						'value' => 'author',
+						'label' => __( 'Author Archive', 'tsmap' ),
+					],
+					[
+						'value' => 'home',
+						'label' => __( 'Blog Archive', 'tsmap' ),
+					],
+					[
+						'value' => 'post_type',
+						'label' => __( 'Post Type Archive', 'tsmap' ),
+					],
+				],
+			],
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
 			$section = $setting['section'] ?? 'default';

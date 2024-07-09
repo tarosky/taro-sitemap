@@ -55,9 +55,11 @@ function tsmap_init() {
 	// 1. noindex.
 	\Tarosky\Sitemap\Seo\Features\NoIndexArchive::get_instance();
 	\Tarosky\Sitemap\Seo\Features\OtherNoindex::get_instance();
-
 	\Tarosky\Sitemap\Seo\Features\PostNoindex::get_instance();
 	\Tarosky\Sitemap\Seo\Features\TermNoindex::get_instance();
+	// 2. Canonical
+	\Tarosky\Sitemap\Seo\Features\CanonicalPriority::get_instance();
+	\Tarosky\Sitemap\Seo\Features\CanonicalArchive::get_instance();
 
 
 	// Register assets.

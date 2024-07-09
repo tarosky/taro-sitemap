@@ -49,7 +49,7 @@ class PostNoindex extends RobotsFilterPattern {
 			'<p><label><input type="checkbox" name="%s" value="1" %s</label> %s</p>',
 			esc_attr( $this->meta_key() ),
 			checked( get_post_meta( $post->ID, $this->meta_key(), true ), '1', false ),
-			esc_html__( 'This post is noindex', 'tsmap' )
+			esc_html__( 'Hide this post from search engines', 'tsmap' )
 		);
 	}
 
