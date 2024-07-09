@@ -410,7 +410,7 @@ class Setting extends Singleton {
 						}
 						break;
 				}
-				if ( ! empty( $setting['label'] ) && 'bool' !== $setting['label'] ) {
+				if ( ! empty( $setting['label'] ) && 'bool' !== $setting['type'] ) {
 					printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
 				}
 				if ( 'default_image' === $setting['id'] ) {
