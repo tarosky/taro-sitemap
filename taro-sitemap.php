@@ -60,6 +60,10 @@ function tsmap_init() {
 	// 2. Canonical
 	\Tarosky\Sitemap\Seo\Features\CanonicalPriority::get_instance();
 	\Tarosky\Sitemap\Seo\Features\CanonicalArchive::get_instance();
+	// 3. Meta
+	\Tarosky\Sitemap\Seo\Features\MetaSeparator::get_instance();
+	\Tarosky\Sitemap\Seo\Features\PostDescription::get_instance();
+	\Tarosky\Sitemap\Seo\Features\AutoDescription::get_instance();
 
 
 	// Register assets.

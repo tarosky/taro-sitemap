@@ -100,13 +100,26 @@ class Setting extends Singleton {
 		}
 		foreach ( [
 			[ 'default', __( 'Sitemap', 'tsmap' ), __( 'Setting for Sitemap.', 'tsmap' ) ],
-			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies.', 'tsmap' ) ],
+			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies. This affects the appearance on search engines.', 'tsmap' ) ],
 			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
+			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
-				printf( '<p class="description">%s</p>', esc_html( $description ) );
+				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 			}, 'tsmap' );
 		}
+		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function( $post_type ) {
+			return [
+				'value' => $post_type->name,
+				'label' => $post_type->label,
+			];
+		}, get_post_types( [ 'public' => true ], OBJECT ) ) );
+		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function( \WP_Taxonomy $taxonomy ) {
+			return [
+				'value' => $taxonomy->name,
+				'label' => $taxonomy->label,
+			];
+		}, get_taxonomies( [ 'public' => true ], OBJECT ) ) );
 		// Register setting.
 		foreach ( [
 			// Sitemap features.
@@ -121,12 +134,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in site map.', 'tsmap' ),
-				'options' => array_map( function( $post_type ) {
-					return [
-						'value' => $post_type->name,
-						'label' => $post_type->label,
-					];
-				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+				'options' => $post_types,
 			],
 			[
 				'id'          => 'posts_per_page',
@@ -160,24 +168,14 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in news sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in news site map.', 'tsmap' ),
-				'options' => array_map( function( $post_type ) {
-					return [
-						'value' => $post_type->name,
-						'label' => $post_type->label,
-					];
-				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+				'options' => $post_types,
 			],
 			[
 				'id'      => 'taxonomies',
 				'title'   => __( 'Taxonomies in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check taxonomy archive in site map.', 'tsmap' ),
-				'options' => array_map( function( \WP_Taxonomy $taxonomy ) {
-					return [
-						'value' => $taxonomy->name,
-						'label' => $taxonomy->label,
-					];
-				}, get_taxonomies( [ 'public' => true ], OBJECT ) ),
+				'options' => $taxonomies,
 			],
 			// No Index.
 			[
@@ -186,12 +184,7 @@ class Setting extends Singleton {
 				'title'   => __( 'No Indexable Post Types', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each post in checked post types will have noindex meta box.', 'tsmap' ),
-				'options' => array_map( function( \WP_Post_Type $post_type ) {
-					return [
-						'value' => $post_type->name,
-						'label' => $post_type->label,
-					];
-				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+				'options' => $post_types,
 			],
 			[
 				'id'      => 'noindex_terms',
@@ -199,12 +192,7 @@ class Setting extends Singleton {
 				'title'   => __( 'No Indexable Taxonomies', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each term in checked taxonomies will have noindex setting field.', 'tsmap' ),
-				'options' => array_map( function( \WP_Taxonomy $taxonomy ) {
-					return [
-						'value' => $taxonomy->name,
-						'label' => $taxonomy->label,
-					];
-				}, get_taxonomies( [ 'public' => true ], OBJECT ) ),
+				'options' => $taxonomies,
 			],
 			[
 				'id'          => 'noindex_archive_limit',
@@ -268,6 +256,50 @@ class Setting extends Singleton {
 					],
 				],
 			],
+			[
+				'id'          => 'separator',
+				'section'     => 'meta',
+				'title'       => __( 'Separator', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Separator for document title.', 'tsmap' ),
+				'placeholder' => __( 'Default. -', 'tsmap' )
+			],
+			[
+				'id'          => 'post_desc',
+				'section'     => 'meta',
+				'title'       => __( 'Post Description', 'tsmap' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
+				'options'     => $post_types,
+			],
+			[
+				'id'          => 'auto_desc',
+				'section'     => 'meta',
+				'title'       => __( 'Description', 'tsmap' ),
+				'type'        => 'radio',
+				'label'       => __( 'The strategy for display description.', 'tsmap' ),
+				'options'     => [
+					[
+						'label' => __( 'Do nothing', 'tsmap' ),
+						'value' => '',
+					],
+					[
+						'label' => __( 'Automatic Generate', 'tsmap' ),
+						'value' => 'auto',
+					],
+					[
+						'label' => __( 'Display if specified(excerpt, description, etc.)', 'tsmap' ),
+						'value' => 'manual',
+					]
+				],
+			],
+			[
+				'id'          => 'front_desc',
+				'section'     => 'meta',
+				'title'       => __( 'Front page', 'tsmap' ),
+				'type'        => 'textarea',
+				'label'       => __( 'Description for front page.', 'tsmap' ),
+			],
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
 			$section = $setting['section'] ?? 'default';
@@ -282,6 +314,14 @@ class Setting extends Singleton {
 							esc_attr( $value ),
 							esc_attr( $id ),
 							esc_attr( $setting['placeholder'] ?? '' )
+						);
+						break;
+					case 'textarea':
+						printf(
+							'<textarea name="%1$s" placeholder="%2$s" rows="3" style="width:100%%; box-sizing: border-box;">%3$s</textarea>',
+							esc_attr( $id ),
+							esc_attr( $setting['placeholder'] ?? '' ),
+							esc_textarea( $value )
 						);
 						break;
 					case 'bool':
