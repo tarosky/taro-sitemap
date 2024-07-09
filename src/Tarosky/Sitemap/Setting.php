@@ -32,7 +32,7 @@ class Setting extends Singleton {
 	 * @return void
 	 */
 	public function add_menu_page() {
-		add_submenu_page( 'tools.php', __( 'Sitemap', 'tsmap' ), __( 'Sitemap', 'tsmap' ), 'manage_options', 'tsmap', [ $this, 'render_page' ] );
+		add_submenu_page( 'tools.php', __( 'Sitemap & SEO', 'tsmap' ), __( 'Sitemap & SEO', 'tsmap' ), 'manage_options', 'tsmap', [ $this, 'render_page' ] );
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Setting extends Singleton {
 	public function render_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Sitemap Setting', 'tsmap' ); ?></h1>
+			<h1><?php esc_html_e( 'Sitemap & SEO Setting', 'tsmap' ); ?></h1>
 			<form method="post" action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>">
 				<?php
 				settings_fields( 'tsmap' );
@@ -98,12 +98,17 @@ class Setting extends Singleton {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return;
 		}
-		// Register sections.
-		add_settings_section( 'tsmap_setting_default', __( 'Setting', 'tsmap' ), function() {
-
-		}, 'tsmap' );
+		foreach ( [
+			[ 'default', __( 'Sitemap', 'tsmap' ), __( 'Setting for Sitemap.', 'tsmap' ) ],
+			[ 'noindex', __( 'Noindex', 'tsmap' ), __( 'Add options of noindex for posts and taxonomies.', 'tsmap' ) ]
+		] as list( $key, $title, $description ) ) {
+			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
+				printf( '<p class="description">%s</p>', esc_html( $description ) );
+			}, 'tsmap' );
+		}
 		// Register setting.
 		foreach ( [
+			// Sitemap features.
 			[
 				'id'    => 'disable_core',
 				'title' => __( 'Core Sitemap', 'tsmap' ),
@@ -173,8 +178,67 @@ class Setting extends Singleton {
 					];
 				}, get_taxonomies( [ 'public' => true ], OBJECT ) ),
 			],
+			// No Index.
+			[
+				'id'      => 'noindex_posts',
+				'section' => 'noindex',
+				'title'   => __( 'No Indexable Post Types', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each post in checked post types will have noindex meta box.', 'tsmap' ),
+				'options' => array_map( function( \WP_Post_Type $post_type ) {
+					return [
+						'value' => $post_type->name,
+						'label' => $post_type->label,
+					];
+				}, get_post_types( [ 'public' => true ], OBJECT ) ),
+			],
+			[
+				'id'      => 'noindex_terms',
+				'section' => 'noindex',
+				'title'   => __( 'No Indexable Taxonomies', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each term in checked taxonomies will have noindex setting field.', 'tsmap' ),
+				'options' => array_map( function( \WP_Taxonomy $taxonomy ) {
+					return [
+						'value' => $taxonomy->name,
+						'label' => $taxonomy->label,
+					];
+				}, get_taxonomies( [ 'public' => true ], OBJECT ) ),
+			],
+			[
+				'id'          => 'noindex_archive_limit',
+				'section'     => 'noindex',
+				'title'       => __( 'Noindex Archive', 'tsmap' ),
+				'type'        => 'number',
+				'label'       => __( 'Archive page greater than this number will be noindex.', 'tsmap' ),
+				'placeholder' => __( 'e.g. 6', 'tsmap' )
+			],
+			[
+				'id'      => 'noindex_other',
+				'section' => 'noindex',
+				'title'   => __( 'Other Page', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Miscellaneous pages to be no-indexed.', 'tsmap' ),
+				'options' => [
+					[
+						'value' => 'search',
+						'label' => __( 'Search Results', 'tsmap' ),
+					],
+					[
+						'value' => '404',
+						'label' => __( '404 Page', 'tsmap' ),
+					],
+					[
+						'value' => 'attachment',
+						'label' => __( 'Attachment page', 'tsmap' ),
+					],
+				],
+			],
+
+
 		] as $setting ) {
-			$id = 'tsmap_' . $setting['id'];
+			$id      = 'tsmap_' . $setting['id'];
+			$section = $setting['section'] ?? 'default';
 			add_settings_field( $id, $setting['title'], function() use ( $id, $setting ) {
 				$value = get_option( $id );
 				switch ( $setting['type'] ) {
@@ -187,9 +251,6 @@ class Setting extends Singleton {
 							esc_attr( $id ),
 							esc_attr( $setting['placeholder'] ?? '' )
 						);
-						if ( ! empty( $setting['label'] ) ) {
-							printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
-						}
 						break;
 					case 'bool':
 						printf(
@@ -223,9 +284,13 @@ class Setting extends Singleton {
 						}
 						break;
 				}
-			}, 'tsmap', 'tsmap_setting_default' );
+				if ( ! empty( $setting['label'] ) ) {
+					printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
+				}
+			}, 'tsmap', 'tsmap_setting_' . $section );
 
 			register_setting( 'tsmap', $id );
+
 		}
 	}
 

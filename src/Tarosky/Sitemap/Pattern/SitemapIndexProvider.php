@@ -41,12 +41,12 @@ abstract class SitemapIndexProvider extends AbstractSitemapProvider {
 	/**
 	 * Add robots.txt.
 	 *
-	 * @param string $txt    Robots.txt content.
-	 * @param bool   $public If this site is public.
+	 * @param string $txt       Robots.txt content.
+	 * @param bool   $is_public If this site is public.
 	 * @return string
 	 */
-	public function robots_txt( $txt, $public ) {
-		if ( $public ) {
+	public function robots_txt( $txt, $is_public ) {
+		if ( $is_public ) {
 			$txt .= sprintf( 'Sitemap: %s%s', esc_url( $this->build_url() ), "\n" );
 		}
 		return $txt;

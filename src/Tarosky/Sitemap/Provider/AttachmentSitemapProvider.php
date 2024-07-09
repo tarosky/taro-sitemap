@@ -34,7 +34,7 @@ class AttachmentSitemapProvider extends PostSitemapProvider {
 		$year         = get_query_var( 'year' );
 		$month        = get_query_var( 'monthnum' );
 		$from         = sprintf( '%04d-%02d-01 00:00:00', $year, $month );
-		$to           = ( new \DateTimeImmutable )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
+		$to           = ( new \DateTimeImmutable() )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
 		$per_page     = $this->option()->posts_per_page;
 		$offset       = ( max( 1, get_query_var( 'paged' ) ) - 1 ) * $per_page;
 		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
