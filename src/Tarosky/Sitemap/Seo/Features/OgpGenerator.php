@@ -21,18 +21,22 @@ class OgpGenerator extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function register_hooks() {
-		add_action( 'language_attributes', [ $this, 'language_attributes' ] );
+		add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
 		add_action( 'wp_head', [ $this, 'render_ogp' ] );
 	}
 
 	/**
 	 * Render ns.
+	 *
+	 * @param string $attributes
+	 * @return string
 	 */
-	public function language_attributes() {
-		$ns    = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
-		$ns [] = 'og: http://ogp.me/ns#';
-		$ns [] = 'fb: http://ogp.me/ns/fb#';
-		printf( ' prefix="%s"', esc_attr( implode( ' ', $ns ) ) );
+	public function language_attributes( $attributes ) {
+		$ns          = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
+		$ns []       = 'og: http://ogp.me/ns#';
+		$ns []       = 'fb: http://ogp.me/ns/fb#';
+		$attributes .= sprintf( ' prefix="%s"', esc_attr( implode( ' ', $ns ) ) );
+		return $attributes;
 	}
 
 	/**

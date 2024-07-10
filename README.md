@@ -77,6 +77,10 @@ Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap).
 
 ## Changelog
 
+### 2.0.1
+
+* Bugfix of removing language attributes.
+
 ### 2.0.0
 
 * Add noindex setting.
