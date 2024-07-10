@@ -32,9 +32,9 @@ class OgpGenerator extends AbstractFeaturePattern {
 	 * @return string
 	 */
 	public function language_attributes( $attributes ) {
-		$ns    = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
-		$ns [] = 'og: http://ogp.me/ns#';
-		$ns [] = 'fb: http://ogp.me/ns/fb#';
+		$ns          = [ ( is_front_page() ) ? 'website: http://ogp.me/ns/website#' : 'article: http://ogp.me/ns/article#' ];
+		$ns []       = 'og: http://ogp.me/ns#';
+		$ns []       = 'fb: http://ogp.me/ns/fb#';
 		$attributes .= sprintf( ' prefix="%s"', esc_attr( implode( ' ', $ns ) ) );
 		return $attributes;
 	}
