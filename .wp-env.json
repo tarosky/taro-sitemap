@@ -1,5 +1,8 @@
 {
-	"plugins": [ "." ],
+	"plugins": [
+		".",
+		"https://github.com/kuno1/virtual-member/releases/latest/download/virtual-member.zip"
+	],
 	"themes": [
 		"https://downloads.wordpress.org/theme/twentytwenty.latest-stable.zip",
 		"https://downloads.wordpress.org/theme/stacks.latest-stable.zip"
