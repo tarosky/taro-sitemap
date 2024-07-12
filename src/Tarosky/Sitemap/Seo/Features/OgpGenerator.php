@@ -80,6 +80,14 @@ class OgpGenerator extends AbstractFeaturePattern {
 				$image = $attachment;
 			}
 		}
+		// Set date on singular
+		if ( is_singular() && is_a( get_queried_object(), 'WP_Post' ) ) {
+			$post = get_queried_object();
+			$ogp['article:published_time'] = mysql2date( \DateTime::ATOM, $post->post_date );
+			if ( $post->post_date < $post->post_modified ) {
+				$ogp['article:modified_time'] = mysql2date( \DateTime::ATOM, $post->post_modified );
+			}
+		}
 		if ( is_singular() && has_post_thumbnail( get_queried_object() ) ) {
 			$image = wp_get_attachment_image_url( get_post_thumbnail_id( get_queried_object() ), 'full' );
 		}
