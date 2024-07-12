@@ -69,7 +69,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 * @return array
 	 */
 	public function get_article_structure( $post ) {
-		$json = [
+		$json   = [
 			'@context'         => 'http://schema.org',
 			'@type'            => apply_filters( 'tsmap_json_ld_article_type', 'Article', $post ),
 			'mainEntityOfPage' => [
@@ -147,7 +147,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			$option_key = 'jsonld_publisher_' . $key;
 			if ( 'logo' === $key ) {
 				$attachment_id = $this->option( $option_key );
-				$option = $attachment_id ? wp_get_attachment_image_url( $attachment_id, 'full' ) : '';
+				$option        = $attachment_id ? wp_get_attachment_image_url( $attachment_id, 'full' ) : '';
 			} else {
 				$option = $this->option( $option_key );
 			}

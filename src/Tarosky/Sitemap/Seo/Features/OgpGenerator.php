@@ -82,7 +82,7 @@ class OgpGenerator extends AbstractFeaturePattern {
 		}
 		// Set date on singular
 		if ( is_singular() && is_a( get_queried_object(), 'WP_Post' ) ) {
-			$post = get_queried_object();
+			$post                          = get_queried_object();
 			$ogp['article:published_time'] = mysql2date( \DateTime::ATOM, $post->post_date );
 			if ( $post->post_date < $post->post_modified ) {
 				$ogp['article:modified_time'] = mysql2date( \DateTime::ATOM, $post->post_modified );

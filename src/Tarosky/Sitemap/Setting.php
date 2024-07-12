@@ -378,11 +378,11 @@ class Setting extends Singleton {
 				'placeholder' => get_bloginfo( 'url' ),
 			],
 			[
-				'id'          => 'jsonld_publisher_logo',
-				'section'     => 'json-ld',
-				'title'       => __( 'Publisher Logo', 'tsmap' ),
-				'type'        => 'image',
-				'label'       => __( 'Attachment ID of the publisher. Default is site icon.', 'tsmap' ),
+				'id'      => 'jsonld_publisher_logo',
+				'section' => 'json-ld',
+				'title'   => __( 'Publisher Logo', 'tsmap' ),
+				'type'    => 'image',
+				'label'   => __( 'Attachment ID of the publisher. Default is site icon.', 'tsmap' ),
 			],
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
