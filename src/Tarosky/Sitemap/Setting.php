@@ -89,6 +89,28 @@ class Setting extends Singleton {
 	}
 
 	/**
+	 * Get post types for selection.
+	 *
+	 * @param string $context       Filter context.
+	 * @param bool   $include_media Is attachment included.
+	 * @return array{label:string,name:string}[]
+	 */
+	protected function selectable_post_types( $context, $include_media = false ) {
+		$post_types = get_post_types([ 'public' => true ], OBJECT );
+		if ( ! $include_media ) {
+			$post_types = array_filter( $post_types, function ( $post_type ) {
+				return 'attachment' !== $post_type->name;
+			} );
+		}
+		return apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
+			return [
+				'value' => $post_type->name,
+				'label' => $post_type->label,
+			];
+		}, $post_types ), $context );
+	}
+
+	/**
 	 * Register setting fields.
 	 *
 	 * @return void
@@ -109,12 +131,6 @@ class Setting extends Singleton {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 			}, 'tsmap' );
 		}
-		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
-			return [
-				'value' => $post_type->name,
-				'label' => $post_type->label,
-			];
-		}, get_post_types( [ 'public' => true ], OBJECT ) ) );
 		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function ( \WP_Taxonomy $taxonomy ) {
 			return [
 				'value' => $taxonomy->name,
@@ -135,7 +151,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in site map.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'sitemap' ),
 			],
 			[
 				'id'          => 'posts_per_page',
@@ -169,7 +185,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in news sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in news site map.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'news_sitemap' ),
 			],
 			[
 				'id'      => 'taxonomies',
@@ -185,7 +201,7 @@ class Setting extends Singleton {
 				'title'   => __( 'No Indexable Post Types', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each post in checked post types will have noindex meta box.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'noindex', true ),
 			],
 			[
 				'id'      => 'noindex_terms',
@@ -271,7 +287,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post Description', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'meta_desc' ),
 			],
 			[
 				'id'      => 'auto_desc',
@@ -358,7 +374,7 @@ class Setting extends Singleton {
 				'section' => 'json-ld',
 				'title'   => __( 'Article Post Type', 'tsmap' ),
 				'type'    => 'checkbox',
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'json_ld' ),
 				'label'   => __( 'Checked post type will display JSON-LD in head tag.', 'tsmap' ),
 			],
 			[

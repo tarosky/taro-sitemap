@@ -18,6 +18,7 @@ class PostMetaBoxes extends Singleton {
 	protected function init() {
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 100 );
 		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
+		add_action('edit_attachment', [ $this, 'save_attachment' ] );
 	}
 
 	/**
@@ -47,6 +48,17 @@ class PostMetaBoxes extends Singleton {
 		}
 		// Should save action.
 		do_action( 'tsmap_save_post_meta', $post );
+	}
+
+	/**
+	 * Save metabox for attachment
+	 *
+	 * @param int $post_id Post ID.
+	 * @return void
+	 */
+	public function save_attachment( $post_id ) {
+		$attachment = get_post( $post_id );
+		$this->save_post( $post_id, $attachment );
 	}
 
 	/**
