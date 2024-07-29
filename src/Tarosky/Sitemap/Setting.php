@@ -58,7 +58,6 @@ class Setting extends Singleton {
 				// Description.
 				echo wp_kses_post( sprintf(
 					// translators: %1$s is URL, %2$s is robotx.txt url.
-
 					__( 'The sitemap URL are listed below. You should register these URLs at <a href="%1$s" target="_blank" rel="noopener noreferrer">Google Search Console</a>. They also appear in <a href="%2$s">robots.txt</a>.', 'tsmap' ),
 					'https://search.google.com/search-console',
 					home_url( 'robots.txt' )
@@ -90,6 +89,28 @@ class Setting extends Singleton {
 	}
 
 	/**
+	 * Get post types for selection.
+	 *
+	 * @param string $context       Filter context.
+	 * @param bool   $include_media Is attachment included.
+	 * @return array{label:string,name:string}[]
+	 */
+	protected function selectable_post_types( $context, $include_media = false ) {
+		$post_types = get_post_types( [ 'public' => true ], OBJECT );
+		if ( ! $include_media ) {
+			$post_types = array_filter( $post_types, function ( $post_type ) {
+				return 'attachment' !== $post_type->name;
+			} );
+		}
+		return apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
+			return [
+				'value' => $post_type->name,
+				'label' => $post_type->label,
+			];
+		}, $post_types ), $context );
+	}
+
+	/**
 	 * Register setting fields.
 	 *
 	 * @return void
@@ -104,17 +125,12 @@ class Setting extends Singleton {
 			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
 			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
 			[ 'ogp', __( 'OGP', 'tsmap' ), __( 'OGP setting. Displayed on social media.', 'tsmap' ) ],
+			[ 'json-ld', __( 'Structured Date', 'tsmap' ), __( 'Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter hooks <code>tsmap_json_ld</code> is also available.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 			}, 'tsmap' );
 		}
-		$post_types = apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
-			return [
-				'value' => $post_type->name,
-				'label' => $post_type->label,
-			];
-		}, get_post_types( [ 'public' => true ], OBJECT ) ) );
 		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function ( \WP_Taxonomy $taxonomy ) {
 			return [
 				'value' => $taxonomy->name,
@@ -135,7 +151,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in Sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in site map.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'sitemap' ),
 			],
 			[
 				'id'          => 'posts_per_page',
@@ -169,7 +185,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post types in news sitemap', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in news site map.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'news_sitemap' ),
 			],
 			[
 				'id'      => 'taxonomies',
@@ -185,7 +201,7 @@ class Setting extends Singleton {
 				'title'   => __( 'No Indexable Post Types', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each post in checked post types will have noindex meta box.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'noindex', true ),
 			],
 			[
 				'id'      => 'noindex_terms',
@@ -271,7 +287,7 @@ class Setting extends Singleton {
 				'title'   => __( 'Post Description', 'tsmap' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Each post in checked post type will have post description field.', 'tsmap' ),
-				'options' => $post_types,
+				'options' => $this->selectable_post_types( 'meta_desc' ),
 			],
 			[
 				'id'      => 'auto_desc',
@@ -312,7 +328,7 @@ class Setting extends Singleton {
 				'id'      => 'default_image',
 				'section' => 'ogp',
 				'title'   => __( 'Default Image', 'tsmap' ),
-				'type'    => 'number',
+				'type'    => 'image',
 				'label'   => __( 'Attachment ID of default image. This image is used for page without featured image..', 'tsmap' ),
 			],
 			[
@@ -353,7 +369,37 @@ class Setting extends Singleton {
 					],
 				],
 			],
-
+			[
+				'id'      => 'jsonld_article_post_types',
+				'section' => 'json-ld',
+				'title'   => __( 'Article Post Type', 'tsmap' ),
+				'type'    => 'checkbox',
+				'options' => $this->selectable_post_types( 'json_ld' ),
+				'label'   => __( 'Checked post type will display JSON-LD in head tag.', 'tsmap' ),
+			],
+			[
+				'id'          => 'jsonld_publisher_name',
+				'section'     => 'json-ld',
+				'title'       => __( 'Publisher Name', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Publisher name of article. Default is site name.', 'tsmap' ),
+				'placeholder' => get_bloginfo( 'name' ),
+			],
+			[
+				'id'          => 'jsonld_publisher_url',
+				'section'     => 'json-ld',
+				'title'       => __( 'Publisher URL', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Publisher URL of article. Default is site URL.', 'tsmap' ),
+				'placeholder' => get_bloginfo( 'url' ),
+			],
+			[
+				'id'      => 'jsonld_publisher_logo',
+				'section' => 'json-ld',
+				'title'   => __( 'Publisher Logo', 'tsmap' ),
+				'type'    => 'image',
+				'label'   => __( 'Attachment ID of the publisher. Default is site icon.', 'tsmap' ),
+			],
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];
 			$section = $setting['section'] ?? 'default';
@@ -362,9 +408,11 @@ class Setting extends Singleton {
 				switch ( $setting['type'] ) {
 					case 'number':
 					case 'text':
+					case 'image':
+						$type = 'image' === $setting['type'] ? 'number' : $setting['type'];
 						printf(
 							'<input type="%1$s" value="%2$s" name="%3$s" placeholder="%4$s" />',
-							esc_attr( $setting['type'] ),
+							esc_attr( $type ),
 							esc_attr( $value ),
 							esc_attr( $id ),
 							esc_attr( $setting['placeholder'] ?? '' )
@@ -413,7 +461,7 @@ class Setting extends Singleton {
 				if ( ! empty( $setting['label'] ) && 'bool' !== $setting['type'] ) {
 					printf( '<p class="description">%s</p>', esc_html( $setting['label'] ) );
 				}
-				if ( 'default_image' === $setting['id'] ) {
+				if ( 'image' === $setting['type'] ) {
 					$attachment = $value ? get_post( $value ) : null;
 					if ( $attachment ) {
 						printf(

@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Taro Sitemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 21:56+0900\n"
-"PO-Revision-Date: 2024-07-09 22:14+0900\n"
+"POT-Creation-Date: 2024-07-12 17:40+0900\n"
+"PO-Revision-Date: 2024-07-12 17:43+0900\n"
 "Last-Translator: Takahashi Fumiki <takahashi.fumiki@hametuha.co.jp>\n"
 "Language-Team: TAROSKY INC <info@tarosky.co.jp>\n"
 "Language: ja\n"
@@ -23,12 +23,12 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: wordpress\n"
 "X-Poedit-SearchPathExcluded-4: dist\n"
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:123
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:124
 #, php-format
 msgid "Search results for: %s"
 msgstr "検索結果: %s"
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:125
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:126
 msgid "Page not found."
 msgstr "ページが見つかりませんでした。"
 
@@ -45,7 +45,7 @@ msgid "Make this term noindex for search engines."
 msgstr "このタームを検索エンジンで表示しない。"
 
 #: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:61
-#: src/Tarosky/Sitemap/Setting.php:103
+#: src/Tarosky/Sitemap/Setting.php:102
 msgid "Noindex"
 msgstr "ノーインデックス"
 
@@ -65,7 +65,7 @@ msgstr "サイトマップとSEO設定"
 msgid "Sitemap URL"
 msgstr "サイトマップURL"
 
-#: src/Tarosky/Sitemap/Setting.php:62
+#: src/Tarosky/Sitemap/Setting.php:61
 #, php-format
 msgid ""
 "The sitemap URL are listed below. You should register these URLs at <a "
@@ -77,47 +77,59 @@ msgstr ""
 "登録する必要があります。URLは <a href=\"%2$s\">robots.txt</a>にも表示されてい"
 "ます。"
 
-#: src/Tarosky/Sitemap/Setting.php:75
+#: src/Tarosky/Sitemap/Setting.php:74
 msgid "No sitemaps are available."
 msgstr "サイトマップがありません。"
 
-#: src/Tarosky/Sitemap/Setting.php:102
+#: src/Tarosky/Sitemap/Setting.php:101
 msgid "Sitemap"
 msgstr "サイトマップ"
 
-#: src/Tarosky/Sitemap/Setting.php:102
+#: src/Tarosky/Sitemap/Setting.php:101
 msgid "Setting for Sitemap."
 msgstr "サイトマップの設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:103
+#: src/Tarosky/Sitemap/Setting.php:102
 msgid ""
 "Add options of noindex for posts and taxonomies. This affects the appearance "
 "on search engines."
 msgstr "投稿やタクソノーにnoidex設定を追加します。"
 
-#: src/Tarosky/Sitemap/Setting.php:104
+#: src/Tarosky/Sitemap/Setting.php:103
 msgid "Canonical"
 msgstr "カノニカル"
 
-#: src/Tarosky/Sitemap/Setting.php:104
+#: src/Tarosky/Sitemap/Setting.php:103
 msgid "Canonical URL related features."
 msgstr "カノニカルURL関連の設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:105
+#: src/Tarosky/Sitemap/Setting.php:104
 msgid "Meta"
 msgstr "メタ"
 
-#: src/Tarosky/Sitemap/Setting.php:105
+#: src/Tarosky/Sitemap/Setting.php:104
 msgid "Additional setting for <code>&lt;head&gt;</code> tag."
 msgstr "<code>&lt;head&gt;</code> タグの追加設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:106
+#: src/Tarosky/Sitemap/Setting.php:105
 msgid "OGP"
 msgstr "OGP"
 
-#: src/Tarosky/Sitemap/Setting.php:106
+#: src/Tarosky/Sitemap/Setting.php:105
 msgid "OGP setting. Displayed on social media."
 msgstr "OGP設定です。ソーシャルメディアで表示されます。"
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid "Structured Date"
+msgstr "構造化データ"
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid ""
+"Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter "
+"hooks <code>tsmap_json_ld</code> is also available."
+msgstr ""
+"JSON-LDの構造化データを <code>&lt;head&gt;</code> タグ内に表示します。フィル"
+"ターフック <code>tsmap_json_ld</code> も利用できます。"
 
 #: src/Tarosky/Sitemap/Setting.php:129
 msgid "Core Sitemap"
@@ -379,6 +391,38 @@ msgstr "Xカードサイズ"
 msgid "Card size shared on X."
 msgstr "Xでシェアされたときのカードサイズです。"
 
-#: src/Tarosky/Sitemap/Setting.php:422
+#: src/Tarosky/Sitemap/Setting.php:359
+msgid "Article Post Type"
+msgstr "記事の投稿タイプ"
+
+#: src/Tarosky/Sitemap/Setting.php:362
+msgid "Checked post type will display JSON-LD in head tag."
+msgstr "チェックした投稿タイプで JSON-LD を head タグに表示します。"
+
+#: src/Tarosky/Sitemap/Setting.php:367
+msgid "Publisher Name"
+msgstr "発行者名"
+
+#: src/Tarosky/Sitemap/Setting.php:369
+msgid "Publisher name of article. Default is site name."
+msgstr "記事の発行者名。デフォルトはサイト名です。"
+
+#: src/Tarosky/Sitemap/Setting.php:375
+msgid "Publisher URL"
+msgstr "発行者URL"
+
+#: src/Tarosky/Sitemap/Setting.php:377
+msgid "Publisher URL of article. Default is site URL."
+msgstr "記事発行者のURL。デフォルトはサイトURLです。"
+
+#: src/Tarosky/Sitemap/Setting.php:383
+msgid "Publisher Logo"
+msgstr "発行者ロゴ"
+
+#: src/Tarosky/Sitemap/Setting.php:385
+msgid "Attachment ID of the publisher. Default is site icon."
+msgstr "発行者ロゴの添付ファイルID。デフォルトはサイトアイコンになります。"
+
+#: src/Tarosky/Sitemap/Setting.php:454
 msgid "Preview: "
 msgstr "プレビュー："

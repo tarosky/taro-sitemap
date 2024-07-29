@@ -15,6 +15,12 @@ trait PostMetaBoxTrait {
 	 */
 	abstract public function is_active_post_type( $post_type ): bool;
 
+	/**
+	 * Register metabox hooks.
+	 *
+	 * @param int $priority Hook priority.
+	 * @return void
+	 */
 	protected function add_meta_box( $priority = 11 ) {
 		add_filter( 'tsmap_has_meta_box', [ $this, 'has_meta_box' ], $priority, 2 );
 		add_action( 'tsmap_do_meta_box', [ $this, 'do_meta_box' ], $priority );

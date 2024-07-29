@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Taro Sitemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 21:56+0900\n"
+"POT-Creation-Date: 2024-07-12 17:40+0900\n"
 "PO-Revision-Date: 2014-04-02 22:50+0900\n"
 "Last-Translator: Takahashi Fumiki <info@takahashifumiki.com>\n"
 "Language-Team: TAROSKY INC <info@tarosky.co.jp>\n"
@@ -23,12 +23,12 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: wordpress\n"
 "X-Poedit-SearchPathExcluded-4: dist\n"
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:123
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:124
 #, php-format
 msgid "Search results for: %s"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:125
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:126
 msgid "Page not found."
 msgstr ""
 
@@ -45,7 +45,7 @@ msgid "Make this term noindex for search engines."
 msgstr ""
 
 #: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:61
-#: src/Tarosky/Sitemap/Setting.php:103
+#: src/Tarosky/Sitemap/Setting.php:102
 msgid "Noindex"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Sitemap URL"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:62
+#: src/Tarosky/Sitemap/Setting.php:61
 #, php-format
 msgid ""
 "The sitemap URL are listed below. You should register these URLs at <a "
@@ -73,46 +73,56 @@ msgid ""
 "Console</a>. They also appear in <a href=\"%2$s\">robots.txt</a>."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:75
+#: src/Tarosky/Sitemap/Setting.php:74
 msgid "No sitemaps are available."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:102
+#: src/Tarosky/Sitemap/Setting.php:101
 msgid "Sitemap"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:102
+#: src/Tarosky/Sitemap/Setting.php:101
 msgid "Setting for Sitemap."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:103
+#: src/Tarosky/Sitemap/Setting.php:102
 msgid ""
 "Add options of noindex for posts and taxonomies. This affects the "
 "appearance on search engines."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:104
+#: src/Tarosky/Sitemap/Setting.php:103
 msgid "Canonical"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:104
+#: src/Tarosky/Sitemap/Setting.php:103
 msgid "Canonical URL related features."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:105
+#: src/Tarosky/Sitemap/Setting.php:104
 msgid "Meta"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:105
+#: src/Tarosky/Sitemap/Setting.php:104
 msgid "Additional setting for <code>&lt;head&gt;</code> tag."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:106
+#: src/Tarosky/Sitemap/Setting.php:105
 msgid "OGP"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:106
+#: src/Tarosky/Sitemap/Setting.php:105
 msgid "OGP setting. Displayed on social media."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid "Structured Date"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:106
+msgid ""
+"Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. "
+"Filter hooks <code>tsmap_json_ld</code> is also available."
 msgstr ""
 
 #: src/Tarosky/Sitemap/Setting.php:129
@@ -361,6 +371,38 @@ msgstr ""
 msgid "Card size shared on X."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:422
+#: src/Tarosky/Sitemap/Setting.php:359
+msgid "Article Post Type"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:362
+msgid "Checked post type will display JSON-LD in head tag."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:367
+msgid "Publisher Name"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:369
+msgid "Publisher name of article. Default is site name."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:375
+msgid "Publisher URL"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:377
+msgid "Publisher URL of article. Default is site URL."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:383
+msgid "Publisher Logo"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:385
+msgid "Attachment ID of the publisher. Default is site icon."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:454
 msgid "Preview: "
 msgstr ""
