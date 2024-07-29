@@ -18,7 +18,7 @@ class PostMetaBoxes extends Singleton {
 	protected function init() {
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 100 );
 		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
-		add_action('edit_attachment', [ $this, 'save_attachment' ] );
+		add_action( 'edit_attachment', [ $this, 'save_attachment' ] );
 	}
 
 	/**

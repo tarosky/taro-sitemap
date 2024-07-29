@@ -96,7 +96,7 @@ class Setting extends Singleton {
 	 * @return array{label:string,name:string}[]
 	 */
 	protected function selectable_post_types( $context, $include_media = false ) {
-		$post_types = get_post_types([ 'public' => true ], OBJECT );
+		$post_types = get_post_types( [ 'public' => true ], OBJECT );
 		if ( ! $include_media ) {
 			$post_types = array_filter( $post_types, function ( $post_type ) {
 				return 'attachment' !== $post_type->name;
