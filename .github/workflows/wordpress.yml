@@ -71,11 +71,12 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
+    if: always()
     needs: [ test, assets ]
     steps:
-      - name: Display Status
-        run: echo "All tests passed!"
-
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
 
   release:
     name: Deploy WordPress.org
