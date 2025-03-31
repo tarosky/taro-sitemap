@@ -67,15 +67,15 @@ class PostSitemapExclusion extends AbstractFeaturePattern {
 			'post__in'       => $post_ids,
 			'meta_query'     => [
 				[
-					'key'     => '_exclude_from_sitemap',
-					'value'   => '1',
+					'key'   => '_exclude_from_sitemap',
+					'value' => '1',
 				],
 			],
 		] );
 		if ( empty( $exclude_ids ) ) {
 			return $result;
 		}
-		return array_values( array_filter( $result, function( $post ) use ( $exclude_ids ) {
+		return array_values( array_filter( $result, function ( $post ) use ( $exclude_ids ) {
 			return ! in_array( (int) $post->ID, $exclude_ids, true );
 		} ) );
 	}
