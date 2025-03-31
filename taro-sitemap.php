@@ -70,6 +70,7 @@ function tsmap_init() {
 	\Tarosky\Sitemap\Seo\Features\OgpGenerator::get_instance();
 	\Tarosky\Sitemap\Seo\Features\StructuredDataGenerator::get_instance();
 	// 5. Sitemap exclusion.
+	\Tarosky\Sitemap\Seo\Features\PostSitemapExclusion::get_instance();
 	\Tarosky\Sitemap\Seo\Features\NewsSitemapExclusion::get_instance();
 
 	// Register assets.
