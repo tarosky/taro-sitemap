@@ -6,15 +6,17 @@ namespace Tarosky\Sitemap\Seo\Features;
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
 use Tarosky\Sitemap\Pattern\PostMetaBoxTrait;
 
+/**
+ * Add feature to exclude from news sitemap.
+ */
 class NewsSitemapExclusion extends AbstractFeaturePattern {
 
 	use PostMetaBoxTrait;
 
 	protected function register_hooks() {
 		add_filter( 'tsmap_news_sitemap_query_args', [ $this, 'news_sitemap_query' ] );
-		$this->add_meta_box( 101 );
+		$this->add_meta_box( 110 );
 	}
-
 
 	protected function is_active(): bool {
 		$news_post_types = $this->option( 'news_post_types' );

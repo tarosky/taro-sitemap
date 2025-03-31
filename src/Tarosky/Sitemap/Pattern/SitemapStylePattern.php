@@ -34,13 +34,14 @@ abstract class SitemapStylePattern extends Singleton {
 	 * @return string
 	 */
 	protected function get_stylesheet_url() {
+		$url   = '';
 		$style = wp_styles()->query( 'tsmap-sitemap', 'registered' );
-		if ( ! $style ) {
-			return '';
+		if ( $style ) {
+			$url = add_query_arg( [
+				'version' => $style->ver,
+			], $style->src );
 		}
-		return add_query_arg( [
-			'version' => $style->ver,
-		], $style->src );
+		return apply_filters( 'tsmap_sitmap_stylesheet_url', $url, $this->style_name() );
 	}
 
 	/**
