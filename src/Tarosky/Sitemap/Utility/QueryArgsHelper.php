@@ -18,7 +18,7 @@ trait QueryArgsHelper {
 	 * @return array
 	 */
 	protected function news_query_args( $type, $args = [] ) {
-		return apply_filters( 'hms_news_sitemap_query_args', array_merge( [
+		return apply_filters( 'tsmap_news_sitemap_query_args', array_merge( [
 			'post_status'         => 'publish',
 			'post_type'           => $this->option()->news_post_types,
 			'orderby'             => [ 'date' => 'DESC' ],
@@ -96,13 +96,17 @@ trait QueryArgsHelper {
 		$in_clause = implode( ', ', array_map( function ( $post_type ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $post_type );
 		}, $post_types ) );
+		$wheres    = apply_filters( 'tsmap_post_index_query_where', [
+			"post_type IN ( {$in_clause} )",
+			"post_status = 'publish'",
+		], $post_types);
+		$wheres    = implode( ' AND ', $wheres );
 		$query     = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from post_date ) as date,
 			    COUNT(ID) AS total
 			FROM {$wpdb->posts}
-			WHERE post_type IN ( {$in_clause} )
-			  AND post_status = 'publish'
+			WHERE {$wheres}
 			GROUP BY EXTRACT( YEAR_MONTH from post_date )
 SQL;
 		// Already escaped.

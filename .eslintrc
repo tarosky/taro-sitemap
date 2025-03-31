@@ -1,5 +1,4 @@
 {
-	"parser": "babel-eslint",
 	"env": {
 		"browser": true,
 		"jquery": true
@@ -12,7 +11,7 @@
 		"ga": false
 	},
 	"extends": [
-		"plugin:@wordpress/eslint-plugin/recommended"
+		"plugin:@wordpress/eslint-plugin/recommended-with-formatting"
 	],
 	"rules": {
 		"no-alert": "off",
@@ -30,10 +29,5 @@
 		"yoda": "off",
 		"strict": "off",
 		"@wordpress/valid-sprintf": "off"
-	},
-	"settings": {
-		"react": {
-			"version": "16.9.0"
-		}
 	}
 }

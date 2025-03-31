@@ -2,9 +2,7 @@
 
 Contributors: tarosky, Takahashi_Fumiki
 Tags: sitemap,google,news  
-Requires at least: 5.9  
-Requires PHP: 7.2  
-Tested up to: 6.5  
+Tested up to: 6.7  
 Stable Tag: nightly
 
 Sitemap plugin.

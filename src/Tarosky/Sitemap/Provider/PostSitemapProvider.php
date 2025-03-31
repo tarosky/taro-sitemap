@@ -73,6 +73,8 @@ SQL;
 		$query = $wpdb->prepare( $query, $from, $to, $offset, $per_page );
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$results = $wpdb->get_results( $query );
+		// Filter results to remove no index.
+		$results = apply_filters( 'tsmap_sitemap_results', $results, $this->type, $this->target_name(), $year, $month );
 		if ( empty( $results ) ) {
 			return [];
 		}

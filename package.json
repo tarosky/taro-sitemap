@@ -1,64 +1,49 @@
 {
-  "name": "tarosky-sitemap",
-  "version": "1.0.0",
-  "description": "",
-  "main": "gulpfile.js",
-  "scripts": {
-    "start": "wp-env start",
-    "update": "wp-env start --update",
-    "stop": "wp-env stop",
-    "cli": "wp-env run cli wp",
-    "cli:test": "wp-env run tests-cli wp",
-    "package": "gulp build",
-    "watch": "gulp watch",
-    "test": "gulp lint",
-    "gulp": "gulp",
-    "gulp:task": "gulp --tasks",
-    "fix:js": "eslint --fix -c .eslintrc assets/js",
-    "fix:css": "stylelint --fix assets/scss"
-  },
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "keywords": [],
-  "author": "Tarosky INC",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": ""
-  },
-  "engines": {
-    "node": ">=14"
-  },
-  "homepage": "",
-  "devDependencies": {
-    "@babel/core": "^7.1.0",
-    "@babel/plugin-transform-react-jsx": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "@kunoichi/grab-deps": "^1.2.2",
-    "@wordpress/env": "^5.4.0",
-    "@wordpress/eslint-plugin": "^9.0",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
-    "eslint": "^7.13",
-    "gulp": "^4.0.0",
-    "gulp-autoprefixer": "^7.0.0",
-    "gulp-eslint": "^6.0.0",
-    "gulp-load-plugins": "^2.0",
-    "gulp-notify": "^3.2.0",
-    "gulp-plumber": "^1.2.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sass-glob": "^1.0.9",
-    "gulp-sourcemaps": "^3.0",
-    "gulp-stylelint": "^13.0.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-wordpress": "^17.0.0",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^5.3",
-    "webpack-stream": "^6.1"
-  },
-  "volta": {
-    "node": "14.21.3"
-  }
+	"name": "tarosky-sitemap",
+	"version": "1.0.0",
+	"description": "",
+	"main": "gulpfile.js",
+	"scripts": {
+		"start": "wp-env start",
+		"update": "wp-env start --update",
+		"stop": "wp-env stop",
+		"cli": "wp-env run cli wp",
+		"cli:test": "wp-env run tests-cli wp",
+		"test": "RESULT=${PWD##*/} && wp-env run tests-cli ./wp-content/plugins/$RESULT/vendor/bin/phpunit -c ./wp-content/plugins/$RESULT/phpunit.xml.dist",
+		"build": "npm run build:css && npm run dump",
+		"dump": "grab-deps dump dist",
+		"build:js": "grab-deps js assts/js dist/js",
+		"build:css": "sass ./assets/scss/:./dist/css/ --style=compressed && postcss ./dist/css/**/*.css --replace",
+		"lint": "npm run lint:css",
+		"lint:js": "wp-scripts lint-js 'assets/js/**/*.js'",
+		"lint:css": "wp-scripts lint-style 'assets/**/*.scss'",
+		"fix:js": "wp-scripts format assets/js",
+		"fix:css": "stylelint --fix assets/scss",
+		"watch": "gulp watch"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"keywords": [],
+	"author": "Tarosky INC",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/tarosky/taro-sitemap/issues/new?template=issue_template.md"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"homepage": "",
+	"devDependencies": {
+		"@kunoichi/grab-deps": "^2.0.0",
+		"@wordpress/env": "^10.0.0",
+		"@wordpress/scripts": "^30.0.0",
+		"postcss": "^8.5.3",
+		"postcss-cli": "^11.0.1",
+		"sass": "^1.86.0"
+	},
+	"volta": {
+		"node": "20.19.0"
+	}
 }
