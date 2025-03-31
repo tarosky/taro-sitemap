@@ -18,7 +18,7 @@ trait QueryArgsHelper {
 	 * @return array
 	 */
 	protected function news_query_args( $type, $args = [] ) {
-		return apply_filters( 'hms_news_sitemap_query_args', array_merge( [
+		return apply_filters( 'tsmap_news_sitemap_query_args', array_merge( [
 			'post_status'         => 'publish',
 			'post_type'           => $this->option()->news_post_types,
 			'orderby'             => [ 'date' => 'DESC' ],
