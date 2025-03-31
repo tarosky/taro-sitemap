@@ -13,7 +13,7 @@ composer install --no-dev --prefer-dist
 
 # Install NPM.
 npm install
-npm run package
+npm run build
 
 # Create README.txt
 curl -L https://raw.githubusercontent.com/fumikito/wp-readme/master/wp-readme.php | php
