@@ -31,7 +31,9 @@ abstract class SitemapProvider extends AbstractSitemapProvider {
 	 * {@inheritdoc}
 	 */
 	public function render() {
+		$start = microtime( true );
 		$urls = $this->get_urls();
+		$this->set_query_time();
 		$this->header();
 
 		do_action( 'tsmap_pre_sitemap', $this->type, $this->target_name() );

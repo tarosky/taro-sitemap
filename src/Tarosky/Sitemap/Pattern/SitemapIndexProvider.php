@@ -75,6 +75,7 @@ abstract class SitemapIndexProvider extends AbstractSitemapProvider {
 	 */
 	public function render() {
 		$urls = $this->get_urls();
+		$this->set_query_time();
 		$this->header();
 		do_action( 'tsmap_pre_sitemap', $this->type, $this->target_name() );
 		echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\n";

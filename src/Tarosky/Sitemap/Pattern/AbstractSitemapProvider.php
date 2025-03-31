@@ -15,6 +15,10 @@ abstract class AbstractSitemapProvider extends Singleton {
 
 	use QueryArgsHelper;
 
+	protected $start_time = 0;
+
+	protected $queried_time = 0;
+
 	/**
 	 * Render header
 	 *
@@ -68,9 +72,26 @@ abstract class AbstractSitemapProvider extends Singleton {
 			// This is not target.
 			return;
 		}
+		$this->start_time = microtime( true );
 		// Okay, time to render sitemap.
 		$this->render();
+		// Record Rendering time.
+		$recording_time = microtime( true ) - $this->start_time;
+		printf( "\n" . '<!-- Rendering Time: %fms -->', $recording_time * 1000 );
+		// Render Query time.
+		if ( $this->queried_time ) {
+			printf( "\n" . '<!-- Query Time: %fms -->', ( $this->queried_time - $this->start_time ) * 1000 );
+		}
 		exit;
+	}
+
+	/**
+	 * Save query time.
+	 *
+	 * @return void
+	 */
+	protected function set_query_time() {
+		$this->queried_time = microtime( true );
 	}
 
 	/**
