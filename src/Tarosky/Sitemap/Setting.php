@@ -12,6 +12,7 @@ use Tarosky\Sitemap\Pattern\Singleton;
  * @property-read bool     $disable_core
  * @property-read int      $posts_per_page
  * @property-read string[] $post_types
+ * @property-read bool     $exclusion_per_post
  * @property-read string[] $news_post_types
  * @property-read string[] $taxonomies
  * @property-read string   $attachment_sitemap
@@ -152,6 +153,22 @@ class Setting extends Singleton {
 				'type'    => 'checkbox',
 				'label'   => __( 'Please check post type to be included in site map.', 'tsmap' ),
 				'options' => $this->selectable_post_types( 'sitemap' ),
+			],
+			[
+				'id'      => 'exclusion_per_post',
+				'title'   => __( 'Exclude each posts from Sitemap', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'Allow exclusion option for each posts. This feature may affect sitemap performance.', 'tsmap' ),
+				'options' => [
+					[
+						'value' => '',
+						'label' => __( 'No', 'tsmap' ),
+					],
+					[
+						'value' => '1',
+						'label' => __( 'Yes', 'tsmap' ),
+					],
+				],
 			],
 			[
 				'id'          => 'posts_per_page',
@@ -492,6 +509,7 @@ class Setting extends Singleton {
 			case 'taxonomies':
 				return array_values( array_filter( (array) get_option( 'tsmap_' . $name, [] ) ) );
 			case 'disable_core':
+			case 'exclusion_per_post':
 				return (bool) get_option( 'tsmap_' . $name );
 			case 'posts_per_page':
 				return min( 5000, (int) get_option( 'tsmap_' . $name, 1000 ) ) ?: 1000;

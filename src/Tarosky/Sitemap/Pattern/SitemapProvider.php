@@ -31,7 +31,6 @@ abstract class SitemapProvider extends AbstractSitemapProvider {
 	 * {@inheritdoc}
 	 */
 	public function render() {
-		$start = microtime( true );
 		$urls = $this->get_urls();
 		$this->set_query_time();
 		$this->header();
