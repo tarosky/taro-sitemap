@@ -74,6 +74,18 @@ SQL;
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$results = $wpdb->get_results( $query );
 		// Filter results to remove no index.
+		/**
+		 * Filters the database results for sitemap entries.
+		 *
+		 * @param array  $results     Array of post objects from database query
+		 * @param string $type        Sitemap type (e.g., 'map')
+		 * @param string $target_name Target name (e.g., 'post')
+		 * @param int    $year        Year for the current sitemap
+		 * @param int    $month       Month for the current sitemap
+		 * @return array Filtered results
+		 *
+		 * @hook tsmap_sitemap_results
+		 */
 		$results = apply_filters( 'tsmap_sitemap_results', $results, $this->type, $this->target_name(), $year, $month );
 		if ( empty( $results ) ) {
 			return [];

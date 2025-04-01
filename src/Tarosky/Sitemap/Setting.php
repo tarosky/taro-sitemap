@@ -103,6 +103,15 @@ class Setting extends Singleton {
 				return 'attachment' !== $post_type->name;
 			} );
 		}
+		/**
+		 * Filters the list of post types available for selection in settings.
+		 *
+		 * @param array  $post_types Array of post type objects with 'value' and 'label' keys
+		 * @param string $context    Context where the filter is being applied
+		 * @return array Filtered post types array
+		 *
+		 * @hook tsmap_seo_post_types_selection
+		 */
 		return apply_filters( 'tsmap_seo_post_types_selection', array_map( function ( $post_type ) {
 			return [
 				'value' => $post_type->name,
@@ -132,6 +141,14 @@ class Setting extends Singleton {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 			}, 'tsmap' );
 		}
+		/**
+		 * Filters the list of taxonomies available for selection in settings.
+		 *
+		 * @param array $taxonomies Array of taxonomy objects with 'value' and 'label' keys
+		 * @return array Filtered taxonomies array
+		 *
+		 * @hook tsmap_seo_taxonomies_selection
+		 */
 		$taxonomies = apply_filters( 'tsmap_seo_taxonomies_selection', array_map( function ( \WP_Taxonomy $taxonomy ) {
 			return [
 				'value' => $taxonomy->name,

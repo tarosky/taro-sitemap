@@ -67,6 +67,14 @@ class CanonicalArchive extends AbstractFeaturePattern {
 			}
 			$canonical = trailingslashit( $canonical ) . $suffix;
 		}
+		/**
+		 * Filters the canonical URL for archive pages.
+		 *
+		 * @param string $canonical Canonical URL for the archive page
+		 * @return string Filtered canonical URL
+		 *
+		 * @hook tsmap_canonical_archive_url
+		 */
 		$canonical = apply_filters( 'tsmap_canonical_archive_url', $canonical );
 		if ( $canonical ) {
 			printf( '<link rel="canonical" href="%s" />' . PHP_EOL, esc_url( $canonical ) );

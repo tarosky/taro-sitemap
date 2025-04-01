@@ -37,8 +37,24 @@ class AttachmentSitemapProvider extends PostSitemapProvider {
 		$to           = ( new \DateTimeImmutable() )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
 		$per_page     = $this->option()->posts_per_page;
 		$offset       = ( max( 1, get_query_var( 'paged' ) ) - 1 ) * $per_page;
-		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
-		$where_clause = apply_filters( 'taro_sitemap_attachment_query_where', '' );
+		/**
+		 * Filters the JOIN clause for attachment sitemap query.
+		 *
+		 * @param string $join_clause JOIN clause for the SQL query
+		 * @return string Filtered JOIN clause
+		 *
+		 * @hook tsmap_attachment_query_join
+		 */
+		$join_clause  = apply_filters( 'tsmap_attachment_query_join', '' );
+		/**
+		 * Filters the WHERE clause for attachment sitemap query.
+		 *
+		 * @param string $where_clause WHERE clause for the SQL query
+		 * @return string Filtered WHERE clause
+		 *
+		 * @hook tsmap_attachment_query_where
+		 */
+		$where_clause = apply_filters( 'tsmap_attachment_query_where', '' );
 		$query        = <<<SQL
 			SELECT p1.* FROM {$wpdb->posts} AS p1
 			LEFT JOIN {$wpdb->posts} AS p2

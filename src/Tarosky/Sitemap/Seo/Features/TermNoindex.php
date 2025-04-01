@@ -37,6 +37,14 @@ class TermNoindex extends RobotsFilterPattern {
 	 * @return string
 	 */
 	protected function meta_key() {
+		/**
+		 * Filters the meta key used to store term noindex status.
+		 *
+		 * @param string $meta_key Meta key for term noindex status (default: 'noindex')
+		 * @return string Filtered meta key
+		 *
+		 * @hook tsmap_noindex_term_meta_key
+		 */
 		return apply_filters( 'tsmap_noindex_term_meta_key', 'noindex' );
 	}
 

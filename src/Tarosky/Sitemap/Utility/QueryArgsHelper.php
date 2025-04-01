@@ -18,6 +18,18 @@ trait QueryArgsHelper {
 	 * @return array
 	 */
 	protected function news_query_args( $type, $args = [] ) {
+		/**
+		 * Filters the query arguments for news sitemap.
+		 *
+		 * Use this filter to modify the WP_Query arguments that control which posts
+		 * are included in the news sitemap.
+		 *
+		 * @param array  $args Query arguments array
+		 * @param string $type Hook type
+		 * @return array Filtered query arguments
+		 *
+		 * @hook tsmap_news_sitemap_query_args
+		 */
 		return apply_filters( 'tsmap_news_sitemap_query_args', array_merge( [
 			'post_status'         => 'publish',
 			'post_type'           => $this->option()->news_post_types,
@@ -39,6 +51,14 @@ trait QueryArgsHelper {
 	 * @return int
 	 */
 	protected function default_news_per_page() {
+		/**
+		 * Filters the maximum number of posts per page in news sitemap.
+		 *
+		 * @param int $per_page Maximum number of posts per page (default: 1000)
+		 * @return int Filtered maximum number of posts per page
+		 *
+		 * @hook tsmap_news_sitemap_per_page
+		 */
 		return min( 1000, (int) apply_filters( 'tsmap_news_sitemap_per_page', 1000 ) );
 	}
 
@@ -59,6 +79,14 @@ trait QueryArgsHelper {
 	public function news_name() {
 		static $news_name = '';
 		if ( empty( $news_name ) ) {
+			/**
+			 * Filters the news publication name used in news sitemap.
+			 *
+			 * @param string $name Default publication name (site title)
+			 * @return string Filtered publication name
+			 *
+			 * @hook tsmap_news_name
+			 */
 			$news_name = apply_filters( 'tsmap_news_name', get_bloginfo( 'title' ) );
 		}
 		return $news_name;
@@ -96,6 +124,15 @@ trait QueryArgsHelper {
 		$in_clause = implode( ', ', array_map( function ( $post_type ) use ( $wpdb ) {
 			return $wpdb->prepare( '%s', $post_type );
 		}, $post_types ) );
+		/**
+		 * Filters the WHERE clauses for post index query in sitemap.
+		 *
+		 * @param array    $where_clauses Array of WHERE clauses
+		 * @param string[] $post_types    Array of post types
+		 * @return array Filtered WHERE clauses
+		 *
+		 * @hook tsmap_post_index_query_where
+		 */
 		$wheres    = apply_filters( 'tsmap_post_index_query_where', [
 			"post_type IN ( {$in_clause} )",
 			"post_status = 'publish'",

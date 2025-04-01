@@ -28,6 +28,15 @@ class PostMetaBoxes extends Singleton {
 	 * @return bool
 	 */
 	protected function is_active_post_type( $post_type ) {
+		/**
+		 * Filters whether a post type should have SEO meta boxes.
+		 *
+		 * @param bool   $has_meta_box Whether the post type has meta boxes (default: false)
+		 * @param string $post_type    Post type name
+		 * @return bool Whether the post type should have SEO meta boxes
+		 *
+		 * @hook tsmap_has_meta_box
+		 */
 		return apply_filters( 'tsmap_has_meta_box', false, $post_type );
 	}
 
@@ -47,6 +56,15 @@ class PostMetaBoxes extends Singleton {
 			return;
 		}
 		// Should save action.
+		/**
+		 * Action fired when post meta is being saved.
+		 *
+		 * Use this action to save custom post meta fields.
+		 *
+		 * @param \WP_Post $post Post object
+		 *
+		 * @hook tsmap_save_post_meta
+		 */
 		do_action( 'tsmap_save_post_meta', $post );
 	}
 
@@ -81,6 +99,15 @@ class PostMetaBoxes extends Singleton {
 	 */
 	public function do_meta_box( $post ) {
 		wp_nonce_field( 'tsmap_postmeta', '_tsmapmetanonce', false );
+		/**
+		 * Action fired when rendering the SEO meta box for a post.
+		 *
+		 * Use this action to output custom fields in the SEO meta box.
+		 *
+		 * @param \WP_Post $post Post object
+		 *
+		 * @hook tsmap_do_meta_box
+		 */
 		do_action( 'tsmap_do_meta_box', $post );
 	}
 }

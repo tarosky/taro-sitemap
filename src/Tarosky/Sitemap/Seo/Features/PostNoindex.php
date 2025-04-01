@@ -70,6 +70,14 @@ class PostNoindex extends RobotsFilterPattern {
 	 * {@inheritDoc}
 	 */
 	protected function meta_key() {
+		/**
+		 * Filters the meta key used to store post noindex status.
+		 *
+		 * @param string $meta_key Meta key for post noindex status (default: '_noindex')
+		 * @return string Filtered meta key
+		 *
+		 * @hook tsmap_noindex_key
+		 */
 		return apply_filters( 'tsmap_noindex_key', '_noindex' );
 	}
 }

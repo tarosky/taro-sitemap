@@ -45,6 +45,14 @@ class TermMetaBoxes extends Singleton {
 	 * @return string[]
 	 */
 	protected function get_taxonomies() {
+		/**
+		 * Filters the list of taxonomies that should have term meta fields.
+		 *
+		 * @param string[] $taxonomies Array of taxonomy names
+		 * @return string[] Filtered array of taxonomy names
+		 *
+		 * @hook tsmap_has_term_meta
+		 */
 		return apply_filters( 'tsmap_has_term_meta', [] );
 	}
 
@@ -55,6 +63,15 @@ class TermMetaBoxes extends Singleton {
 	 * @return void
 	 */
 	public function render_field( $term ) {
+		/**
+		 * Filters the fields to display in the term meta box.
+		 *
+		 * @param array    $fields Array of fields (label => HTML)
+		 * @param \WP_Term $term   Current term object
+		 * @return array Filtered array of fields
+		 *
+		 * @hook tsmap_term_meta_fields
+		 */
 		$fields = apply_filters( 'tsmap_term_meta_fields', [], $term );
 		foreach ( $fields as $label => $field ) {
 			?>
@@ -83,6 +100,16 @@ class TermMetaBoxes extends Singleton {
 			return;
 		}
 		// Should save action.
+		/**
+		 * Action fired when term meta is being saved.
+		 *
+		 * Use this action to save custom term meta fields.
+		 *
+		 * @param int    $term_id  Term ID
+		 * @param string $taxonomy Taxonomy name
+		 *
+		 * @hook tsmap_save_term_meta
+		 */
 		do_action( 'tsmap_save_term_meta', $term_id, $taxonomy );
 	}
 }

@@ -28,8 +28,24 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 	 */
 	protected function get_urls() {
 		global $wpdb;
-		$join_clause  = apply_filters( 'taro_sitemap_attachment_query_join', '' );
-		$where_clause = apply_filters( 'taro_sitemap_attachment_query_where', '' );
+		/**
+		 * Filters the JOIN clause for attachment sitemap index query.
+		 *
+		 * @param string $join_clause JOIN clause for the SQL query
+		 * @return string Filtered JOIN clause
+		 *
+		 * @hook tsmap_attachment_query_join
+		 */
+		$join_clause  = apply_filters( 'tsmap_attachment_query_join', '' );
+		/**
+		 * Filters the WHERE clause for attachment sitemap index query.
+		 *
+		 * @param string $where_clause WHERE clause for the SQL query
+		 * @return string Filtered WHERE clause
+		 *
+		 * @hook tsmap_attachment_query_where
+		 */
+		$where_clause = apply_filters( 'tsmap_attachment_query_where', '' );
 		$query        = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from p1.post_date ) as date,

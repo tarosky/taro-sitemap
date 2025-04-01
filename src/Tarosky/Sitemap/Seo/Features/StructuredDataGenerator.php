@@ -41,6 +41,14 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				$json_lds[] = $article_json_ld;
 			}
 		}
+		/**
+		 * Filters the JSON-LD structured data array.
+		 *
+		 * @param array $json_lds Array of JSON-LD structured data
+		 * @return array Filtered JSON-LD array
+		 *
+		 * @hook tsmap_json_ld
+		 */
 		return apply_filters( 'tsmap_json_ld', $json_lds );
 	}
 
@@ -71,7 +79,16 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	public function get_article_structure( $post ) {
 		$json   = [
 			'@context'         => 'http://schema.org',
-			'@type'            => apply_filters( 'tsmap_json_ld_article_type', 'Article', $post ),
+			'@type'            => /**
+			 * Filters the article type for JSON-LD structured data.
+			 *
+			 * @param string   $type Article type (default: 'Article')
+			 * @param \WP_Post $post Post object
+			 * @return string Filtered article type
+			 *
+			 * @hook tsmap_json_ld_article_type
+			 */
+			apply_filters( 'tsmap_json_ld_article_type', 'Article', $post ),
 			'mainEntityOfPage' => [
 				'@type' => 'WebPage',
 				'@id'   => get_permalink( $post ),
@@ -155,6 +172,15 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				$publisher[ $key ] = $option;
 			}
 		}
+		/**
+		 * Filters the publisher structure for JSON-LD structured data.
+		 *
+		 * @param array    $publisher Publisher structure
+		 * @param \WP_Post $post      Post object
+		 * @return array Filtered publisher structure
+		 *
+		 * @hook tsmap_json_ld_publisher_structure
+		 */
 		return apply_filters( 'tsmap_json_ld_publisher_structure', $publisher, $post );
 	}
 }
