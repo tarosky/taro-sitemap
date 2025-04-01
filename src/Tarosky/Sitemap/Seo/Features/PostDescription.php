@@ -44,6 +44,14 @@ class PostDescription extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function render_meta_box( $post ): void {
+		/**
+		 * Filters the maximum length for post descriptions.
+		 *
+		 * @param int $max_length Maximum character length for post descriptions (default: 140)
+		 * @return int Filtered maximum length
+		 *
+		 * @hook tsmap_post_description_max_length
+		 */
 		$max_length = apply_filters( 'tsmap_post_description_max_length', 140 );
 		printf(
 			'<p><label>%s<br /><textarea rows="5" name="%s" style="width:100%%; box-sizing: border-box" maxlength="%d">%s</textarea></lable></p>',
@@ -58,6 +66,14 @@ class PostDescription extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function meta_key() {
+		/**
+		 * Filters the meta key used to store post descriptions.
+		 *
+		 * @param string $meta_key Meta key for post descriptions (default: '_description')
+		 * @return string Filtered meta key
+		 *
+		 * @hook tsmap_post_description_key
+		 */
 		return apply_filters( 'tsmap_post_description_key', '_description' );
 	}
 

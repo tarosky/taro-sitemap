@@ -91,6 +91,14 @@ class OgpGenerator extends AbstractFeaturePattern {
 		if ( is_singular() && has_post_thumbnail( get_queried_object() ) ) {
 			$image = wp_get_attachment_image_url( get_post_thumbnail_id( get_queried_object() ), 'full' );
 		}
+		/**
+		 * Filters the image URL used for OGP tags.
+		 *
+		 * @param string $image Image URL
+		 * @return string Filtered image URL
+		 *
+		 * @hook tsmap_ogp_image
+		 */
 		$image = apply_filters( 'tsmap_ogp_image', $image );
 		if ( $image ) {
 			$ogp['og:image'] = $image;
@@ -106,6 +114,14 @@ class OgpGenerator extends AbstractFeaturePattern {
 			$ogp['twitter:site'] = $this->option( 'twitter_account' );
 		}
 		// Render.
+		/**
+		 * Filters the OGP tags before output.
+		 *
+		 * @param array $ogp Array of OGP tags (key => value)
+		 * @return array Filtered OGP tags
+		 *
+		 * @hook tsmap_ogp
+		 */
 		$ogp = apply_filters( 'tsmap_ogp', $ogp );
 		foreach ( $ogp as $key => $value ) {
 			if ( preg_match( '#^(og|fb|article):#', $key ) ) {

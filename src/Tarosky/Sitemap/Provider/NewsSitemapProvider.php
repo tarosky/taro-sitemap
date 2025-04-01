@@ -77,6 +77,14 @@ class NewsSitemapProvider extends SitemapProvider {
 	 */
 	public function do_item( $url ) {
 		parent::do_item( $url );
+		/**
+		 * Filters the language code used in news sitemap.
+		 *
+		 * @param string $language Language code (e.g., 'en', 'ja')
+		 * @return string Filtered language code
+		 *
+		 * @hook tsmap_news_lang
+		 */
 		$language = apply_filters( 'tsmap_news_lang', $this->get_site_lang() );
 		?>
 		<news:news>

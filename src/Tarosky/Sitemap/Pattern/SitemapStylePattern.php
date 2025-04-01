@@ -41,6 +41,15 @@ abstract class SitemapStylePattern extends Singleton {
 				'version' => $style->ver,
 			], $style->src );
 		}
+		/**
+		 * Filters the stylesheet URL for sitemap styles.
+		 *
+		 * @param string $url        Stylesheet URL
+		 * @param string $style_name Style name
+		 * @return string Filtered stylesheet URL
+		 *
+		 * @hook tsmap_sitmap_stylesheet_url
+		 */
 		return apply_filters( 'tsmap_sitmap_stylesheet_url', $url, $this->style_name() );
 	}
 

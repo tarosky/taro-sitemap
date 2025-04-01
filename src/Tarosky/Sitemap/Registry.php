@@ -42,6 +42,14 @@ class Registry extends Singleton {
 	 * @return string[]
 	 */
 	public function get_sitemap_indices() {
+		/**
+		 * Filters the list of sitemap indices.
+		 *
+		 * @param array $indices Array of sitemap indices
+		 * @return array Filtered array of sitemap indices
+		 *
+		 * @hook tsmap_sitemap_indices
+		 */
 		return apply_filters( 'tsmap_sitemap_indices', [] );
 	}
 
@@ -87,6 +95,15 @@ class Registry extends Singleton {
 			// This is not sitemap request.
 			return;
 		}
+		/**
+		 * Action fired to render a specific sitemap type.
+		 *
+		 * The actual hook name includes the sitemap type, e.g., 'tsmap_do_sitemap_index'.
+		 *
+		 * @param string $target Sitemap target (e.g., post type, taxonomy)
+		 *
+		 * @hook tsmap_do_sitemap_{$sitemap}
+		 */
 		do_action( 'tsmap_do_sitemap_' . $sitemap, $wp_query->get( 'sitemap_target' ) );
 	}
 
@@ -96,6 +113,14 @@ class Registry extends Singleton {
 	 * @return string[]
 	 */
 	public static function get_registered_sitemap_urls() {
+		/**
+		 * Filters the list of sitemap URLs to be included in robots.txt.
+		 *
+		 * @param array $urls Array of sitemap URLs
+		 * @return array Filtered array of sitemap URLs
+		 *
+		 * @hook tsmap_sitemap_urls
+		 */
 		return apply_filters( 'tsmap_sitemap_urls', [] );
 	}
 }

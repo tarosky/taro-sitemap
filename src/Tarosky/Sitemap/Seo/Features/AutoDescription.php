@@ -30,7 +30,15 @@ class AutoDescription extends AbstractFeaturePattern {
 	 * @return void
 	 */
 	public function render_description() {
-		$description        = $this->get_description();
+		$description = $this->get_description();
+		/**
+		 * Filters the maximum length for automatically generated descriptions.
+		 *
+		 * @param int $length Maximum character length for descriptions (default: 140)
+		 * @return int Filtered maximum length
+		 *
+		 * @hook tsmap_auto_description_length
+		 */
 		$description_length = apply_filters( 'tsmap_auto_description_length', 140 );
 		// see: {wp_trim_words()}
 		$text = trim( preg_replace( "/[\n\r\t ]+/", ' ', $description ), ' ' );
@@ -125,6 +133,14 @@ class AutoDescription extends AbstractFeaturePattern {
 		} elseif ( is_404() ) {
 			$fixed_desc = __( 'Page not found.', 'tsmap' );
 		}
+		/**
+		 * Filters the meta description before output.
+		 *
+		 * @param string $description The description text
+		 * @return string Filtered description
+		 *
+		 * @hook tsmap_meta_desc
+		 */
 		$fixed_desc = apply_filters( 'tsmap_meta_desc', $fixed_desc );
 		return strip_tags( nl2br( strip_shortcodes( $fixed_desc ) ) );
 	}

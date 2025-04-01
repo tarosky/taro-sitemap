@@ -28,6 +28,14 @@ class NoIndexArchive extends RobotsFilterPattern {
 	 * @return string[]
 	 */
 	public function wp_robots( $robots ) {
+		/**
+		 * Filters the current page number used for archive noindex determination.
+		 *
+		 * @param int $paged Current page number from query var 'paged'
+		 * @return int Filtered page number
+		 *
+		 * @hook tsmap_archive_count
+		 */
 		$cur_page = (int) apply_filters( 'tsmap_archive_count', get_query_var( 'paged' ) );
 		if ( ! $cur_page ) {
 			return $robots;
