@@ -30,7 +30,7 @@ class AutoDescription extends AbstractFeaturePattern {
 	 * @return void
 	 */
 	public function render_description() {
-		$description        = $this->get_description();
+		$description = $this->get_description();
 		/**
 		 * Filters the maximum length for automatically generated descriptions.
 		 *

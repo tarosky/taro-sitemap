@@ -36,7 +36,7 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 		 *
 		 * @hook tsmap_attachment_query_join
 		 */
-		$join_clause  = apply_filters( 'tsmap_attachment_query_join', '' );
+		$join_clause = apply_filters( 'tsmap_attachment_query_join', '' );
 		/**
 		 * Filters the WHERE clause for attachment sitemap index query.
 		 *

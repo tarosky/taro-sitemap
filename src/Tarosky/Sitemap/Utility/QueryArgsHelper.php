@@ -133,12 +133,12 @@ trait QueryArgsHelper {
 		 *
 		 * @hook tsmap_post_index_query_where
 		 */
-		$wheres    = apply_filters( 'tsmap_post_index_query_where', [
+		$wheres = apply_filters( 'tsmap_post_index_query_where', [
 			"post_type IN ( {$in_clause} )",
 			"post_status = 'publish'",
 		], $post_types);
-		$wheres    = implode( ' AND ', $wheres );
-		$query     = <<<SQL
+		$wheres = implode( ' AND ', $wheres );
+		$query  = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from post_date ) as date,
 			    COUNT(ID) AS total
