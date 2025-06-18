@@ -55,6 +55,7 @@ class Setting extends Singleton {
 					<?php
 					// Tell user to flush Permalinks after saving.
 					echo wp_kses_post(sprintf(
+						// translators: %s is a link to the Permalinks settings page.
 						'&#9888; ' . __( 'After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap' ),
 						sprintf(
 							'<a href="%s">%s</a>',
