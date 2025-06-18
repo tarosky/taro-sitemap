@@ -2,7 +2,7 @@
 
 Contributors: tarosky, Takahashi_Fumiki
 Tags: sitemap,google,news  
-Tested up to: 6.7  
+Tested up to: 6.8  
 Stable Tag: nightly
 
 Sitemap plugin.
