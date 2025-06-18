@@ -51,6 +51,19 @@ class Setting extends Singleton {
 				do_settings_sections( 'tsmap' );
 				submit_button();
 				?>
+				<p>
+					<?php
+					// Tell user to flush Permalinks after saving.
+					echo wp_kses_post(sprintf(
+						'&#9888; ' . __('After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap'),
+						sprintf(
+							'<a href="%s">%s</a>',
+							home_url( 'wp-admin/options-permalink.php' ),
+							__('Permalinks', 'tsmap')
+						)
+					));
+					?>
+				</p>
 			</form>
 			<hr style="margin: 40px 0;" />
 			<h2><?php esc_html_e( 'Sitemap URL', 'tsmap' ); ?></h2>
