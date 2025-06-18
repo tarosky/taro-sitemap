@@ -55,11 +55,11 @@ class Setting extends Singleton {
 					<?php
 					// Tell user to flush Permalinks after saving.
 					echo wp_kses_post(sprintf(
-						'&#9888; ' . __('After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap'),
+						'&#9888; ' . __( 'After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap' ),
 						sprintf(
 							'<a href="%s">%s</a>',
 							home_url( 'wp-admin/options-permalink.php' ),
-							__('Permalinks', 'tsmap')
+							__( 'Permalinks', 'tsmap' )
 						)
 					));
 					?>
