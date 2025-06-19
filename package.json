@@ -12,7 +12,7 @@
 		"test": "RESULT=${PWD##*/} && wp-env run tests-cli ./wp-content/plugins/$RESULT/vendor/bin/phpunit -c ./wp-content/plugins/$RESULT/phpunit.xml.dist",
 		"build": "npm run build:css && npm run dump",
 		"dump": "grab-deps dump dist",
-		"build:js": "grab-deps js assts/js dist/js",
+		"build:js": "grab-deps js assets/js dist/js",
 		"build:css": "sass ./assets/scss/:./dist/css/ --style=compressed && postcss ./dist/css/**/*.css --replace",
 		"lint": "npm run lint:css",
 		"lint:js": "wp-scripts lint-js 'assets/js/**/*.js'",

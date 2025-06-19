@@ -1,6 +1,6 @@
 # Tarosky Sitemap
 
-Contributors: tarosky, Takahashi_Fumiki
+Contributors: tarosky, Takahashi_Fumiki, tswallie  
 Tags: sitemap,google,news  
 Tested up to: 6.8  
 Stable Tag: nightly
@@ -31,7 +31,7 @@ The remarkable features of this plugin are:
 
 Besides setting on admin screen, some hooks are also available.
 
-#### Newws Sitemap
+#### News Sitemap
 
 By default, news sitemap consists of the posts under specified post type(e.g. post). If you need some condition(e.g. only posts under a category, excluding some tags), use filter hook below:
 
