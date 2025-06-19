@@ -76,9 +76,6 @@ jobs:
       - name: Build Plugin
         run: bash bin/build.sh ${{ github.ref }}
 
-      - name: Clean Package
-        run: bash bin/clean.sh
-
       - name: Zip Archive
         run: |
           mkdir ${{ github.event.repository.name }}
