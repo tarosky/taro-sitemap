@@ -59,7 +59,7 @@ class Setting extends Singleton {
 						'&#9888; ' . __( 'After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap' ),
 						sprintf(
 							'<a href="%s">%s</a>',
-							home_url( 'wp-admin/options-permalink.php' ),
+							esc_url( admin_url( 'options-permalink.php' ) ),
 							__( 'Permalinks', 'tsmap' )
 						)
 					));
