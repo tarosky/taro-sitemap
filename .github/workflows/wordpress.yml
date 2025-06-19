@@ -80,7 +80,10 @@ jobs:
         run: bash bin/clean.sh
 
       - name: Zip Archive
-        run: zip -r ${{ github.event.repository.name }}.zip ./
+        run: |
+          mkdir ${{ github.event.repository.name }}
+          rsync -av --exclude=${{ github.event.repository.name }} --exclude=.git ./ ./${{ github.event.repository.name }}/
+          zip -r ./${{ github.event.repository.name }}.${{ github.ref_name }}.zip ./${{ github.event.repository.name }}
 
       - name: Create Release
         id: create_release
