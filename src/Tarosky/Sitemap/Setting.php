@@ -37,18 +37,18 @@ class Setting extends Singleton {
 		// Make sure we're on options.php and the correct page
 		if (
 			is_admin() &&
-			isset($_SERVER['REQUEST_URI']) &&
-			strpos($_SERVER['REQUEST_URI'], 'options.php') !== false &&
-			isset($_POST['option_page']) &&
+			isset( $_SERVER['REQUEST_URI'] ) &&
+			strpos( $_SERVER['REQUEST_URI'], 'options.php' ) !== false &&
+			isset( $_POST['option_page'] ) &&
 			$_POST['option_page'] === 'tsmap'
 		) {
 			// Check nonce
-			if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'tsmap-options')) {
+			if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'tsmap-options' ) ) {
 				return;
 			}
 
 			// Flush permalinks
-			add_action('shutdown', function() {
+			add_action('shutdown', function () {
 				flush_rewrite_rules();
 			});
 		}
