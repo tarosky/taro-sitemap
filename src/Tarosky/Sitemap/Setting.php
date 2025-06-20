@@ -40,7 +40,7 @@ class Setting extends Singleton {
 			isset( $_SERVER['REQUEST_URI'] ) &&
 			strpos( $_SERVER['REQUEST_URI'], 'options.php' ) !== false &&
 			isset( $_POST['option_page'] ) &&
-			$_POST['option_page'] === 'tsmap'
+			'tsmap' === $_POST['option_page']
 		) {
 			// Check nonce
 			if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'tsmap-options' ) ) {
