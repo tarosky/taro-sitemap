@@ -25,6 +25,33 @@ class Setting extends Singleton {
 	protected function init() {
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
+		add_action( 'admin_init', [ $this, 'on_save_changes' ] );
+	}
+
+	/**
+	 * Flush permalinks.
+	 *
+	 * @return void
+	 */
+	public function on_save_changes() {
+		// Make sure we're on options.php and the correct page
+		if (
+			is_admin() &&
+			isset($_SERVER['REQUEST_URI']) &&
+			strpos($_SERVER['REQUEST_URI'], 'options.php') !== false &&
+			isset($_POST['option_page']) &&
+			$_POST['option_page'] === 'tsmap'
+		) {
+			// Check nonce
+			if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'tsmap-options')) {
+				return;
+			}
+
+			// Flush permalinks
+			add_action('shutdown', function() {
+				flush_rewrite_rules();
+			});
+		}
 	}
 
 	/**
@@ -51,20 +78,6 @@ class Setting extends Singleton {
 				do_settings_sections( 'tsmap' );
 				submit_button();
 				?>
-				<p>
-					<?php
-					// Tell user to flush Permalinks after saving.
-					echo wp_kses_post(sprintf(
-						// translators: %s is a link to the Permalinks settings page.
-						'&#9888; ' . __( 'After clicking Save Changes, you also need to click Save Changes in %s, before your changes will take effect.', 'tsmap' ),
-						sprintf(
-							'<a href="%s">%s</a>',
-							esc_url( admin_url( 'options-permalink.php' ) ),
-							__( 'Permalinks', 'tsmap' )
-						)
-					));
-					?>
-				</p>
 			</form>
 			<hr style="margin: 40px 0;" />
 			<h2><?php esc_html_e( 'Sitemap URL', 'tsmap' ); ?></h2>
