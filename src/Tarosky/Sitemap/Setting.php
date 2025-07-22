@@ -25,7 +25,11 @@ class Setting extends Singleton {
 	protected function init() {
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
-		add_action( 'admin_init', [ $this, 'on_save_changes' ] );
+
+		# Flush permalinks automatically when these options are updated
+		add_action( 'update_option_tsmap_post_types', [ $this, 'flush_permalinks' ] );
+		add_action( 'update_option_tsmap_news_post_types', [ $this, 'flush_permalinks' ] );
+		add_action( 'update_option_tsmap_taxonomies', [ $this, 'flush_permalinks' ] );
 	}
 
 	/**
@@ -33,25 +37,10 @@ class Setting extends Singleton {
 	 *
 	 * @return void
 	 */
-	public function on_save_changes() {
-		// Make sure we're on options.php and the correct page
-		if (
-			is_admin() &&
-			isset( $_SERVER['REQUEST_URI'] ) &&
-			strpos( $_SERVER['REQUEST_URI'], 'options.php' ) !== false &&
-			isset( $_POST['option_page'] ) &&
-			'tsmap' === $_POST['option_page']
-		) {
-			// Check nonce
-			if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'tsmap-options' ) ) {
-				return;
-			}
-
-			// Flush permalinks
-			add_action('shutdown', function () {
-				flush_rewrite_rules();
-			});
-		}
+	public function flush_permalinks() {
+		add_action('shutdown', function () {
+			flush_rewrite_rules();
+		});
 	}
 
 	/**
