@@ -34,7 +34,13 @@ abstract class AbstractSitemapProvider extends Singleton {
 	 * @return string
 	 */
 	protected function get_xslt_url() {
-		return '';
+		if ( get_option( 'permalink_structure' ) ) {
+			return home_url( sprintf( 'sitemap_style_%s.xsl', $this->type ) );
+		}
+		return add_query_arg( [
+			'sitemap_type'   => 'sitemap_style',
+			'sitemap_target' => $this->type,
+		], home_url( '/' ) );
 	}
 
 	/**

@@ -20,16 +20,6 @@ class PostSitemapProvider extends SitemapProvider {
 	}
 
 	/**
-	 * Get sitemap url.
-	 *
-	 * @return string
-	 */
-	protected function get_xslt_url() {
-		return home_url( 'sitemap_style_map.xsl' );
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	protected function namespaces() {

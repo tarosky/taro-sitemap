@@ -41,7 +41,11 @@ class NewsSitemapIndexProvider extends SitemapIndexProvider {
 		$per_page = $this->default_news_per_page();
 		$urls     = [];
 		for ( $i = 1; $i <= ceil( $total / $per_page ); $i++ ) {
-			$urls[] = home_url( sprintf( 'sitemap_news_%d.xml', $i ) );
+			$urls[] = $links[] = $this->sitemap_url([
+				'sitemap_type'   => 'news',
+				'sitemap_target' => 'news',
+				'paged'          => $i,
+			]);
 		}
 		return $urls;
 	}

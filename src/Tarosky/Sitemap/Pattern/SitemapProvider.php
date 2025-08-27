@@ -10,13 +10,6 @@ abstract class SitemapProvider extends AbstractSitemapProvider {
 	protected $type = 'map';
 
 	/**
-	 * {@inheritdoc}
-	 */
-	protected function get_xslt_url() {
-		return home_url( 'sitemap_style_map.xsl' );
-	}
-
-	/**
 	 * Namespaces.
 	 *
 	 * @return string[]
