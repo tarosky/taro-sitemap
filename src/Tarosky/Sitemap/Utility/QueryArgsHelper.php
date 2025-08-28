@@ -140,12 +140,14 @@ trait QueryArgsHelper {
 		$wheres = implode( ' AND ', $wheres );
 		$query  = <<<SQL
 			SELECT
-			    EXTRACT( YEAR_MONTH from post_date ) as date,
-			    COUNT(ID) AS total
+				DATE_FORMAT(post_date, '%Y-%m') AS date,
+				YEAR(post_date) AS year,
+				MONTH(post_date) AS month,
+				COUNT(ID) AS total
 			FROM {$wpdb->posts}
 			WHERE {$wheres}
-			GROUP BY EXTRACT( YEAR_MONTH from post_date )
-SQL;
+			GROUP BY YEAR(post_date), MONTH(post_date)
+		SQL;
 		// Already escaped.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$result = $wpdb->get_results( $query );
@@ -153,9 +155,43 @@ SQL;
 		foreach ( $result as $row ) {
 			$total_page = ceil( $row->total / $this->option()->posts_per_page );
 			for ( $i = 1; $i <= $total_page; $i++ ) {
-				$links[] = home_url( sprintf( 'sitemap_post_%06d_%d.xml', $row->date, $i ) );
+				// $links[] = home_url( sprintf( 'sitemap_post_%06d_%d.xml', $row->date, $i ) );
+				$links[] = $this->sitemap_url([
+					'sitemap_type'   => 'map',
+					'sitemap_target' => 'post',
+					'year'           => $row->year,
+					'monthnum'       => $row->month,
+					'paged'          => $i,
+				]);
 			}
 		}
 		return $links;
+	}
+
+	/**
+	 * Get the sitemap URL.
+	 *
+	 * @param array $args {
+	 *     @type string $sitemap_type   Required. The type of the sitemap.
+	 *     @type string $sitemap_target Required. The target of the sitemap.
+	 *     @type int    $paged          Required. The page number.
+	 *     @type int    $year           Optional. The year of the sitemap archive.
+	 *     @type int    $monthnum       Optional. The month number of the sitemap archive.
+	 * }
+	 * @return string
+	 */
+	public function sitemap_url( $args ) {
+		if ( empty( $args['sitemap_type'] ) || empty( $args['sitemap_target'] ) || ! is_numeric( $args['paged'] ) ) {
+			return '';
+		}
+		if ( get_option( 'permalink_structure' ) ) {
+			$parts = [ 'sitemap', $args['sitemap_target'] ];
+			if ( isset( $args['year'], $args['monthnum'] ) ) {
+				$parts[] = sprintf( '%s%02d', $args['year'], $args['monthnum'] );
+			}
+			$parts[] = $args['paged'];
+			return home_url( implode( '_', $parts ) . '.xml' );
+		}
+		return add_query_arg( $args, home_url( '/' ) );
 	}
 }

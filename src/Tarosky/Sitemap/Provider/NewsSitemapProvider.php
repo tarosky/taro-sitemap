@@ -23,16 +23,6 @@ class NewsSitemapProvider extends SitemapProvider {
 	}
 
 	/**
-	 * Get sitemap url.
-	 *
-	 * @return string
-	 */
-	protected function get_xslt_url() {
-		return home_url( 'sitemap_style_news.xsl' );
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	protected function namespaces() {

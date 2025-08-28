@@ -30,6 +30,7 @@ class Setting extends Singleton {
 		add_action( 'update_option_tsmap_post_types', [ $this, 'flush_permalinks' ] );
 		add_action( 'update_option_tsmap_news_post_types', [ $this, 'flush_permalinks' ] );
 		add_action( 'update_option_tsmap_taxonomies', [ $this, 'flush_permalinks' ] );
+		add_action( 'update_option_tsmap_attachment_sitemap', [ $this, 'flush_permalinks' ] );
 	}
 
 	/**

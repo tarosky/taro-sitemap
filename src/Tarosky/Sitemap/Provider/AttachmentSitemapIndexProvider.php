@@ -48,7 +48,9 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 		$where_clause = apply_filters( 'tsmap_attachment_query_where', '' );
 		$query        = <<<SQL
 			SELECT
-			    EXTRACT( YEAR_MONTH from p1.post_date ) as date,
+				DATE_FORMAT(p1.post_date, '%Y-%m') AS date,
+				YEAR(p1.post_date) AS year,
+				MONTH(p1.post_date) AS month,
 			    COUNT( p1.ID ) AS total
 			FROM {$wpdb->posts} AS p1
 			LEFT JOIN {$wpdb->posts} AS p2
@@ -66,7 +68,13 @@ SQL;
 		foreach ( $wpdb->get_results( $query ) as $row ) {
 			$pages = ceil( $row->total / $this->option()->posts_per_page );
 			for ( $i = 1; $i <= $pages; $i++ ) {
-				$urls[] = home_url( sprintf( 'sitemap_attachment_%06d_%d.xml', $row->date, $i ) );
+				$urls[] = $this->sitemap_url([
+					'sitemap_type'   => 'map',
+					'sitemap_target' => 'attachment',
+					'year'           => $row->year,
+					'monthnum'       => $row->month,
+					'paged'          => $i,
+				]);
 			}
 		}
 		return $urls;
