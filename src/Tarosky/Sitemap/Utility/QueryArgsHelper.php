@@ -172,6 +172,7 @@ trait QueryArgsHelper {
 	 * Get the sitemap URL.
 	 *
 	 * @param array $args {
+	 *     @type string $sitemap_type   Required. The type of the sitemap.
 	 *     @type string $sitemap_target Required. The target of the sitemap.
 	 *     @type int    $paged          Required. The page number.
 	 *     @type int    $year           Optional. The year of the sitemap archive.
@@ -180,7 +181,7 @@ trait QueryArgsHelper {
 	 * @return string
 	 */
 	public function sitemap_url( $args ) {
-		if ( empty( $args['sitemap_target'] ) || ! is_numeric( $args['paged'] ) ) {
+		if ( empty( $args['sitemap_type'] ) || empty( $args['sitemap_target'] ) || ! is_numeric( $args['paged'] ) ) {
 			return '';
 		}
 		if ( get_option( 'permalink_structure' ) ) {
