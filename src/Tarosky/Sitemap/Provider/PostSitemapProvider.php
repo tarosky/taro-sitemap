@@ -116,6 +116,9 @@ SQL;
 		}
 		$urls = [];
 		foreach ( $results as $post ) {
+			if ( $this->is_external_permalink( $post->ID ) ) {
+				continue;
+			}
 			$urls[] = [
 				'link'    => get_permalink( $post ),
 				'lastmod' => $this->get_last_mod( $post->post_modified ),
