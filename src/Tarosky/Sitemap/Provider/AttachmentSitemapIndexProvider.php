@@ -49,7 +49,7 @@ class AttachmentSitemapIndexProvider extends SitemapIndexProvider {
 		$query        = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from p1.post_date ) as date,
-			    COUNT( p1.ID ) AS total
+			    GROUP_CONCAT(p1.ID) as ids
 			FROM {$wpdb->posts} AS p1
 			LEFT JOIN {$wpdb->posts} AS p2
 			ON p1.post_parent = p2.ID
@@ -64,7 +64,17 @@ SQL;
 		// Already escaped.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $wpdb->get_results( $query ) as $row ) {
-			$pages = ceil( $row->total / $this->option()->posts_per_page );
+			$ids = array_map( 'intval', explode( ',', $row->ids ) );
+			// Filter out external attachments
+			$valid_ids = array_filter( $ids, function ( $id ) {
+				return ! $this->is_external_permalink( get_post( $id ) );
+			} );
+			$total     = count( $valid_ids );
+			// Skip month if no internal attachments
+			if ( 0 === $total ) {
+				continue;
+			}
+			$pages = ceil( $total / $this->option()->posts_per_page );
 			for ( $i = 1; $i <= $pages; $i++ ) {
 				$urls[] = home_url( sprintf( 'sitemap_attachment_%06d_%d.xml', $row->date, $i ) );
 			}
