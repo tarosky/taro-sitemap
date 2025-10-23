@@ -44,4 +44,42 @@ abstract class AbstractFeaturePattern extends Singleton {
 	public function option( $key ) {
 		return get_option( 'tsmap_' . $key );
 	}
+
+	/**
+	 * Exclude posts with meta key.
+	 *
+	 * @param \WP_Post[] $posts
+	 * @param string     $meta_key
+	 * @param mixed      $meta_value
+	 *
+	 * @return \WP_Post[]
+	 */
+	protected function exclude_list( $posts, $meta_key, $meta_value = '1' ) {
+		$post_ids = array_map( function( $post ) {
+			return $post->ID;
+		}, $posts );
+		if ( empty( $post_ids ) ) {
+			return $posts;
+		}
+		// Get post ids which has no meta.
+		$exclude_ids = get_posts( [
+			'fields'         => 'ids',
+			'post_type'      => $this->option( 'post_types' ),
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'post__in'       => $post_ids,
+			'meta_query'     => [
+				[
+					'key'   => $meta_key,
+					'value' =>$meta_value,
+				],
+			],
+		] );
+		if ( empty( $exclude_ids ) ) {
+			return $posts;
+		}
+		return array_values( array_filter( $posts, function ( $post ) use ( $exclude_ids ) {
+			return ! in_array( (int) $post->ID, $exclude_ids, true );
+		} ) );
+	}
 }
