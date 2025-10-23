@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tarosky\Sitemap\Provider;
 
 
