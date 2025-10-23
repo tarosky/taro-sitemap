@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tarosky\Sitemap\Provider;
 
 
@@ -55,38 +56,40 @@ class PostSitemapProvider extends SitemapProvider {
 		$month     = get_query_var( 'monthnum' );
 		$from      = sprintf( '%04d-%02d-01 00:00:00', $year, $month );
 		$to        = ( new \DateTimeImmutable() )->modify( sprintf( 'last day of %04d-%02d', $year, $month ) )->format( 'Y-m-d 23:59:59' );
-		$in_clause = implode( ', ', array_map( function ( $post_type ) use ( $wpdb ) {
-			return $wpdb->prepare( '%s', $post_type );
-		}, $this->option()->post_types ) );
-		$per_page  = $this->option()->posts_per_page;
-		$offset    = ( max( 1, get_query_var( 'paged' ) ) - 1 ) * $per_page;
-		$query     = <<<SQL
-			SELECT * FROM {$wpdb->posts}
-			WHERE post_type IN ( {$in_clause} )
-			  AND post_status = 'publish'
-			  AND post_date BETWEEN %s AND %s
-			ORDER BY post_date DESC
-			LIMIT %d, %d
-SQL;
-		// Already escaped.
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$query = $wpdb->prepare( $query, $from, $to, $offset, $per_page );
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$results = $wpdb->get_results( $query );
-		// Filter results to remove no index.
+		$query_arg = apply_filters( 'tsmap_posts_sitemap_query_args', [
+			'post_type'              => $this->option()->post_types,
+			'post_status'            => 'publish',
+			'date_query'             => [
+				[
+					'after'     => $from,
+					'before'    => $to,
+					'inclusive' => true,
+				],
+			],
+			'orderby'                => 'date',
+			'order'                  => 'DESC',
+			'posts_per_page'         => $this->option()->posts_per_page,
+			'paged'                  => max( 1, get_query_var( 'paged' ) ),
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		] );
+		$query     = new \WP_Query( $query_arg );
 		/**
 		 * Filters the database results for sitemap entries.
 		 *
-		 * @param array  $results     Array of post objects from database query
-		 * @param string $type        Sitemap type (e.g., 'map')
-		 * @param string $target_name Target name (e.g., 'post')
-		 * @param int    $year        Year for the current sitemap
-		 * @param int    $month       Month for the current sitemap
+		 * @since 3.0.0
+		 *
+		 * @param \WP_Post[] $results     Array of post objects from database query
+		 * @param string     $type        Sitemap type (e.g., 'map')
+		 * @param string     $target_name Target name (e.g., 'post')
+		 * @param int        $year        Year for the current sitemap
+		 * @param int        $month       Month for the current sitemap
 		 * @return array Filtered results
 		 *
 		 * @hook tsmap_sitemap_results
 		 */
-		$results = apply_filters( 'tsmap_sitemap_results', $results, $this->type, $this->target_name(), $year, $month );
+		$results = apply_filters( 'tsmap_sitemap_results', $query->posts, $this->type, $this->target_name(), $year, $month );
 		if ( empty( $results ) ) {
 			return [];
 		}

@@ -15,6 +15,7 @@ class TermNoindex extends RobotsFilterPattern {
 	 */
 	protected function register_hooks() {
 		parent::register_hooks();
+		add_filter( 'tsmap_taxonomy_sitemap_results', [ $this, 'filter_taxonomy_sitemap' ], 10, 3 );
 		$this->add_term_meta_hooks( 100 );
 	}
 
@@ -95,5 +96,27 @@ class TermNoindex extends RobotsFilterPattern {
 	 */
 	protected function is_active(): bool {
 		return 0 < count( $this->taxonomies() );
+	}
+
+	/**
+	 * Filter taxonomy sitemap results to exclude noindex terms.
+	 *
+	 * @param object[] $results     Array of term objects from database query
+	 * @param string   $type        Sitemap type
+	 * @param string   $target_name Target name
+	 * @return array Filtered results
+	 */
+	public function filter_taxonomy_sitemap( $results, $type = '', $target_name = '' ) {
+		if ( empty( $results ) ) {
+			return $results;
+		}
+		// Filter out terms with noindex meta.
+		return array_values( array_filter( $results, function ( $term ) {
+			if ( ! in_array( $term->taxonomy, $this->taxonomies(), true ) ) {
+				return true;
+			}
+			$noindex = get_term_meta( $term->term_id, $this->meta_key(), true );
+			return ! $noindex;
+		} ) );
 	}
 }
