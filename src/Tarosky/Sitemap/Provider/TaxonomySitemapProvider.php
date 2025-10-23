@@ -51,6 +51,19 @@ SQL;
 		$query = $wpdb->prepare( $query, $offset, $per_page );
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$results = $wpdb->get_results( $query );
+		/**
+		 * Filters the taxonomy results for sitemap entries.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param object[] $results     Array of term objects from database query
+		 * @param string   $type        Sitemap type (e.g., 'map')
+		 * @param string   $target_name Target name (e.g., 'taxonomy')
+		 * @return array Filtered results
+		 *
+		 * @hook tsmap_taxonomy_sitemap_results
+		 */
+		$results = apply_filters( 'tsmap_taxonomy_sitemap_results', $results, $this->type, $this->target_name() );
 		if ( empty( $results ) ) {
 			return [];
 		}
