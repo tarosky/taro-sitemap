@@ -63,7 +63,7 @@ class PostSitemapProvider extends SitemapProvider {
 				[
 					'after'     => $from,
 					'before'    => $to,
-					'inclusive' => true
+					'inclusive' => true,
 				],
 			],
 			'orderby'                => 'date',
@@ -74,7 +74,7 @@ class PostSitemapProvider extends SitemapProvider {
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		] );
-		$query = new \WP_Query( $query_arg );
+		$query     = new \WP_Query( $query_arg );
 		/**
 		 * Filters the database results for sitemap entries.
 		 *

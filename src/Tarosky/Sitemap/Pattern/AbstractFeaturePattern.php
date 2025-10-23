@@ -55,7 +55,7 @@ abstract class AbstractFeaturePattern extends Singleton {
 	 * @return \WP_Post[]
 	 */
 	protected function exclude_list( $posts, $meta_key, $meta_value = '1' ) {
-		$post_ids = array_map( function( $post ) {
+		$post_ids = array_map( function ( $post ) {
 			return $post->ID;
 		}, $posts );
 		if ( empty( $post_ids ) ) {
@@ -71,7 +71,7 @@ abstract class AbstractFeaturePattern extends Singleton {
 			'meta_query'     => [
 				[
 					'key'   => $meta_key,
-					'value' =>$meta_value,
+					'value' => $meta_value,
 				],
 			],
 		] );
