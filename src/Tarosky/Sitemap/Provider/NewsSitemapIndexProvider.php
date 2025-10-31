@@ -33,13 +33,17 @@ class NewsSitemapIndexProvider extends SitemapIndexProvider {
 	 * @return string[]
 	 */
 	protected function get_urls() {
-		$query    = new \WP_Query( $this->news_query_args( 'index', [
+		$query = new \WP_Query( $this->news_query_args( 'index', [
 			'posts_per_page' => 1,
 			'fields'         => 'ids',
 		] ) );
-		$total    = $query->found_posts;
-		$per_page = $this->default_news_per_page();
-		$urls     = [];
+		// Filter out external permalinks
+		$valid_post_ids = array_filter( $query->posts, function ( $post_id ) {
+			return ! $this->is_external_permalink( get_post( $post_id ) );
+		} );
+		$total          = count( $valid_post_ids );
+		$per_page       = $this->default_news_per_page();
+		$urls           = [];
 		for ( $i = 1; $i <= ceil( $total / $per_page ); $i++ ) {
 			$urls[] = home_url( sprintf( 'sitemap_news_%d.xml', $i ) );
 		}

@@ -46,6 +46,23 @@ trait QueryArgsHelper {
 	}
 
 	/**
+	 * Checks if permalink is external.
+	 *
+	 * @return bool
+	 */
+	public function is_external_permalink( \WP_Post|int $post ) {
+		$url = get_permalink( $post );
+		if ( is_string( $url ) ) {
+			$site_host = parse_url( get_site_url(), PHP_URL_HOST );
+			$url_host  = parse_url( $url, PHP_URL_HOST );
+			if ( $url_host !== $site_host ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * News posts per page.
 	 *
 	 * @return int
@@ -141,7 +158,7 @@ trait QueryArgsHelper {
 		$query  = <<<SQL
 			SELECT
 			    EXTRACT( YEAR_MONTH from post_date ) as date,
-			    COUNT(ID) AS total
+			    GROUP_CONCAT(ID) as ids
 			FROM {$wpdb->posts}
 			WHERE {$wheres}
 			GROUP BY EXTRACT( YEAR_MONTH from post_date )
@@ -149,13 +166,23 @@ SQL;
 		// Already escaped.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$result = $wpdb->get_results( $query );
-		$links  = [];
+		$urls   = [];
 		foreach ( $result as $row ) {
-			$total_page = ceil( $row->total / $this->option()->posts_per_page );
-			for ( $i = 1; $i <= $total_page; $i++ ) {
-				$links[] = home_url( sprintf( 'sitemap_post_%06d_%d.xml', $row->date, $i ) );
+			$ids = array_map( 'intval', explode( ',', $row->ids ) );
+			// Filter out external attachments
+			$valid_ids = array_filter( $ids, function ( $id ) {
+				return ! $this->is_external_permalink( get_post( $id ) );
+			} );
+			$total     = count( $valid_ids );
+			// Skip month if no internal attachments
+			if ( 0 === $total ) {
+				continue;
+			}
+			$pages = ceil( $total / $this->option()->posts_per_page );
+			for ( $i = 1; $i <= $pages; $i++ ) {
+				$urls[] = home_url( sprintf( 'sitemap_post_%06d_%d.xml', $row->date, $i ) );
 			}
 		}
-		return $links;
+		return $urls;
 	}
 }
