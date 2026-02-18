@@ -33,6 +33,13 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 */
 	public function get_json_ld() {
 		$json_lds = [];
+		// Front page: output WebSite schema.
+		if ( is_front_page() ) {
+			$website_json_ld = $this->get_website_structure();
+			if ( $website_json_ld ) {
+				$json_lds[] = $website_json_ld;
+			}
+		}
 		// If this is singular.
 		$article_post_types = $this->option( 'jsonld_article_post_types' );
 		if ( ! empty( $article_post_types ) && is_singular( $article_post_types ) && is_a( get_queried_object(), 'WP_Post' ) ) {
@@ -68,6 +75,33 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT )
 			);
 		}
+	}
+
+	/**
+	 * Get WebSite structured data for front page.
+	 *
+	 * @return array
+	 */
+	public function get_website_structure() {
+		$json = [
+			'@context' => 'https://schema.org',
+			'@type'    => 'WebSite',
+			'name'     => get_bloginfo( 'name' ),
+			'url'      => home_url( '/' ),
+		];
+		$description = get_bloginfo( 'description' );
+		if ( $description ) {
+			$json['description'] = $description;
+		}
+		/**
+		 * Filters the WebSite structured data for the front page.
+		 *
+		 * @param array $json WebSite structured data.
+		 * @return array Filtered WebSite structured data.
+		 *
+		 * @hook tsmap_json_ld_website_structure
+		 */
+		return apply_filters( 'tsmap_json_ld_website_structure', $json );
 	}
 
 	/**
