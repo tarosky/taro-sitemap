@@ -83,7 +83,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 * @return array
 	 */
 	public function get_website_structure() {
-		$json = [
+		$json        = [
 			'@context' => 'https://schema.org',
 			'@type'    => 'WebSite',
 			'name'     => get_bloginfo( 'name' ),

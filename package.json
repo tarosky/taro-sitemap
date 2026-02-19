@@ -19,7 +19,8 @@
 		"lint:css": "wp-scripts lint-style 'assets/**/*.scss'",
 		"fix:js": "wp-scripts format assets/js",
 		"fix:css": "stylelint --fix assets/scss",
-		"watch": "gulp watch"
+		"watch": "gulp watch",
+		"prepare": "husky"
 	},
 	"repository": {
 		"type": "git",
@@ -39,9 +40,15 @@
 		"@kunoichi/grab-deps": "^2.0.0",
 		"@wordpress/env": "^10.0.0",
 		"@wordpress/scripts": "^30.0.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
 		"postcss": "^8.5.3",
 		"postcss-cli": "^11.0.1",
 		"sass": "^1.86.0"
+	},
+	"lint-staged": {
+		"*.php": "vendor/bin/phpcs --standard=phpcs.ruleset.xml",
+		"*.scss": "wp-scripts lint-style"
 	},
 	"volta": {
 		"node": "20.19.0"
