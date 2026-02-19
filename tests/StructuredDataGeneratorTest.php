@@ -70,9 +70,9 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test that front page with static page also outputs Article schema when page is in jsonld_article_post_types.
+	 * Test that front page with static page outputs WebSite only, NOT Article.
 	 */
-	public function test_front_page_static_page_has_both_website_and_article() {
+	public function test_front_page_static_page_has_website_but_not_article() {
 		$user_id = self::factory()->user->create( [ 'role' => 'editor' ] );
 		$page_id = self::factory()->post->create( [
 			'post_type'   => 'page',
@@ -92,7 +92,7 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$this->assertNotNull( $website, 'WebSite schema should exist.' );
 
 		$article = $this->find_by_type( $json_lds, 'Article' );
-		$this->assertNotNull( $article, 'Article schema should also exist for static front page.' );
+		$this->assertNull( $article, 'Article schema should NOT exist on front page.' );
 
 		// Clean up.
 		update_option( 'show_on_front', 'posts' );

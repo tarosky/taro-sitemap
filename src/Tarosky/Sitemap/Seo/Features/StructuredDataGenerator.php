@@ -40,9 +40,9 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				$json_lds[] = $website_json_ld;
 			}
 		}
-		// If this is singular.
+		// If this is singular (exclude front page to avoid Article on homepage).
 		$article_post_types = $this->option( 'jsonld_article_post_types' );
-		if ( ! empty( $article_post_types ) && is_singular( $article_post_types ) && is_a( get_queried_object(), 'WP_Post' ) ) {
+		if ( ! is_front_page() && ! empty( $article_post_types ) && is_singular( $article_post_types ) && is_a( get_queried_object(), 'WP_Post' ) ) {
 			$article_json_ld = $this->get_article_structure( get_queried_object() );
 			if ( $article_json_ld ) {
 				$json_lds[] = $article_json_ld;
