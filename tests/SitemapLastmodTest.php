@@ -15,7 +15,7 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 	// Unit tests: get_last_mod()
 	// -----------------------------------------------------------------------
 
-	private function call_get_last_mod( string $post_modified, string $post_date = null ): string {
+	private function call_get_last_mod( string $post_modified, ?string $post_date = null ): string {
 		$provider = NewsSitemapProvider::get_instance();
 		$method   = new ReflectionMethod( $provider, 'get_last_mod' );
 		$method->setAccessible( true );
@@ -104,9 +104,9 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 		] );
 
 		$now = current_time( 'mysql' );
-		$old = gmdate( 'Y-m-d H:i:s', strtotime( '-6 days', current_time( 'timestamp' ) ) );
+		$old = date( 'Y-m-d H:i:s', strtotime( '-6 days', current_time( 'timestamp' ) ) );
 
-		$wpdb->update(
+		$updated = $wpdb->update(
 			$wpdb->posts,
 			[
 				'post_date'          => $now,
@@ -116,6 +116,7 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 			],
 			[ 'ID' => $post_id ]
 		);
+		$this->assertSame( 1, $updated, 'failed to seed scheduled-then-published post' );
 		clean_post_cache( $post_id );
 
 		return $post_id;
@@ -124,7 +125,8 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 	public function test_news_sitemap_lastmod_not_older_than_publication_date() {
 		update_option( 'tsmap_news_post_types', [ 'post' ] );
 
-		$post_id = $this->create_scheduled_then_published_post();
+		$post_id   = $this->create_scheduled_then_published_post();
+		$permalink = get_permalink( $post_id );
 
 		$provider = NewsSitemapProvider::get_instance();
 
@@ -133,23 +135,29 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 
 		$found = false;
 		foreach ( $sxe->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' ) as $url ) {
+			$loc = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->loc;
+			if ( $loc !== $permalink ) {
+				continue;
+			}
+
 			$lastmod  = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->lastmod;
 			$news     = $url->children( 'http://www.google.com/schemas/sitemap-news/0.9' );
 			$pub_date = isset( $news->news->publication_date ) ? (string) $news->news->publication_date : '';
 
-			if ( empty( $lastmod ) || empty( $pub_date ) ) {
-				continue;
-			}
+			$this->assertNotEmpty( $lastmod, '<lastmod> が出力されていること' );
+			$this->assertNotEmpty( $pub_date, '<news:publication_date> が出力されていること' );
 
+			$pub_ts     = ( new DateTimeImmutable( $pub_date, wp_timezone() ) )->getTimestamp();
+			$lastmod_ts = ( new DateTimeImmutable( $lastmod ) )->getTimestamp();
 			$this->assertGreaterThanOrEqual(
-				strtotime( $pub_date ),
-				strtotime( $lastmod ),
+				$pub_ts,
+				$lastmod_ts,
 				"<lastmod>({$lastmod}) は <news:publication_date>({$pub_date}) 以上であること"
 			);
 			$found = true;
 		}
 
-		$this->assertTrue( $found, 'ニュースサイトマップに URL が1件以上含まれること' );
+		$this->assertTrue( $found, "ニュースサイトマップに対象投稿({$permalink})が含まれること" );
 
 		delete_option( 'tsmap_news_post_types' );
 		wp_delete_post( $post_id, true );
@@ -158,12 +166,14 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 	public function test_post_sitemap_lastmod_not_older_than_post_date() {
 		update_option( 'tsmap_post_types', [ 'post' ] );
 
-		$post_id = $this->create_scheduled_then_published_post();
-		$post    = get_post( $post_id );
+		$post_id   = $this->create_scheduled_then_published_post();
+		$post      = get_post( $post_id );
+		$permalink = get_permalink( $post_id );
 
 		// PostSitemapProvider の get_urls() は year/monthnum query var を使う
-		set_query_var( 'year', (int) date( 'Y', strtotime( $post->post_date ) ) );
-		set_query_var( 'monthnum', (int) date( 'm', strtotime( $post->post_date ) ) );
+		$post_date_local = new DateTimeImmutable( $post->post_date, wp_timezone() );
+		set_query_var( 'year', (int) $post_date_local->format( 'Y' ) );
+		set_query_var( 'monthnum', (int) $post_date_local->format( 'm' ) );
 		set_query_var( 'paged', 1 );
 
 		$provider = PostSitemapProvider::get_instance();
@@ -173,22 +183,26 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 
 		$found = false;
 		foreach ( $sxe->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' ) as $url ) {
-			$lastmod = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->lastmod;
-			if ( empty( $lastmod ) ) {
+			$loc = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->loc;
+			if ( $loc !== $permalink ) {
 				continue;
 			}
 
+			$lastmod = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->lastmod;
+			$this->assertNotEmpty( $lastmod, '<lastmod> が出力されていること' );
+
 			// lastmod は post_date 以上であること
-			$post_date_ts = strtotime( $post->post_date );
+			$post_date_ts = $post_date_local->getTimestamp();
+			$lastmod_ts   = ( new DateTimeImmutable( $lastmod ) )->getTimestamp();
 			$this->assertGreaterThanOrEqual(
 				$post_date_ts,
-				strtotime( $lastmod ),
+				$lastmod_ts,
 				"<lastmod>({$lastmod}) は post_date({$post->post_date}) 以上であること"
 			);
 			$found = true;
 		}
 
-		$this->assertTrue( $found, 'ポストサイトマップに URL が1件以上含まれること' );
+		$this->assertTrue( $found, "ポストサイトマップに対象投稿({$permalink})が含まれること" );
 
 		delete_option( 'tsmap_post_types' );
 		wp_delete_post( $post_id, true );
@@ -206,8 +220,8 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 		// post_modified を post_date より1時間後にする
 		global $wpdb;
 		$post    = get_post( $post_id );
-		$later   = gmdate( 'Y-m-d H:i:s', strtotime( $post->post_date ) + 3600 );
-		$wpdb->update(
+		$later   = date( 'Y-m-d H:i:s', strtotime( $post->post_date ) + 3600 );
+		$updated = $wpdb->update(
 			$wpdb->posts,
 			[
 				'post_modified'     => $later,
@@ -215,7 +229,10 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 			],
 			[ 'ID' => $post_id ]
 		);
+		$this->assertSame( 1, $updated, 'failed to update post_modified' );
 		clean_post_cache( $post_id );
+
+		$permalink = get_permalink( $post_id );
 
 		$provider = NewsSitemapProvider::get_instance();
 		$xml      = $this->render_url_items( $provider );
@@ -223,20 +240,26 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 
 		$found = false;
 		foreach ( $sxe->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' ) as $url ) {
-			$lastmod = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->lastmod;
-			if ( empty( $lastmod ) ) {
+			$loc = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->loc;
+			if ( $loc !== $permalink ) {
 				continue;
 			}
+
+			$lastmod = (string) $url->children( 'http://www.sitemaps.org/schemas/sitemap/0.9' )->lastmod;
+			$this->assertNotEmpty( $lastmod, '<lastmod> が出力されていること' );
+
 			// post_modified ベース (= $later) が使われていることを確認
+			$post_date_ts = ( new DateTimeImmutable( $post->post_date, wp_timezone() ) )->getTimestamp();
+			$lastmod_ts   = ( new DateTimeImmutable( $lastmod ) )->getTimestamp();
 			$this->assertGreaterThanOrEqual(
-				strtotime( $post->post_date ),
-				strtotime( $lastmod ),
+				$post_date_ts,
+				$lastmod_ts,
 				"<lastmod>({$lastmod}) は post_date({$post->post_date}) 以上であること"
 			);
 			$found = true;
 		}
 
-		$this->assertTrue( $found, 'ニュースサイトマップに URL が1件以上含まれること' );
+		$this->assertTrue( $found, "ニュースサイトマップに対象投稿({$permalink})が含まれること" );
 
 		delete_option( 'tsmap_news_post_types' );
 		wp_delete_post( $post_id, true );
