@@ -121,7 +121,7 @@ class PostSitemapProvider extends SitemapProvider {
 		foreach ( $results as $post ) {
 			$urls[] = [
 				'link'    => get_permalink( $post ),
-				'lastmod' => $this->get_last_mod( $post->post_modified ),
+				'lastmod' => $this->get_last_mod( $post->post_modified, $post->post_date ),
 				'images'  => $images[ $post->ID ] ?? [],
 			];
 		}

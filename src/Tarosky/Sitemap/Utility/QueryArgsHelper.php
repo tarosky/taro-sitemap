@@ -63,12 +63,22 @@ trait QueryArgsHelper {
 	}
 
 	/**
-	 * Get lastmod.
+	 * Get lastmod. Returns the later of post_modified and post_date in W3C format.
 	 *
-	 * @return string
+	 * When a scheduled post is published via wp_publish_post(), post_modified is not
+	 * updated. Passing post_date ensures lastmod is never older than publication_date.
+	 *
+	 * @param string      $post_modified MySQL datetime string (local time).
+	 * @param string|null $post_date     MySQL datetime string (local time). When given
+	 *                                   and newer than $post_modified, used instead.
+	 * @return string W3C-formatted datetime string.
 	 */
-	protected function get_last_mod( $post_date ) {
-		return mysql2date( \DateTime::W3C, $post_date );
+	protected function get_last_mod( string $post_modified, ?string $post_date = null ) {
+		$base = $post_modified;
+		if ( ! empty( $post_date ) && strtotime( $post_date ) > strtotime( $post_modified ) ) {
+			$base = $post_date;
+		}
+		return mysql2date( \DateTime::W3C, $base );
 	}
 
 	/**

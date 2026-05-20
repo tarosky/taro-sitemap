@@ -83,7 +83,7 @@ SQL;
 		foreach ( $results as $row ) {
 			$urls[] = [
 				'link'    => get_permalink( $row ),
-				'lastmod' => $this->get_last_mod( $row->post_modified ),
+				'lastmod' => $this->get_last_mod( $row->post_modified, $row->post_date ),
 				'images'  => [
 					wp_get_attachment_image_url( $row->ID, 'full' ),
 				],
