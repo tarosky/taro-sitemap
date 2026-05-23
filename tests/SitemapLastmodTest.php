@@ -103,8 +103,9 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 			'post_title'  => 'Scheduled post',
 		] );
 
-		$now = current_time( 'mysql' );
-		$old = date( 'Y-m-d H:i:s', strtotime( '-6 days', current_time( 'timestamp' ) ) );
+		$tz  = wp_timezone();
+		$now = ( new DateTimeImmutable( 'now', $tz ) )->format( 'Y-m-d H:i:s' );
+		$old = ( new DateTimeImmutable( '-6 days', $tz ) )->format( 'Y-m-d H:i:s' );
 
 		$updated = $wpdb->update(
 			$wpdb->posts,
@@ -220,7 +221,8 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 		// post_modified を post_date より1時間後にする
 		global $wpdb;
 		$post    = get_post( $post_id );
-		$later   = date( 'Y-m-d H:i:s', strtotime( $post->post_date ) + 3600 );
+		$later   = ( new DateTimeImmutable( $post->post_date, wp_timezone() ) )
+			->modify( '+1 hour' )->format( 'Y-m-d H:i:s' );
 		$updated = $wpdb->update(
 			$wpdb->posts,
 			[
@@ -249,12 +251,12 @@ class SitemapLastmodTest extends WP_UnitTestCase {
 			$this->assertNotEmpty( $lastmod, '<lastmod> が出力されていること' );
 
 			// post_modified ベース (= $later) が使われていることを確認
-			$post_date_ts = ( new DateTimeImmutable( $post->post_date, wp_timezone() ) )->getTimestamp();
-			$lastmod_ts   = ( new DateTimeImmutable( $lastmod ) )->getTimestamp();
-			$this->assertGreaterThanOrEqual(
-				$post_date_ts,
+			$later_ts   = ( new DateTimeImmutable( $later, wp_timezone() ) )->getTimestamp();
+			$lastmod_ts = ( new DateTimeImmutable( $lastmod ) )->getTimestamp();
+			$this->assertSame(
+				$later_ts,
 				$lastmod_ts,
-				"<lastmod>({$lastmod}) は post_date({$post->post_date}) 以上であること"
+				"<lastmod>({$lastmod}) は post_modified ({$later}) に一致すること"
 			);
 			$found = true;
 		}

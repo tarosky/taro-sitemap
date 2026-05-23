@@ -75,7 +75,7 @@ trait QueryArgsHelper {
 	 */
 	protected function get_last_mod( string $post_modified, ?string $post_date = null ) {
 		$base = $post_modified;
-		if ( ! empty( $post_date ) && strtotime( $post_date ) > strtotime( $post_modified ) ) {
+		if ( ! empty( $post_date ) && $post_date > $post_modified ) {
 			$base = $post_date;
 		}
 		return mysql2date( \DateTime::W3C, $base );
