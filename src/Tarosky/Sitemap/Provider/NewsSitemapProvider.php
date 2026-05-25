@@ -61,7 +61,7 @@ class NewsSitemapProvider extends SitemapProvider {
 		foreach ( $query->posts as $post ) {
 			$urls[] = [
 				'link'    => get_permalink( $post ),
-				'lastmod' => $this->get_last_mod( $post->post_modified ),
+				'lastmod' => $this->get_last_mod( $post->post_modified, $post->post_date ),
 				'title'   => get_the_title( $post ),
 				'date'    => get_the_time( 'Y-m-d', $post ),
 			];
