@@ -52,31 +52,6 @@ class PostSitemapExclusion extends AbstractFeaturePattern {
 	 * @return array
 	 */
 	public function filter_post_sitemap( $result ) {
-		$post_ids = array_map( function ( $post ) {
-			return $post->ID;
-		}, $result );
-		if ( empty( $post_ids ) ) {
-			return $result;
-		}
-		// Get post ids which has no meta.
-		$exclude_ids = get_posts( [
-			'fields'         => 'ids',
-			'post_type'      => $this->option( 'post_types' ),
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'post__in'       => $post_ids,
-			'meta_query'     => [
-				[
-					'key'   => '_exclude_from_sitemap',
-					'value' => '1',
-				],
-			],
-		] );
-		if ( empty( $exclude_ids ) ) {
-			return $result;
-		}
-		return array_values( array_filter( $result, function ( $post ) use ( $exclude_ids ) {
-			return ! in_array( (int) $post->ID, $exclude_ids, true );
-		} ) );
+		return $this->exclude_list( $result, '_exclude_from_sitemap' );
 	}
 }

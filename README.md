@@ -75,6 +75,11 @@ Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap).
 
 ## Changelog
 
+### 2.4.0
+
+* Bump PHP minimum version.
+* Add filter for 
+
 ### 2.0.1
 
 * Bugfix of removing language attributes.

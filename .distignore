@@ -16,6 +16,7 @@ package-lock.json
 phpcs.ruleset.xml
 phpunit.xml.dist
 README.md
+Development.md
 webpack.config.js
 wordpress
 bin

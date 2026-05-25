@@ -23,6 +23,7 @@ class PostNoindex extends RobotsFilterPattern {
 	 */
 	protected function register_hooks() {
 		parent::register_hooks();
+		add_filter( 'tsmap_sitemap_results', [ $this, 'filter_post_sitemap' ], 10, 5 );
 		$this->add_meta_box( 100 );
 	}
 
@@ -79,5 +80,15 @@ class PostNoindex extends RobotsFilterPattern {
 		 * @hook tsmap_noindex_key
 		 */
 		return apply_filters( 'tsmap_noindex_key', '_noindex' );
+	}
+
+	/**
+	 * Filter post sitemap results to exclude noindex posts.
+	 *
+	 * @param \WP_Post[] $result
+	 * @return array
+	 */
+	public function filter_post_sitemap( $result ) {
+		return $this->exclude_list( $result, $this->meta_key() );
 	}
 }

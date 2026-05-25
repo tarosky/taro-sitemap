@@ -1,4 +1,5 @@
 {
+	"phpVersion": "7.4",
 	"plugins": [
 		".",
 		"https://downloads.wordpress.org/plugin/query-monitor.latest-stable.zip",
