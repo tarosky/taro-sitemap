@@ -88,7 +88,7 @@ class TermMetaBoxes extends Singleton {
 	 *
 	 * @param int    $term_id   Term ID.
 	 * @param int    $tt_id     Term taxonomy ID.
-	 * @param string $stasonomy taxonomy of this term.
+	 * @param string $taxonomy taxonomy of this term.
 	 *
 	 * @return void
 	 */
