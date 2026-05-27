@@ -23,7 +23,8 @@ class PostSitemapExclusion extends AbstractFeaturePattern {
 	}
 
 	public function is_active_post_type( $post_type ): bool {
-		return in_array( $post_type, $this->option( 'post_types' ), true );
+		$post_types = (array) $this->option( 'post_types' );
+		return in_array( $post_type, $post_types, true );
 	}
 
 	protected function do_save( $post ): void {

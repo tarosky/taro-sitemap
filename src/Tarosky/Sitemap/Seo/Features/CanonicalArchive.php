@@ -28,7 +28,7 @@ class CanonicalArchive extends AbstractFeaturePattern {
 			return;
 		}
 		$canonical = '';
-		$options   = $this->option( 'canonical_archive' );
+		$options   = (array) $this->option( 'canonical_archive' );
 		$paged     = get_query_var( 'paged' );
 		$suffix    = 1 < $paged ? sprintf( 'page/%d', $paged ) : '';
 		if ( is_author() ) {

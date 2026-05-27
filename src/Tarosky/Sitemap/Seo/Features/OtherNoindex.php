@@ -26,7 +26,7 @@ class OtherNoindex extends RobotsFilterPattern {
 	public function wp_robots( $robots ) {
 		$noindex  = false;
 		$nofollow = false;
-		$options  = $this->option( 'noindex_other' );
+		$options  = (array) $this->option( 'noindex_other' );
 		if ( is_search() ) {
 			$noindex  = in_array( 'search', $options, true );
 			$nofollow = $noindex;

@@ -24,7 +24,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "git+https://github.com/tarosky/taro-sitemap.git"
 	},
 	"keywords": [],
 	"author": "Tarosky INC",
