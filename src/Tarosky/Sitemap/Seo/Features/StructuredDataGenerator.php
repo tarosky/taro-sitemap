@@ -151,6 +151,13 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	public function get_authors_structure( $post ) {
 		$author = get_userdata( $post->post_author );
 		$json   = [
+			/**
+			 * Filters the author type for JSON-LD structured data.
+			 *
+			 * @param string   $type   Author type. Default 'Person'. Can also be 'Organization', etc.
+			 * @param \WP_User $author Author user object.
+			 * @param \WP_Post $post   Post object.
+			 */
 			'@type' => apply_filters( 'tsmap_json_ld_author_type', 'Person', $author, $post ),
 			'name'  => get_the_author_meta( 'display_name', $author->ID ),
 		];
