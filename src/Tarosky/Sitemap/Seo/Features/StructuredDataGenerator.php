@@ -151,7 +151,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	public function get_authors_structure( $post ) {
 		$author = get_userdata( $post->post_author );
 		$json   = [
-			'@type' => apply_filters( 'tsmap_json_ld_author_type', 'Person', $post ),
+			'@type' => apply_filters( 'tsmap_json_ld_author_type', 'Person', $author, $post ),
 			'name'  => get_the_author_meta( 'display_name', $author->ID ),
 		];
 		if ( preg_match( '#^https?://.+#', $author->user_url ) ) {
