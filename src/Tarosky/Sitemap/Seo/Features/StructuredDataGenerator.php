@@ -3,7 +3,7 @@
 namespace Tarosky\Sitemap\Seo\Features;
 
 
-use Kunoichi\VirtualMember\Services\OgpProvider;
+use Kunoichi\VirtualMember\Services\StructuredDataProvider;
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
 
 /**
@@ -165,10 +165,10 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			$json['url'] = $author->user_url;
 		}
 		// If virtual member exists, set author.
-		if ( class_exists( 'Kunoichi\VirtualMember\Services\OgpProvider' ) ) {
+		if ( class_exists( 'Kunoichi\VirtualMember\Services\StructuredDataProvider' ) ) {
 			$members = [];
 			foreach ( \Kunoichi\VirtualMember\Ui\PublicScreen::get_instance()->get_members( $post ) as $member ) {
-				$j = OgpProvider::get_instance()->get_ogp( $member );
+				$j = StructuredDataProvider::get_instance()->get_profile_schema( $member );
 				if ( ! empty( $j ) ) {
 					$members[] = $j;
 				}
@@ -177,7 +177,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				// Try to get default member.
 				$default_user = \Kunoichi\VirtualMember\PostType::default_user();
 				if ( $default_user ) {
-					$members[] = OgpProvider::get_instance()->get_ogp( $default_user );
+					$members[] = StructuredDataProvider::get_instance()->get_profile_schema( $default_user );
 				}
 			}
 			if ( ! empty( $members ) ) {
