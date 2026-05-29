@@ -3,8 +3,8 @@
 namespace Tarosky\Sitemap\Seo\Features;
 
 
-use Kunoichi\VirtualMember\Services\StructuredDataProvider;
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
+use Tarosky\Sitemap\Seo\VirtualMemberIntegration;
 
 /**
  * Structured data generator.
@@ -165,24 +165,26 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			$json['url'] = $author->user_url;
 		}
 		// If virtual member exists, set author.
-		if ( class_exists( 'Kunoichi\VirtualMember\Services\StructuredDataProvider' ) ) {
-			$members = [];
-			foreach ( \Kunoichi\VirtualMember\Ui\PublicScreen::get_instance()->get_members( $post ) as $member ) {
-				$j = StructuredDataProvider::get_instance()->get_profile_schema( $member );
+		$integration = VirtualMemberIntegration::get_instance();
+		$members     = [];
+		foreach ( $integration->get_members( $post ) as $member ) {
+			$j = $integration->get_profile_schema( $member );
+			if ( ! empty( $j ) ) {
+				$members[] = $j;
+			}
+		}
+		if ( empty( $members ) ) {
+			// Try to get default member.
+			$default = $integration->get_default_member();
+			if ( $default ) {
+				$j = $integration->get_profile_schema( $default );
 				if ( ! empty( $j ) ) {
 					$members[] = $j;
 				}
 			}
-			if ( empty( $members ) ) {
-				// Try to get default member.
-				$default_user = \Kunoichi\VirtualMember\PostType::default_user();
-				if ( $default_user ) {
-					$members[] = StructuredDataProvider::get_instance()->get_profile_schema( $default_user );
-				}
-			}
-			if ( ! empty( $members ) ) {
-				$json = $members;
-			}
+		}
+		if ( ! empty( $members ) ) {
+			$json = $members;
 		}
 		return $json;
 	}
