@@ -13,6 +13,39 @@ use Tarosky\Sitemap\Seo\VirtualMemberIntegration;
 class StructuredDataGenerator extends AbstractFeaturePattern {
 
 	/**
+	 * VirtualMemberIntegration instance (nullable for lazy-load / DI).
+	 *
+	 * @var VirtualMemberIntegration|null
+	 */
+	private $virtual_member_integration = null;
+
+	/**
+	 * Get the VirtualMemberIntegration instance.
+	 *
+	 * Falls back to the shared singleton when none has been injected.
+	 *
+	 * @return VirtualMemberIntegration
+	 */
+	public function get_virtual_member_integration(): VirtualMemberIntegration {
+		if ( null === $this->virtual_member_integration ) {
+			$this->virtual_member_integration = VirtualMemberIntegration::get_instance();
+		}
+		return $this->virtual_member_integration;
+	}
+
+	/**
+	 * Set the VirtualMemberIntegration instance.
+	 *
+	 * Intended for use in tests to inject a mock.
+	 *
+	 * @param VirtualMemberIntegration $integration Integration instance to inject.
+	 * @return void
+	 */
+	public function set_virtual_member_integration( VirtualMemberIntegration $integration ): void {
+		$this->virtual_member_integration = $integration;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected function is_active(): bool {
@@ -165,7 +198,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			$json['url'] = $author->user_url;
 		}
 		// If virtual member exists, set author.
-		$integration = VirtualMemberIntegration::get_instance();
+		$integration = $this->get_virtual_member_integration();
 		$members     = [];
 		foreach ( $integration->get_members( $post ) as $member ) {
 			$j = $integration->get_profile_schema( $member );
