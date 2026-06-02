@@ -6,6 +6,13 @@
 // Load Composer autoloader.
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
+// Polyfill for enum_exists() — available since PHP 8.1; PHPUnit's mock builder calls it internally.
+if ( ! function_exists( 'enum_exists' ) ) {
+	function enum_exists( string $enum, bool $autoload = true ): bool {
+		return false;
+	}
+}
+
 // Determine the tests directory (defaults to the WP PHPUnit path in wp-env).
 $_tests_dir = getenv( 'WP_TESTS_DIR' ) ?: '/wordpress-phpunit/';
 

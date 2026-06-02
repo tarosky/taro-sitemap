@@ -47,12 +47,8 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$mock->method( 'get_default_member' )->willReturn( $default );
 		$mock->method( 'get_profile_schema' )->willReturnCallback(
 			function ( $member ) use ( $profile_map ) {
-				foreach ( $profile_map as $key => $schema ) {
-					if ( $key === $member ) {
-						return $schema;
-					}
-				}
-				return [];
+				$id = is_object( $member ) ? $member->ID : (int) $member;
+				return $profile_map[ $id ] ?? [];
 			}
 		);
 
@@ -368,7 +364,7 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$this->inject_virtual_member_mock(
 			[ $member_a, $member_b ],
 			null,
-			[ $member_a => $schema_a, $member_b => $schema_b ]
+			[ $member_a->ID => $schema_a, $member_b->ID => $schema_b ]
 		);
 
 		$author = $this->generator->get_authors_structure( $post );
@@ -394,7 +390,7 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$default_member = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
 		$default_schema = [ '@type' => 'Person', 'name' => 'Default Member' ];
 
-		$this->inject_virtual_member_mock( [], $default_member, [ $default_member => $default_schema ] );
+		$this->inject_virtual_member_mock( [], $default_member, [ $default_member->ID => $default_schema ] );
 
 		$author = $this->generator->get_authors_structure( $post );
 
@@ -421,7 +417,7 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$this->inject_virtual_member_mock(
 			[ $member_ok, $member_empty ],
 			null,
-			[ $member_ok => $schema_ok, $member_empty => [] ]
+			[ $member_ok->ID => $schema_ok, $member_empty->ID => [] ]
 		);
 
 		$author = $this->generator->get_authors_structure( $post );
