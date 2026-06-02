@@ -252,6 +252,38 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 	// -----------------------------------------------------------------------
 
 	/**
+	 * When the virtual-member plugin is inactive, returns the standard Person structure.
+	 *
+	 * Uses a partial mock: only is_active() is mocked (returns false).
+	 * get_members() and get_default_member() run their real implementations,
+	 * which check is_active() internally and early-return [] / null.
+	 */
+	public function test_authors_structure_when_virtual_member_plugin_inactive() {
+		$user_id = self::factory()->user->create( [
+			'display_name' => 'Inactive Plugin Author',
+			'user_url'     => '',
+		] );
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$mock = $this->getMockBuilder( VirtualMemberIntegration::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'is_active' ] )
+			->getMock();
+		$mock->method( 'is_active' )->willReturn( false );
+		$this->generator->set_virtual_member_integration( $mock );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertIsArray( $author );
+		$this->assertEquals( 'Person', $author['@type'] );
+		$this->assertEquals( 'Inactive Plugin Author', $author['name'] );
+	}
+
+	/**
 	 * No virtual members and no default member: returns the standard Person structure.
 	 */
 	public function test_authors_structure_returns_person_when_no_virtual_members() {
