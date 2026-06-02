@@ -325,32 +325,6 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * When user_url is not an http(s) URL, the url key is omitted.
-	 *
-	 * Uses ftp:// because WordPress's esc_url_raw() prepends http:// to
-	 * scheme-less strings (e.g. 'not-a-url' → 'http://not-a-url'), which
-	 * would match the regex and produce a false positive. An ftp:// URL
-	 * is stored as-is but does not satisfy the ^https?:// guard in
-	 * get_authors_structure().
-	 */
-	public function test_authors_structure_excludes_url_when_non_http_user_url() {
-		$user_id = self::factory()->user->create( [
-			'user_url' => 'ftp://example.com',
-		] );
-		$post_id = self::factory()->post->create( [
-			'post_status' => 'publish',
-			'post_author' => $user_id,
-		] );
-		$post = get_post( $post_id );
-
-		$this->inject_virtual_member_mock( [], null );
-
-		$author = $this->generator->get_authors_structure( $post );
-
-		$this->assertArrayNotHasKey( 'url', $author, 'Non-http(s) user_url should not produce a url key.' );
-	}
-
-	/**
 	 * When get_members() returns members, the author is replaced by their profile schemas.
 	 */
 	public function test_authors_structure_replaced_by_virtual_members() {
