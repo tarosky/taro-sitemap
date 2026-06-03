@@ -33,7 +33,7 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 	 *
 	 * @param array         $members     Value returned by get_members().
 	 * @param \WP_Post|null $default     Value returned by get_default_member().
-	 * @param array         $profile_map Map of [ member_post => schema_array ] for get_profile_schema().
+	 * @param array         $profile_map Map of [ member ID => schema_array ] for get_profile_schema().
 	 * @return \PHPUnit\Framework\MockObject\MockObject
 	 */
 	private function inject_virtual_member_mock( array $members = [], $default = null, array $profile_map = [] ) {
