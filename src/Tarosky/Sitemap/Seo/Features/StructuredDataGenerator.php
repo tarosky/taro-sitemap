@@ -3,14 +3,47 @@
 namespace Tarosky\Sitemap\Seo\Features;
 
 
-use Kunoichi\VirtualMember\Services\OgpProvider;
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
+use Tarosky\Sitemap\Seo\VirtualMemberIntegration;
 
 /**
  * Structured data generator.
  *
  */
 class StructuredDataGenerator extends AbstractFeaturePattern {
+
+	/**
+	 * VirtualMemberIntegration instance (nullable for lazy-load / DI).
+	 *
+	 * @var VirtualMemberIntegration|null
+	 */
+	private $virtual_member_integration = null;
+
+	/**
+	 * Get the VirtualMemberIntegration instance.
+	 *
+	 * Falls back to the shared singleton when none has been injected.
+	 *
+	 * @return VirtualMemberIntegration
+	 */
+	public function get_virtual_member_integration(): VirtualMemberIntegration {
+		if ( null === $this->virtual_member_integration ) {
+			$this->virtual_member_integration = VirtualMemberIntegration::get_instance();
+		}
+		return $this->virtual_member_integration;
+	}
+
+	/**
+	 * Set the VirtualMemberIntegration instance.
+	 *
+	 * Intended for use in tests to inject a mock.
+	 *
+	 * @param VirtualMemberIntegration $integration Integration instance to inject.
+	 * @return void
+	 */
+	public function set_virtual_member_integration( VirtualMemberIntegration $integration ): void {
+		$this->virtual_member_integration = $integration;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -165,24 +198,26 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			$json['url'] = $author->user_url;
 		}
 		// If virtual member exists, set author.
-		if ( class_exists( 'Kunoichi\VirtualMember\Services\OgpProvider' ) ) {
-			$members = [];
-			foreach ( \Kunoichi\VirtualMember\Ui\PublicScreen::get_instance()->get_members( $post ) as $member ) {
-				$j = OgpProvider::get_instance()->get_ogp( $member );
+		$integration = $this->get_virtual_member_integration();
+		$members     = [];
+		foreach ( $integration->get_members( $post ) as $member ) {
+			$j = $integration->get_profile_schema( $member );
+			if ( ! empty( $j ) ) {
+				$members[] = $j;
+			}
+		}
+		if ( empty( $members ) ) {
+			// Try to get default member.
+			$default = $integration->get_default_member();
+			if ( $default ) {
+				$j = $integration->get_profile_schema( $default );
 				if ( ! empty( $j ) ) {
 					$members[] = $j;
 				}
 			}
-			if ( empty( $members ) ) {
-				// Try to get default member.
-				$default_user = \Kunoichi\VirtualMember\PostType::default_user();
-				if ( $default_user ) {
-					$members[] = OgpProvider::get_instance()->get_ogp( $default_user );
-				}
-			}
-			if ( ! empty( $members ) ) {
-				$json = $members;
-			}
+		}
+		if ( ! empty( $members ) ) {
+			$json = $members;
 		}
 		return $json;
 	}

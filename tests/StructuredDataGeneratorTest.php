@@ -1,6 +1,7 @@
 <?php
 
 use Tarosky\Sitemap\Seo\Features\StructuredDataGenerator;
+use Tarosky\Sitemap\Seo\VirtualMemberIntegration;
 
 /**
  * Tests for StructuredDataGenerator.
@@ -15,6 +16,44 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 		$this->generator = StructuredDataGenerator::get_instance();
+	}
+
+	public function tear_down() {
+		// Reset any injected mock back to the real singleton.
+		$this->generator->set_virtual_member_integration( VirtualMemberIntegration::get_instance() );
+		parent::tear_down();
+	}
+
+	// -----------------------------------------------------------------------
+	// Helper: build and inject a VirtualMemberIntegration mock.
+	// -----------------------------------------------------------------------
+
+	/**
+	 * Create a VirtualMemberIntegration mock and inject it into the generator.
+	 *
+	 * @param array         $members     Value returned by get_members().
+	 * @param \WP_Post|null $default     Value returned by get_default_member().
+	 * @param array         $profile_map Map of [ member ID => schema_array ] for get_profile_schema().
+	 * @return \PHPUnit\Framework\MockObject\MockObject
+	 */
+	private function inject_virtual_member_mock( array $members = [], $default = null, array $profile_map = [] ) {
+		$mock = $this->getMockBuilder( VirtualMemberIntegration::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'is_active', 'get_members', 'get_default_member', 'get_profile_schema' ] )
+			->getMock();
+
+		$mock->method( 'is_active' )->willReturn( true );
+		$mock->method( 'get_members' )->willReturn( $members );
+		$mock->method( 'get_default_member' )->willReturn( $default );
+		$mock->method( 'get_profile_schema' )->willReturnCallback(
+			function ( $member ) use ( $profile_map ) {
+				$id = is_object( $member ) ? $member->ID : (int) $member;
+				return $profile_map[ $id ] ?? [];
+			}
+		);
+
+		$this->generator->set_virtual_member_integration( $mock );
+		return $mock;
 	}
 
 	/**
@@ -203,6 +242,198 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 
 		$this->assertEmpty( $json_lds, 'Category archive should have no JSON-LD by default.' );
 	}
+
+	// -----------------------------------------------------------------------
+	// Tests for get_authors_structure()
+	// -----------------------------------------------------------------------
+
+	/**
+	 * When the virtual-member plugin is inactive, returns the standard Person structure.
+	 *
+	 * Uses a partial mock: only is_active() is mocked (returns false).
+	 * get_members() and get_default_member() run their real implementations,
+	 * which check is_active() internally and early-return [] / null.
+	 */
+	public function test_authors_structure_when_virtual_member_plugin_inactive() {
+		$user_id = self::factory()->user->create( [
+			'display_name' => 'Inactive Plugin Author',
+			'user_url'     => '',
+		] );
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$mock = $this->getMockBuilder( VirtualMemberIntegration::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'is_active' ] )
+			->getMock();
+		$mock->method( 'is_active' )->willReturn( false );
+		$this->generator->set_virtual_member_integration( $mock );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertIsArray( $author );
+		$this->assertEquals( 'Person', $author['@type'] );
+		$this->assertEquals( 'Inactive Plugin Author', $author['name'] );
+	}
+
+	/**
+	 * No virtual members and no default member: returns the standard Person structure.
+	 */
+	public function test_authors_structure_returns_person_when_no_virtual_members() {
+		$user_id = self::factory()->user->create( [
+			'display_name' => 'Test Author',
+			'user_url'     => '',
+		] );
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertIsArray( $author );
+		$this->assertEquals( 'Person', $author['@type'] );
+		$this->assertEquals( 'Test Author', $author['name'] );
+		$this->assertArrayNotHasKey( 'url', $author, 'Empty user_url should not produce a url key.' );
+	}
+
+	/**
+	 * When user_url is a valid http(s) URL, the url key is included.
+	 */
+	public function test_authors_structure_includes_url_when_valid_user_url() {
+		$user_id = self::factory()->user->create( [
+			'user_url' => 'https://example.com',
+		] );
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertArrayHasKey( 'url', $author );
+		$this->assertEquals( 'https://example.com', $author['url'] );
+	}
+
+	/**
+	 * When get_members() returns members, the author is replaced by their profile schemas.
+	 */
+	public function test_authors_structure_replaced_by_virtual_members() {
+		$user_id = self::factory()->user->create();
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$member_a = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+		$member_b = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+
+		$schema_a = [ '@type' => 'Person', 'name' => 'Member A' ];
+		$schema_b = [ '@type' => 'Person', 'name' => 'Member B' ];
+
+		$this->inject_virtual_member_mock(
+			[ $member_a, $member_b ],
+			null,
+			[ $member_a->ID => $schema_a, $member_b->ID => $schema_b ]
+		);
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertIsArray( $author );
+		$this->assertCount( 2, $author );
+		$this->assertEquals( $schema_a, $author[0] );
+		$this->assertEquals( $schema_b, $author[1] );
+	}
+
+	/**
+	 * When get_members() returns empty and get_default_member() returns a member,
+	 * the author is replaced by the default member's profile schema.
+	 */
+	public function test_authors_structure_falls_back_to_default_member() {
+		$user_id = self::factory()->user->create();
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$default_member = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+		$default_schema = [ '@type' => 'Person', 'name' => 'Default Member' ];
+
+		$this->inject_virtual_member_mock( [], $default_member, [ $default_member->ID => $default_schema ] );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertIsArray( $author );
+		$this->assertCount( 1, $author );
+		$this->assertEquals( $default_schema, $author[0] );
+	}
+
+	/**
+	 * Members whose get_profile_schema() returns an empty array are skipped.
+	 */
+	public function test_authors_structure_skips_members_with_empty_profile_schema() {
+		$user_id = self::factory()->user->create();
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$member_ok    = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+		$member_empty = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+		$schema_ok    = [ '@type' => 'Person', 'name' => 'Valid Member' ];
+
+		$this->inject_virtual_member_mock(
+			[ $member_ok, $member_empty ],
+			null,
+			[ $member_ok->ID => $schema_ok, $member_empty->ID => [] ]
+		);
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertCount( 1, $author, 'Members with empty profile schema should be skipped.' );
+		$this->assertEquals( $schema_ok, $author[0] );
+	}
+
+	/**
+	 * The tsmap_json_ld_author_type filter changes the @type (no-virtual-member case).
+	 */
+	public function test_authors_structure_author_type_filter() {
+		$user_id = self::factory()->user->create();
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$callback = function ( $type ) {
+			return 'Organization';
+		};
+		add_filter( 'tsmap_json_ld_author_type', $callback );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		remove_filter( 'tsmap_json_ld_author_type', $callback );
+
+		$this->assertEquals( 'Organization', $author['@type'] );
+	}
+
+	// -----------------------------------------------------------------------
+	// Private helpers
+	// -----------------------------------------------------------------------
 
 	/**
 	 * Find a JSON-LD item by @type.
