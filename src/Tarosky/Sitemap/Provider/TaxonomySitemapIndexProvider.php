@@ -43,7 +43,11 @@ SQL;
 		$paged = ceil( $wpdb->get_var( $query ) / $per_page );
 		$urls  = [];
 		for ( $i = 1; $i <= $paged; $i++ ) {
-			$urls[] = home_url( sprintf( 'sitemap_taxonomy_%d.xml', $i ) );
+			$urls[] = $links[] = $this->sitemap_url([
+				'sitemap_type'   => 'map',
+				'sitemap_target' => 'taxonomy',
+				'paged'          => $i,
+			]);
 		}
 		return $urls;
 	}

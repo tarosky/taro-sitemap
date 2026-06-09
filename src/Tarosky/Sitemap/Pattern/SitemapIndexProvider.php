@@ -58,14 +58,13 @@ abstract class SitemapIndexProvider extends AbstractSitemapProvider {
 	 * @return string
 	 */
 	public function build_url() {
-		return home_url( sprintf( '/sitemap_index_%s.xml', $this->target_name() ) );
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function get_xslt_url() {
-		return home_url( 'sitemap_style_index.xsl' );
+		if ( get_option( 'permalink_structure' ) ) {
+			return home_url( sprintf( '/sitemap_index_%s.xml', $this->target_name() ) );
+		}
+		return add_query_arg( [
+			'sitemap_type'   => $this->type,
+			'sitemap_target' => $this->target_name(),
+		], home_url( '/' ) );
 	}
 
 	/**
