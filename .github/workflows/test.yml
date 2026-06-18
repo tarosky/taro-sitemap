@@ -11,7 +11,7 @@ jobs:
     name: PHP Syntax Check
     uses: tarosky/workflows/.github/workflows/phpcs.yml@main
     with:
-      version: 7.4
+      version: 8.1
 
   assets:
     name: Assets Test
@@ -40,6 +40,9 @@ jobs:
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [8.1, 8.2, 8.3]
     steps:
       - uses: actions/checkout@v4
 
@@ -54,7 +57,7 @@ jobs:
       - name: Setup PHP with composer v2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: ${{ matrix.php-version }}
           tools: composer
 
       - name: Install Composer Dependencies
