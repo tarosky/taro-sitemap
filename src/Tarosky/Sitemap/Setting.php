@@ -26,10 +26,13 @@ class Setting extends Singleton {
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
 
+		add_action( 'init', [ $this, 'sync_attachment_pages_setting' ] );
+
 		# Flush permalinks automatically when these options are updated
 		add_action( 'update_option_tsmap_post_types', [ $this, 'flush_permalinks' ] );
 		add_action( 'update_option_tsmap_news_post_types', [ $this, 'flush_permalinks' ] );
 		add_action( 'update_option_tsmap_taxonomies', [ $this, 'flush_permalinks' ] );
+		add_action( 'update_option_tsmap_attachment_pages_enabled', [ $this, 'flush_permalinks' ] );
 	}
 
 	/**
@@ -41,6 +44,16 @@ class Setting extends Singleton {
 		add_action('shutdown', function () {
 			flush_rewrite_rules();
 		});
+	}
+
+	/**
+	 * Syncs options tsmap_attachment_pages_enabled and wp_attachment_pages_enabled
+	 *
+	 * @return void
+	 */
+	public function sync_attachment_pages_setting() {
+		$enabled = (bool) get_option( 'tsmap_attachment_pages_enabled' );
+		update_option( 'wp_attachment_pages_enabled', $enabled ? 1 : 0 );
 	}
 
 	/**
@@ -322,6 +335,13 @@ class Setting extends Singleton {
 						'label' => __( 'Post Type Archive', 'tsmap' ),
 					],
 				],
+			],
+			[
+				'id'      => 'attachment_pages_enabled',
+				'section' => 'canonical',
+				'title'   => __( 'Attachment Pages', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Enable WordPress attachment pages instead of redirecting them to media files.', 'tsmap' ),
 			],
 			[
 				'id'          => 'separator',
