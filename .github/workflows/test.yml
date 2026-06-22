@@ -11,7 +11,7 @@ jobs:
     name: PHP Syntax Check
     uses: tarosky/workflows/.github/workflows/phpcs.yml@main
     with:
-      version: 8.1
+      version: 8.0
 
   assets:
     name: Assets Test
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [8.1, 8.2, 8.3]
+        php-version: [8.0, 8.1, 8.3]
     steps:
       - uses: actions/checkout@v4
 
