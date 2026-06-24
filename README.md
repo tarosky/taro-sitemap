@@ -3,6 +3,7 @@
 Contributors: tarosky, Takahashi_Fumiki, tswallie  
 Tags: sitemap,google,news  
 Tested up to: 6.8  
+Requires PHP: 8.1  
 Stable Tag: nightly
 
 Sitemap plugin.

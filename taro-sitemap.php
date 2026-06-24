@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/extend/plugins/taro-sitemap
 Description: Yet another sitemap plugin with more than 200,000 posts.
 Version: nightly
 Requires at least: 5.9
-Requires PHP: 8.0
+Requires PHP: 8.1
 Author: Tarosky INC
 Author URI: https://tarosky.co.jp
 Text Domain: tsmap

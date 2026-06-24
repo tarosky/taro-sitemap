@@ -11,7 +11,7 @@ jobs:
     name: PHP Syntax Check
     uses: tarosky/workflows/.github/workflows/phpcs.yml@main
     with:
-      version: 8.0
+      version: 8.1
 
   assets:
     name: Assets Test
@@ -36,13 +36,15 @@ jobs:
   short-open-tag:
     name: Short Open Tag Check
     uses: tarosky/workflows/.github/workflows/php-short-open-tag.yml@main
+    with:
+      version: '8.1'
 
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [8.0, 8.1, 8.3]
+        php-version: [8.1, 8.2, 8.3]
     steps:
       - uses: actions/checkout@v4
 
