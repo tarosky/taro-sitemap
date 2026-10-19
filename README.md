@@ -64,6 +64,27 @@ add_filter( 'hms_news_sitemap_query_args', function( $query_args ) {
 } );
 ```
 
+#### Organization (Structured Data)
+
+Go to <code>Admin screen -> Tools -> Sitemap & SEO -> Structured Data</code> and enable "Organization" to output Organization JSON-LD on the front page.
+
+- Name, URL and logo are shared with the publisher settings. The logo falls back to the site logo, then the site icon.
+- `@id` is generated from the publisher URL (e.g. `https://example.com/#organization`). Sites pointing to the same URL refer to the same organization.
+- For a publishing company with multiple media sites, set "NewsMediaOrganization" on each media site and enter the company site's publisher URL as "Parent Organization URL". The media sites and the company are linked via `parentOrganization`.
+
+```
+/**
+ * Filters the Organization structured data for the front page.
+ *
+ * @param array $json Organization structured data.
+ * @return array
+ */
+add_filter( 'tsmap_json_ld_organization_structure', function( $json ) {
+	$json['alternateName'] = 'Example';
+	return $json;
+} );
+```
+
 ## Installation
 
 - Download zip and unpack it.
@@ -75,6 +96,17 @@ add_filter( 'hms_news_sitemap_query_args', function( $query_args ) {
 Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap). 
 
 ## Changelog
+
+### 2.6.0
+
+* Add Organization structured data (JSON-LD) on the front page with description, sameAs, address and parent organization.
+* Add organization type setting (Organization / NewsMediaOrganization / Corporation).
+* Add `@type` to the publisher of Article and refer to the Organization by `@id`.
+* Publisher logo now falls back to the site logo before the site icon.
+* Add filter `tsmap_json_ld_organization_structure`.
+* Add option to enable attachment pages.
+* Bump PHP minimum version to 8.1.
+* Fix typo in the setting section name.
 
 ### 2.4.0
 
