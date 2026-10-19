@@ -2,7 +2,7 @@
 
 Contributors: tarosky, Takahashi_Fumiki, tswallie  
 Tags: sitemap,google,news  
-Tested up to: 6.8  
+Tested up to: 7.1  
 Requires PHP: 8.1  
 Stable Tag: nightly
 
