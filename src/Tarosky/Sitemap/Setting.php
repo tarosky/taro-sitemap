@@ -468,7 +468,7 @@ class Setting extends Singleton {
 				'section' => 'json-ld',
 				'title'   => __( 'Publisher Logo', 'tsmap' ),
 				'type'    => 'image',
-				'label'   => __( 'Attachment ID of the publisher. Default is site icon.', 'tsmap' ),
+				'label'   => __( 'Attachment ID of the publisher. Default is site logo, then site icon.', 'tsmap' ),
 			],
 			[
 				'id'      => 'jsonld_organization',
@@ -476,6 +476,27 @@ class Setting extends Singleton {
 				'title'   => __( 'Organization', 'tsmap' ),
 				'type'    => 'bool',
 				'label'   => __( 'Display Organization JSON-LD on the front page. Publisher name, URL and logo are used as the organization\'s.', 'tsmap' ),
+			],
+			[
+				'id'      => 'jsonld_organization_type',
+				'section' => 'json-ld',
+				'title'   => __( 'Organization Type', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'Schema type of the organization. Also used for the publisher of articles.', 'tsmap' ),
+				'options' => [
+					[
+						'label' => 'Organization',
+						'value' => '',
+					],
+					[
+						'label' => __( 'NewsMediaOrganization (Media site)', 'tsmap' ),
+						'value' => 'NewsMediaOrganization',
+					],
+					[
+						'label' => __( 'Corporation (Company site)', 'tsmap' ),
+						'value' => 'Corporation',
+					],
+				],
 			],
 			[
 				'id'      => 'jsonld_organization_description',
@@ -491,6 +512,21 @@ class Setting extends Singleton {
 				'type'        => 'textarea',
 				'label'       => __( 'URLs of other pages about the organization (e.g. Wikipedia, social accounts). One URL per line.', 'tsmap' ),
 				'placeholder' => 'https://en.wikipedia.org/wiki/Example',
+			],
+			[
+				'id'      => 'jsonld_organization_parent_name',
+				'section' => 'json-ld',
+				'title'   => __( 'Parent Organization Name', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'e.g. The publishing company of this media.', 'tsmap' ),
+			],
+			[
+				'id'          => 'jsonld_organization_parent_url',
+				'section'     => 'json-ld',
+				'title'       => __( 'Parent Organization URL', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Official URL of the parent organization. Required to output parentOrganization. Use the same URL as the parent site\'s Publisher URL to link them.', 'tsmap' ),
+				'placeholder' => 'https://example.co.jp/',
 			],
 			[
 				'id'          => 'jsonld_organization_postal_code',

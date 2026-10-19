@@ -152,6 +152,84 @@ class OrganizationStructureTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @id follows the publisher URL, so multiple sites can share one organization.
+	 */
+	public function test_organization_id_follows_publisher_url() {
+		update_option( 'tsmap_jsonld_organization', '1' );
+		update_option( 'tsmap_jsonld_publisher_url', 'https://corp.example.com' );
+		$post = self::factory()->post->create_and_get();
+
+		$organization = $this->generator->get_organization_structure();
+		$publisher    = $this->generator->get_publisher_structure( $post );
+
+		$this->assertEquals( 'https://corp.example.com/#organization', $organization['@id'] );
+		$this->assertEquals( $organization['@id'], $publisher['@id'] );
+	}
+
+	/**
+	 * Organization type is applied to both Organization and publisher.
+	 */
+	public function test_organization_type() {
+		update_option( 'tsmap_jsonld_organization', '1' );
+		update_option( 'tsmap_jsonld_organization_type', 'NewsMediaOrganization' );
+		$post = self::factory()->post->create_and_get();
+
+		$this->assertEquals( 'NewsMediaOrganization', $this->generator->get_organization_structure()['@type'] );
+		$this->assertEquals( 'NewsMediaOrganization', $this->generator->get_publisher_structure( $post )['@type'] );
+	}
+
+	/**
+	 * Invalid organization type falls back to Organization.
+	 */
+	public function test_invalid_organization_type_falls_back() {
+		update_option( 'tsmap_jsonld_organization_type', 'Person' );
+
+		$this->assertEquals( 'Organization', $this->generator->get_organization_type() );
+	}
+
+	/**
+	 * Parent organization refers to the same @id as the parent site.
+	 */
+	public function test_parent_organization() {
+		update_option( 'tsmap_jsonld_organization', '1' );
+		update_option( 'tsmap_jsonld_organization_parent_name', 'Example Publishing' );
+		update_option( 'tsmap_jsonld_organization_parent_url', 'https://publishing.example.com/' );
+
+		$organization = $this->generator->get_organization_structure();
+
+		$this->assertEquals( [
+			'@type' => 'Organization',
+			'@id'   => 'https://publishing.example.com/#organization',
+			'url'   => 'https://publishing.example.com/',
+			'name'  => 'Example Publishing',
+		], $organization['parentOrganization'] );
+	}
+
+	/**
+	 * Parent organization requires a valid URL.
+	 */
+	public function test_parent_organization_requires_url() {
+		update_option( 'tsmap_jsonld_organization', '1' );
+		update_option( 'tsmap_jsonld_organization_parent_name', 'Example Publishing' );
+
+		$this->assertArrayNotHasKey( 'parentOrganization', $this->generator->get_organization_structure() );
+	}
+
+	/**
+	 * Logo falls back to site logo.
+	 */
+	public function test_logo_falls_back_to_site_logo() {
+		update_option( 'tsmap_jsonld_organization', '1' );
+		$attachment_id = self::factory()->attachment->create_upload_object( DIR_TESTDATA . '/images/canola.jpg' );
+		set_theme_mod( 'custom_logo', $attachment_id );
+
+		$organization = $this->generator->get_organization_structure();
+
+		remove_theme_mod( 'custom_logo' );
+		$this->assertEquals( wp_get_attachment_image_url( $attachment_id, 'full' ), $organization['logo'] );
+	}
+
+	/**
 	 * Find JSON-LD by @type.
 	 *
 	 * @param array  $json_lds JSON-LD list.

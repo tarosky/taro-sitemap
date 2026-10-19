@@ -238,11 +238,12 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 		if ( ! $this->is_organization_enabled() ) {
 			return [];
 		}
+		$base        = $this->get_organization_base();
 		$json        = array_merge( [
 			'@context' => 'https://schema.org',
-			'@type'    => 'Organization',
-			'@id'      => $this->get_organization_id(),
-		], $this->get_organization_base() );
+			'@type'    => $this->get_organization_type(),
+			'@id'      => $this->build_organization_id( $base['url'] ),
+		], $base );
 		$description = trim( (string) $this->option( 'jsonld_organization_description' ) );
 		if ( $description ) {
 			$json['description'] = $description;
@@ -254,6 +255,10 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 		$address = $this->get_organization_address();
 		if ( ! empty( $address ) ) {
 			$json['address'] = $address;
+		}
+		$parent = $this->get_parent_organization();
+		if ( ! empty( $parent ) ) {
+			$json['parentOrganization'] = $parent;
 		}
 		/**
 		 * Filters the Organization structured data for the front page.
@@ -276,12 +281,48 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	}
 
 	/**
-	 * Get the @id of the Organization node.
+	 * Get the schema type of the organization.
 	 *
 	 * @return string
 	 */
-	public function get_organization_id() {
-		return home_url( '/#organization' );
+	public function get_organization_type() {
+		$type = $this->option( 'jsonld_organization_type' );
+		return in_array( $type, [ 'NewsMediaOrganization', 'Corporation' ], true ) ? $type : 'Organization';
+	}
+
+	/**
+	 * Build the @id of an Organization node from its URL.
+	 *
+	 * The same organization gets the same @id across sites,
+	 * e.g. media sites can refer to their publishing company.
+	 *
+	 * @param string $url Organization URL.
+	 * @return string
+	 */
+	public function build_organization_id( $url ) {
+		return trailingslashit( $url ) . '#organization';
+	}
+
+	/**
+	 * Get parent organization reference.
+	 *
+	 * @return array Empty array if parent URL is not set.
+	 */
+	protected function get_parent_organization() {
+		$url = trim( (string) $this->option( 'jsonld_organization_parent_url' ) );
+		if ( ! preg_match( '#^https?://.+#', $url ) ) {
+			return [];
+		}
+		$parent = [
+			'@type' => 'Organization',
+			'@id'   => $this->build_organization_id( $url ),
+			'url'   => $url,
+		];
+		$name   = trim( (string) $this->option( 'jsonld_organization_parent_name' ) );
+		if ( $name ) {
+			$parent['name'] = $name;
+		}
+		return $parent;
 	}
 
 	/**
@@ -292,13 +333,18 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 * @return array
 	 */
 	protected function get_organization_base() {
-		$base      = [
+		$base = [
 			'name' => get_bloginfo( 'name' ),
 			'url'  => home_url( '/' ),
 		];
-		$site_icon = get_site_icon_url( 'full' );
-		if ( $site_icon ) {
-			$base['logo'] = $site_icon;
+		// Fallback logo: site logo, then site icon.
+		$site_logo = get_theme_mod( 'custom_logo' );
+		$logo      = $site_logo ? wp_get_attachment_image_url( $site_logo, 'full' ) : '';
+		if ( ! $logo ) {
+			$logo = get_site_icon_url( 'full' );
+		}
+		if ( $logo ) {
+			$base['logo'] = $logo;
 		}
 		foreach ( [ 'name', 'url', 'logo' ] as $key ) {
 			$option_key = 'jsonld_publisher_' . $key;
@@ -359,12 +405,13 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 * @return mixed|null
 	 */
 	public function get_publisher_structure( $post ) {
-		$publisher = [ '@type' => 'Organization' ];
+		$base      = $this->get_organization_base();
+		$publisher = [ '@type' => $this->get_organization_type() ];
 		if ( $this->is_organization_enabled() ) {
 			// Refer to the Organization node on the front page.
-			$publisher['@id'] = $this->get_organization_id();
+			$publisher['@id'] = $this->build_organization_id( $base['url'] );
 		}
-		$publisher = array_merge( $publisher, $this->get_organization_base() );
+		$publisher = array_merge( $publisher, $base );
 		/**
 		 * Filters the publisher structure for JSON-LD structured data.
 		 *
