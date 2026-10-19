@@ -164,7 +164,7 @@ class Setting extends Singleton {
 			[ 'canonical', __( 'Canonical', 'tsmap' ), __( 'Canonical URL related features.', 'tsmap' ) ],
 			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
 			[ 'ogp', __( 'OGP', 'tsmap' ), __( 'OGP setting. Displayed on social media.', 'tsmap' ) ],
-			[ 'json-ld', __( 'Structured Date', 'tsmap' ), __( 'Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter hooks <code>tsmap_json_ld</code> is also available.', 'tsmap' ) ],
+			[ 'json-ld', __( 'Structured Data', 'tsmap' ), __( 'Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter hooks <code>tsmap_json_ld</code> is also available.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
@@ -468,7 +468,101 @@ class Setting extends Singleton {
 				'section' => 'json-ld',
 				'title'   => __( 'Publisher Logo', 'tsmap' ),
 				'type'    => 'image',
-				'label'   => __( 'Attachment ID of the publisher. Default is site icon.', 'tsmap' ),
+				'label'   => __( 'Attachment ID of the publisher. Default is site logo, then site icon.', 'tsmap' ),
+			],
+			[
+				'id'      => 'jsonld_organization',
+				'section' => 'json-ld',
+				'title'   => __( 'Organization', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Display Organization JSON-LD on the front page. Publisher name, URL and logo are used as the organization\'s.', 'tsmap' ),
+			],
+			[
+				'id'      => 'jsonld_organization_type',
+				'section' => 'json-ld',
+				'title'   => __( 'Organization Type', 'tsmap' ),
+				'type'    => 'radio',
+				'label'   => __( 'Schema type of the organization. Also used for the publisher of articles.', 'tsmap' ),
+				'options' => [
+					[
+						'label' => 'Organization',
+						'value' => '',
+					],
+					[
+						'label' => __( 'NewsMediaOrganization (Media site)', 'tsmap' ),
+						'value' => 'NewsMediaOrganization',
+					],
+					[
+						'label' => __( 'Corporation (Company site)', 'tsmap' ),
+						'value' => 'Corporation',
+					],
+				],
+			],
+			[
+				'id'      => 'jsonld_organization_description',
+				'section' => 'json-ld',
+				'title'   => __( 'Organization Description', 'tsmap' ),
+				'type'    => 'textarea',
+				'label'   => __( 'Description of the organization.', 'tsmap' ),
+			],
+			[
+				'id'          => 'jsonld_organization_same_as',
+				'section'     => 'json-ld',
+				'title'       => __( 'Organization sameAs', 'tsmap' ),
+				'type'        => 'textarea',
+				'label'       => __( 'URLs of other pages about the organization (e.g. Wikipedia, social accounts). One URL per line.', 'tsmap' ),
+				'placeholder' => 'https://en.wikipedia.org/wiki/Example',
+			],
+			[
+				'id'      => 'jsonld_organization_parent_name',
+				'section' => 'json-ld',
+				'title'   => __( 'Parent Organization Name', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'e.g. The publishing company of this media.', 'tsmap' ),
+			],
+			[
+				'id'          => 'jsonld_organization_parent_url',
+				'section'     => 'json-ld',
+				'title'       => __( 'Parent Organization URL', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Official URL of the parent organization. Required to output parentOrganization. Use the same URL as the parent site\'s Publisher URL to link them.', 'tsmap' ),
+				'placeholder' => 'https://example.co.jp/',
+			],
+			[
+				'id'          => 'jsonld_organization_postal_code',
+				'section'     => 'json-ld',
+				'title'       => __( 'Postal Code', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'Address of the organization.', 'tsmap' ),
+				'placeholder' => '100-0001',
+			],
+			[
+				'id'      => 'jsonld_organization_region',
+				'section' => 'json-ld',
+				'title'   => __( 'Region', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'State or prefecture.', 'tsmap' ),
+			],
+			[
+				'id'      => 'jsonld_organization_locality',
+				'section' => 'json-ld',
+				'title'   => __( 'Locality', 'tsmap' ),
+				'type'    => 'text',
+				'label'   => __( 'City or ward.', 'tsmap' ),
+			],
+			[
+				'id'      => 'jsonld_organization_street',
+				'section' => 'json-ld',
+				'title'   => __( 'Street Address', 'tsmap' ),
+				'type'    => 'text',
+			],
+			[
+				'id'          => 'jsonld_organization_country',
+				'section'     => 'json-ld',
+				'title'       => __( 'Country', 'tsmap' ),
+				'type'        => 'text',
+				'label'       => __( 'ISO 3166-1 alpha-2 country code.', 'tsmap' ),
+				'placeholder' => 'JP',
 			],
 		] as $setting ) {
 			$id      = 'tsmap_' . $setting['id'];

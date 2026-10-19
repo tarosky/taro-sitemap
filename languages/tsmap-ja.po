@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Taro Sitemap\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 00:08+0900\n"
+"Report-Msgid-Bugs-To: https://github.com/tarosky/taro-sitemap/issues\n"
+"POT-Creation-Date: 2026-10-19T03:26:41+00:00\n"
 "PO-Revision-Date: 2025-04-01 00:10+0900\n"
 "Last-Translator: Takahashi Fumiki <takahashi.fumiki@hametuha.co.jp>\n"
 "Language-Team: TAROSKY INC <info@tarosky.co.jp>\n"
@@ -11,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_x:1,2c;_n:1,2;_e;esc_html_e;esc_html__;esc_attr__;"
-"esc_attr_e;_ex:1,2c\n"
+"X-Poedit-KeywordsList: "
+"__;_x:1,2c;_n:1,2;_e;esc_html_e;esc_html__;esc_attr__;esc_attr_e;_ex:1,2c\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.5\n"
@@ -23,12 +23,38 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: wordpress\n"
 "X-Poedit-SearchPathExcluded-4: dist\n"
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:124
+#. Plugin Name of the plugin
+#: taro-sitemap.php
+msgid "Tarosky Sitemap"
+msgstr "Tarosky Sitemap"
+
+#. Plugin URI of the plugin
+#: taro-sitemap.php
+msgid "https://wordpress.org/extend/plugins/taro-sitemap"
+msgstr ""
+
+#. Description of the plugin
+#: taro-sitemap.php
+msgid "Yet another sitemap plugin with more than 200,000 posts."
+msgstr "20万件以上の投稿にも対応できるサイトマッププラグインです。"
+
+#. Author of the plugin
+#: taro-sitemap.php
+msgid "Tarosky INC"
+msgstr "株式会社タロスカイ"
+
+#. Author URI of the plugin
+#: taro-sitemap.php
+msgid "https://tarosky.co.jp"
+msgstr ""
+
+#. translators: %s search query.
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:132
 #, php-format
 msgid "Search results for: %s"
 msgstr "検索結果: %s"
 
-#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:126
+#: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:134
 msgid "Page not found."
 msgstr "ページが見つかりませんでした。"
 
@@ -36,44 +62,45 @@ msgstr "ページが見つかりませんでした。"
 msgid "Exclude this post from news sitemap"
 msgstr "この投稿をニュースサイトマップから除外する"
 
-#: src/Tarosky/Sitemap/Seo/Features/PostDescription.php:50
+#: src/Tarosky/Sitemap/Seo/Features/PostDescription.php:58
 msgid "Meta Description"
 msgstr "メタデスクリプション"
 
-#: src/Tarosky/Sitemap/Seo/Features/PostNoindex.php:52
+#: src/Tarosky/Sitemap/Seo/Features/PostNoindex.php:53
 msgid "Hide this post from search engines"
 msgstr "この投稿を検索エンジンで表示しない"
 
-#: src/Tarosky/Sitemap/Seo/Features/PostSitemapExclusion.php:44
+#: src/Tarosky/Sitemap/Seo/Features/PostSitemapExclusion.php:45
 msgid "Exclude this post from post sitemap"
 msgstr "この投稿をサイトマップから除外する"
 
-#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:30
+#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:31
 msgid "Make this term noindex for search engines."
 msgstr "このタームを検索エンジンで表示しない。"
 
-#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:61
-#: src/Tarosky/Sitemap/Setting.php:125
+#: src/Tarosky/Sitemap/Seo/Features/TermNoindex.php:70
+#: src/Tarosky/Sitemap/Setting.php:163
 msgid "Noindex"
 msgstr "ノーインデックス"
 
-#: src/Tarosky/Sitemap/Seo/PostMetaBoxes.php:72
+#: src/Tarosky/Sitemap/Seo/PostMetaBoxes.php:90
 msgid "SEO Setting"
 msgstr "SEO設定"
 
-#: src/Tarosky/Sitemap/Setting.php:36
+#: src/Tarosky/Sitemap/Setting.php:65
 msgid "Sitemap & SEO"
 msgstr "サイトマップ＆SEO"
 
-#: src/Tarosky/Sitemap/Setting.php:47
+#: src/Tarosky/Sitemap/Setting.php:76
 msgid "Sitemap & SEO Setting"
 msgstr "サイトマップとSEO設定"
 
-#: src/Tarosky/Sitemap/Setting.php:56
+#: src/Tarosky/Sitemap/Setting.php:85
 msgid "Sitemap URL"
 msgstr "サイトマップURL"
 
-#: src/Tarosky/Sitemap/Setting.php:62
+#. translators: %1$s is URL, %2$s is robotx.txt url.
+#: src/Tarosky/Sitemap/Setting.php:91
 #, php-format
 msgid ""
 "The sitemap URL are listed below. You should register these URLs at <a "
@@ -85,53 +112,53 @@ msgstr ""
 "登録する必要があります。URLは <a href=\"%2$s\">robots.txt</a>にも表示されてい"
 "ます。"
 
-#: src/Tarosky/Sitemap/Setting.php:75
+#: src/Tarosky/Sitemap/Setting.php:104
 msgid "No sitemaps are available."
 msgstr "サイトマップがありません。"
 
-#: src/Tarosky/Sitemap/Setting.php:124
+#: src/Tarosky/Sitemap/Setting.php:162
 msgid "Sitemap"
 msgstr "サイトマップ"
 
-#: src/Tarosky/Sitemap/Setting.php:124
+#: src/Tarosky/Sitemap/Setting.php:162
 msgid "Setting for Sitemap."
 msgstr "サイトマップの設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:125
+#: src/Tarosky/Sitemap/Setting.php:163
 msgid ""
 "Add options of noindex for posts and taxonomies. This affects the appearance "
 "on search engines."
 msgstr "投稿やタクソノーにnoidex設定を追加します。"
 
-#: src/Tarosky/Sitemap/Setting.php:126
+#: src/Tarosky/Sitemap/Setting.php:164
 msgid "Canonical"
 msgstr "カノニカル"
 
-#: src/Tarosky/Sitemap/Setting.php:126
+#: src/Tarosky/Sitemap/Setting.php:164
 msgid "Canonical URL related features."
 msgstr "カノニカルURL関連の設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:127
+#: src/Tarosky/Sitemap/Setting.php:165
 msgid "Meta"
 msgstr "メタ"
 
-#: src/Tarosky/Sitemap/Setting.php:127
+#: src/Tarosky/Sitemap/Setting.php:165
 msgid "Additional setting for <code>&lt;head&gt;</code> tag."
 msgstr "<code>&lt;head&gt;</code> タグの追加設定です。"
 
-#: src/Tarosky/Sitemap/Setting.php:128
+#: src/Tarosky/Sitemap/Setting.php:166
 msgid "OGP"
 msgstr "OGP"
 
-#: src/Tarosky/Sitemap/Setting.php:128
+#: src/Tarosky/Sitemap/Setting.php:166
 msgid "OGP setting. Displayed on social media."
 msgstr "OGP設定です。ソーシャルメディアで表示されます。"
 
-#: src/Tarosky/Sitemap/Setting.php:129
-msgid "Structured Date"
+#: src/Tarosky/Sitemap/Setting.php:167
+msgid "Structured Data"
 msgstr "構造化データ"
 
-#: src/Tarosky/Sitemap/Setting.php:129
+#: src/Tarosky/Sitemap/Setting.php:167
 msgid ""
 "Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter "
 "hooks <code>tsmap_json_ld</code> is also available."
@@ -139,27 +166,27 @@ msgstr ""
 "JSON-LDの構造化データを <code>&lt;head&gt;</code> タグ内に表示します。フィル"
 "ターフック <code>tsmap_json_ld</code> も利用できます。"
 
-#: src/Tarosky/Sitemap/Setting.php:146
+#: src/Tarosky/Sitemap/Setting.php:192
 msgid "Core Sitemap"
 msgstr "コア・サイトマップ"
 
-#: src/Tarosky/Sitemap/Setting.php:148
+#: src/Tarosky/Sitemap/Setting.php:194
 msgid "Disable core sitemap"
 msgstr "コア・サイトマップを停止する"
 
-#: src/Tarosky/Sitemap/Setting.php:152
+#: src/Tarosky/Sitemap/Setting.php:198
 msgid "Post types in Sitemap"
 msgstr "サイトマップの投稿タイプ"
 
-#: src/Tarosky/Sitemap/Setting.php:154
+#: src/Tarosky/Sitemap/Setting.php:200
 msgid "Please check post type to be included in site map."
 msgstr "サイトマップに含める投稿タイプをチェックしてください。"
 
-#: src/Tarosky/Sitemap/Setting.php:159
+#: src/Tarosky/Sitemap/Setting.php:205
 msgid "Exclude each posts from Sitemap"
 msgstr "投稿をサイトマップから除外する"
 
-#: src/Tarosky/Sitemap/Setting.php:161
+#: src/Tarosky/Sitemap/Setting.php:207
 msgid ""
 "Allow exclusion option for each posts. This feature may affect sitemap "
 "performance."
@@ -167,116 +194,116 @@ msgstr ""
 "投稿ごとに除外設定をできるようにします。この機能はサイトマップのパフォーマン"
 "スに影響を与える可能性があります。"
 
-#: src/Tarosky/Sitemap/Setting.php:165
+#: src/Tarosky/Sitemap/Setting.php:211
 msgid "No"
 msgstr "いいえ"
 
-#: src/Tarosky/Sitemap/Setting.php:169
+#: src/Tarosky/Sitemap/Setting.php:215
 msgid "Yes"
 msgstr "はい"
 
-#: src/Tarosky/Sitemap/Setting.php:175
+#: src/Tarosky/Sitemap/Setting.php:221
 msgid "Posts per page"
 msgstr "ページあたりの投稿数"
 
-#: src/Tarosky/Sitemap/Setting.php:177
+#: src/Tarosky/Sitemap/Setting.php:223
 msgid "Number of posts per each sitemap. Should be under 5,000."
 msgstr ""
 "それぞれのサイトマップに表示する投稿の数。5,000 以下でなくてはなりません。"
 
-#: src/Tarosky/Sitemap/Setting.php:182
+#: src/Tarosky/Sitemap/Setting.php:228
 msgid "Attachment"
 msgstr "添付ファイル"
 
-#: src/Tarosky/Sitemap/Setting.php:184
+#: src/Tarosky/Sitemap/Setting.php:230
 msgid "How attachments appear in sitemap."
 msgstr "添付ファイルがサイトマップでどのように表示されるか設定します。"
 
-#: src/Tarosky/Sitemap/Setting.php:188
+#: src/Tarosky/Sitemap/Setting.php:234
 msgid "Not displayed."
 msgstr "表示しない。"
 
-#: src/Tarosky/Sitemap/Setting.php:192
+#: src/Tarosky/Sitemap/Setting.php:238
 msgid "In post sitemap"
 msgstr "投稿のサイトマップに含める"
 
-#: src/Tarosky/Sitemap/Setting.php:196
+#: src/Tarosky/Sitemap/Setting.php:242
 msgid "Create attachment page sitemap"
 msgstr "添付ファイルサイトマップを作成する"
 
-#: src/Tarosky/Sitemap/Setting.php:202
+#: src/Tarosky/Sitemap/Setting.php:248
 msgid "Post types in news sitemap"
 msgstr "ニュースサイトマップの投稿タイプ"
 
-#: src/Tarosky/Sitemap/Setting.php:204
+#: src/Tarosky/Sitemap/Setting.php:250
 msgid "Please check post type to be included in news site map."
 msgstr "ニュースサイトマップに含める投稿タイプをチェックしてください。"
 
-#: src/Tarosky/Sitemap/Setting.php:209
+#: src/Tarosky/Sitemap/Setting.php:255
 msgid "Taxonomies in Sitemap"
 msgstr "サイトマップのタクソノミー"
 
-#: src/Tarosky/Sitemap/Setting.php:211
+#: src/Tarosky/Sitemap/Setting.php:257
 msgid "Please check taxonomy archive in site map."
 msgstr "サイトマップに含めるタクソノミー・アーカイブをチェックしてください。"
 
-#: src/Tarosky/Sitemap/Setting.php:218
+#: src/Tarosky/Sitemap/Setting.php:264
 msgid "No Indexable Post Types"
 msgstr "noindexにする投稿タイプ"
 
-#: src/Tarosky/Sitemap/Setting.php:220
+#: src/Tarosky/Sitemap/Setting.php:266
 msgid "Each post in checked post types will have noindex meta box."
 msgstr ""
 "チェックされた投稿タイプのそれぞれの投稿がnoindexのメタボックスを持つようにな"
 "ります。"
 
-#: src/Tarosky/Sitemap/Setting.php:226
+#: src/Tarosky/Sitemap/Setting.php:272
 msgid "No Indexable Taxonomies"
 msgstr "noindexにするタクソノミー"
 
-#: src/Tarosky/Sitemap/Setting.php:228
+#: src/Tarosky/Sitemap/Setting.php:274
 msgid "Each term in checked taxonomies will have noindex setting field."
 msgstr ""
 "チェックされたタクソノミーのそれぞれのタームがnoindexの設定項目を持つようにな"
 "ります。"
 
-#: src/Tarosky/Sitemap/Setting.php:234
+#: src/Tarosky/Sitemap/Setting.php:280
 msgid "Noindex Archive"
 msgstr "noindexにするアーカイブ"
 
-#: src/Tarosky/Sitemap/Setting.php:236
+#: src/Tarosky/Sitemap/Setting.php:282
 msgid "Archive page greater than this number will be noindex."
 msgstr "この数値より大きいアーカイブページはnoindexになります。"
 
-#: src/Tarosky/Sitemap/Setting.php:237
+#: src/Tarosky/Sitemap/Setting.php:283
 msgid "e.g. 6"
 msgstr "例・6"
 
-#: src/Tarosky/Sitemap/Setting.php:242
+#: src/Tarosky/Sitemap/Setting.php:288
 msgid "Other Page"
 msgstr "その他のページ"
 
-#: src/Tarosky/Sitemap/Setting.php:244
+#: src/Tarosky/Sitemap/Setting.php:290
 msgid "Miscellaneous pages to be no-indexed."
 msgstr "noindexにしたいその他のページです。"
 
-#: src/Tarosky/Sitemap/Setting.php:248
+#: src/Tarosky/Sitemap/Setting.php:294
 msgid "Search Results"
 msgstr "検索結果"
 
-#: src/Tarosky/Sitemap/Setting.php:252
+#: src/Tarosky/Sitemap/Setting.php:298
 msgid "404 Page"
 msgstr "404ページ"
 
-#: src/Tarosky/Sitemap/Setting.php:256
+#: src/Tarosky/Sitemap/Setting.php:302
 msgid "Attachment page"
 msgstr "添付ファイルページ"
 
-#: src/Tarosky/Sitemap/Setting.php:263
+#: src/Tarosky/Sitemap/Setting.php:309
 msgid "Canonical Priority"
 msgstr "カノニカル優先度"
 
-#: src/Tarosky/Sitemap/Setting.php:265
+#: src/Tarosky/Sitemap/Setting.php:311
 msgid ""
 "To leverage search engines crawling, change priority to lower number. 1 is "
 "the best."
@@ -284,15 +311,15 @@ msgstr ""
 "検索エンジンのクローリングされやすくするためには低い数値にしてください。1が最"
 "速です。"
 
-#: src/Tarosky/Sitemap/Setting.php:266
+#: src/Tarosky/Sitemap/Setting.php:312
 msgid "Default. 10"
 msgstr "デフォルト・10"
 
-#: src/Tarosky/Sitemap/Setting.php:271
+#: src/Tarosky/Sitemap/Setting.php:317
 msgid "Canonical For Archive"
 msgstr "一覧ページのカノニカル"
 
-#: src/Tarosky/Sitemap/Setting.php:273
+#: src/Tarosky/Sitemap/Setting.php:319
 msgid ""
 "WordPress has canonical link only for singular pages. This option provides "
 "canonical features to archive pages."
@@ -300,84 +327,95 @@ msgstr ""
 "WordPressは記事詳細ページしかcanonicalリンクを主強くしません。この設定は一覧"
 "ページにカノニカルを提供します。"
 
-#: src/Tarosky/Sitemap/Setting.php:277
+#: src/Tarosky/Sitemap/Setting.php:323
 msgid "Taxonomy Page"
 msgstr "タクソノミー・ページ"
 
-#: src/Tarosky/Sitemap/Setting.php:281
+#: src/Tarosky/Sitemap/Setting.php:327
 msgid "Author Archive"
 msgstr "著者アーカイブ"
 
-#: src/Tarosky/Sitemap/Setting.php:285
+#: src/Tarosky/Sitemap/Setting.php:331
 msgid "Blog Archive"
 msgstr "投稿一覧"
 
-#: src/Tarosky/Sitemap/Setting.php:289
+#: src/Tarosky/Sitemap/Setting.php:335
 msgid "Post Type Archive"
 msgstr "投稿タイプ一覧"
 
-#: src/Tarosky/Sitemap/Setting.php:296
+#: src/Tarosky/Sitemap/Setting.php:342
+msgid "Attachment Pages"
+msgstr "添付ファイルページ"
+
+#: src/Tarosky/Sitemap/Setting.php:344
+msgid ""
+"Enable WordPress attachment pages instead of redirecting them to media files."
+msgstr ""
+"メディアファイルへリダイレクトせず、WordPressの添付ファイルページを有効にしま"
+"す。"
+
+#: src/Tarosky/Sitemap/Setting.php:349
 msgid "Separator"
 msgstr "区切り文字"
 
-#: src/Tarosky/Sitemap/Setting.php:298
+#: src/Tarosky/Sitemap/Setting.php:351
 msgid "Separator for document title."
 msgstr "titleタグの区切り文字です。"
 
-#: src/Tarosky/Sitemap/Setting.php:299
+#: src/Tarosky/Sitemap/Setting.php:352
 msgid "Default. -"
 msgstr "デフォルト -"
 
-#: src/Tarosky/Sitemap/Setting.php:304
+#: src/Tarosky/Sitemap/Setting.php:357
 msgid "Post Description"
 msgstr "投稿のデスクリプション"
 
-#: src/Tarosky/Sitemap/Setting.php:306
+#: src/Tarosky/Sitemap/Setting.php:359
 msgid "Each post in checked post type will have post description field."
 msgstr ""
 "チェックされた投稿タイプのそれぞれの投稿がdescriptionの設定項目を持ちます。"
 
-#: src/Tarosky/Sitemap/Setting.php:312
+#: src/Tarosky/Sitemap/Setting.php:365
 msgid "Description"
 msgstr "デスクリプション"
 
-#: src/Tarosky/Sitemap/Setting.php:314
+#: src/Tarosky/Sitemap/Setting.php:367
 msgid "The strategy for display description."
 msgstr "description を表示する方法を設定します。"
 
-#: src/Tarosky/Sitemap/Setting.php:317
+#: src/Tarosky/Sitemap/Setting.php:370
 msgid "Do nothing"
 msgstr "なにもしない"
 
-#: src/Tarosky/Sitemap/Setting.php:321
+#: src/Tarosky/Sitemap/Setting.php:374
 msgid "Automatic Generate"
 msgstr "自動生成"
 
-#: src/Tarosky/Sitemap/Setting.php:325
+#: src/Tarosky/Sitemap/Setting.php:378
 msgid "Display if specified(excerpt, description, etc.)"
 msgstr "指定されたものを表示（抜粋分、説明など）"
 
-#: src/Tarosky/Sitemap/Setting.php:333
+#: src/Tarosky/Sitemap/Setting.php:386
 msgid "Front page"
 msgstr "フロントページ"
 
-#: src/Tarosky/Sitemap/Setting.php:335
+#: src/Tarosky/Sitemap/Setting.php:388
 msgid "Description for front page."
 msgstr "フロントページの説明文です。"
 
-#: src/Tarosky/Sitemap/Setting.php:340
+#: src/Tarosky/Sitemap/Setting.php:393
 msgid "Render OGP"
 msgstr "OGPを出力する"
 
-#: src/Tarosky/Sitemap/Setting.php:342
+#: src/Tarosky/Sitemap/Setting.php:395
 msgid "Display OGP in head tag."
 msgstr "OGPをheadタグに出力する。"
 
-#: src/Tarosky/Sitemap/Setting.php:347
+#: src/Tarosky/Sitemap/Setting.php:400
 msgid "Default Image"
 msgstr "デフォルト画像"
 
-#: src/Tarosky/Sitemap/Setting.php:349
+#: src/Tarosky/Sitemap/Setting.php:402
 msgid ""
 "Attachment ID of default image. This image is used for page without featured "
 "image.."
@@ -385,72 +423,183 @@ msgstr ""
 "デフォルト画像の添付ファイルID。アイキャッチ画像のないページでこの画像が使わ"
 "れます。"
 
-#: src/Tarosky/Sitemap/Setting.php:354
+#: src/Tarosky/Sitemap/Setting.php:407
 msgid "Facebook App ID"
 msgstr "FacebookアプリID"
 
-#: src/Tarosky/Sitemap/Setting.php:356
+#: src/Tarosky/Sitemap/Setting.php:409
 msgid "Facebook App ID. Required for Facebook page and retargeting ad"
 msgstr ""
 "Facebook アプリIDを入力してください。Facebookページやリターゲティング広告で使"
 "われます"
 
-#: src/Tarosky/Sitemap/Setting.php:361
+#: src/Tarosky/Sitemap/Setting.php:414
 msgid "Facebook Page URL"
 msgstr "FacebookページURL"
 
-#: src/Tarosky/Sitemap/Setting.php:363
+#: src/Tarosky/Sitemap/Setting.php:416
 msgid "Displayed as Author of this site in Facebook."
 msgstr "Facebookで投稿の作者として表示されます。"
 
-#: src/Tarosky/Sitemap/Setting.php:368
+#: src/Tarosky/Sitemap/Setting.php:421
 msgid "X(ex-Twitter) screen name"
 msgstr "X（前twitter）スクリーン名"
 
-#: src/Tarosky/Sitemap/Setting.php:370
+#: src/Tarosky/Sitemap/Setting.php:423
 msgid "e.g. @elonmask"
 msgstr "例・@elonmask"
 
-#: src/Tarosky/Sitemap/Setting.php:375
+#: src/Tarosky/Sitemap/Setting.php:428
 msgid "X card size"
 msgstr "Xカードサイズ"
 
-#: src/Tarosky/Sitemap/Setting.php:377
+#: src/Tarosky/Sitemap/Setting.php:430
 msgid "Card size shared on X."
 msgstr "Xでシェアされたときのカードサイズです。"
 
-#: src/Tarosky/Sitemap/Setting.php:392
+#: src/Tarosky/Sitemap/Setting.php:445
 msgid "Article Post Type"
 msgstr "記事の投稿タイプ"
 
-#: src/Tarosky/Sitemap/Setting.php:395
+#: src/Tarosky/Sitemap/Setting.php:448
 msgid "Checked post type will display JSON-LD in head tag."
 msgstr "チェックした投稿タイプで JSON-LD を head タグに表示します。"
 
-#: src/Tarosky/Sitemap/Setting.php:400
+#: src/Tarosky/Sitemap/Setting.php:453
 msgid "Publisher Name"
 msgstr "発行者名"
 
-#: src/Tarosky/Sitemap/Setting.php:402
+#: src/Tarosky/Sitemap/Setting.php:455
 msgid "Publisher name of article. Default is site name."
 msgstr "記事の発行者名。デフォルトはサイト名です。"
 
-#: src/Tarosky/Sitemap/Setting.php:408
+#: src/Tarosky/Sitemap/Setting.php:461
 msgid "Publisher URL"
 msgstr "発行者URL"
 
-#: src/Tarosky/Sitemap/Setting.php:410
+#: src/Tarosky/Sitemap/Setting.php:463
 msgid "Publisher URL of article. Default is site URL."
 msgstr "記事発行者のURL。デフォルトはサイトURLです。"
 
-#: src/Tarosky/Sitemap/Setting.php:416
+#: src/Tarosky/Sitemap/Setting.php:469
 msgid "Publisher Logo"
 msgstr "発行者ロゴ"
 
-#: src/Tarosky/Sitemap/Setting.php:418
-msgid "Attachment ID of the publisher. Default is site icon."
-msgstr "発行者ロゴの添付ファイルID。デフォルトはサイトアイコンになります。"
+#: src/Tarosky/Sitemap/Setting.php:471
+msgid "Attachment ID of the publisher. Default is site logo, then site icon."
+msgstr ""
+"パブリッシャーのロゴの添付ファイルID。未設定の場合はサイトロゴ、それもなけれ"
+"ばサイトアイコンを使います。"
 
-#: src/Tarosky/Sitemap/Setting.php:487
+#: src/Tarosky/Sitemap/Setting.php:476
+msgid "Organization"
+msgstr "組織"
+
+#: src/Tarosky/Sitemap/Setting.php:478
+msgid ""
+"Display Organization JSON-LD on the front page. Publisher name, URL and logo "
+"are used as the organization's."
+msgstr ""
+"トップページに組織（Organization）のJSON-LDを出力します。組織名・URL・ロゴに"
+"はパブリッシャーの設定を使います。"
+
+#: src/Tarosky/Sitemap/Setting.php:483
+msgid "Organization Type"
+msgstr "組織タイプ"
+
+#: src/Tarosky/Sitemap/Setting.php:485
+msgid ""
+"Schema type of the organization. Also used for the publisher of articles."
+msgstr "組織のスキーマタイプ。記事のパブリッシャーにも使われます。"
+
+#: src/Tarosky/Sitemap/Setting.php:492
+msgid "NewsMediaOrganization (Media site)"
+msgstr "NewsMediaOrganization（メディアサイト）"
+
+#: src/Tarosky/Sitemap/Setting.php:496
+msgid "Corporation (Company site)"
+msgstr "Corporation（企業サイト）"
+
+#: src/Tarosky/Sitemap/Setting.php:504
+msgid "Organization Description"
+msgstr "組織の説明"
+
+#: src/Tarosky/Sitemap/Setting.php:506
+msgid "Description of the organization."
+msgstr "組織の説明文です。"
+
+#: src/Tarosky/Sitemap/Setting.php:511
+msgid "Organization sameAs"
+msgstr "組織の関連URL（sameAs）"
+
+#: src/Tarosky/Sitemap/Setting.php:513
+msgid ""
+"URLs of other pages about the organization (e.g. Wikipedia, social "
+"accounts). One URL per line."
+msgstr ""
+"この組織について書かれた他のページのURL（Wikipedia、SNSアカウントなど）。1行"
+"に1つずつ入力してください。"
+
+#: src/Tarosky/Sitemap/Setting.php:519
+msgid "Parent Organization Name"
+msgstr "親組織の名前"
+
+#: src/Tarosky/Sitemap/Setting.php:521
+msgid "e.g. The publishing company of this media."
+msgstr "例：このメディアを発行している会社"
+
+#: src/Tarosky/Sitemap/Setting.php:526
+msgid "Parent Organization URL"
+msgstr "親組織のURL"
+
+#: src/Tarosky/Sitemap/Setting.php:528
+msgid ""
+"Official URL of the parent organization. Required to output "
+"parentOrganization. Use the same URL as the parent site's Publisher URL to "
+"link them."
+msgstr ""
+"親組織の公式URL。parentOrganizationの出力に必須です。親組織のサイトで設定して"
+"いるパブリッシャーURLと同じ値にすると、両者が同じ組織として結びつきます。"
+
+#: src/Tarosky/Sitemap/Setting.php:534
+msgid "Postal Code"
+msgstr "郵便番号"
+
+#: src/Tarosky/Sitemap/Setting.php:536
+msgid "Address of the organization."
+msgstr "組織の所在地です。"
+
+#: src/Tarosky/Sitemap/Setting.php:542
+msgid "Region"
+msgstr "都道府県"
+
+#: src/Tarosky/Sitemap/Setting.php:544
+msgid "State or prefecture."
+msgstr "都道府県や州。"
+
+#: src/Tarosky/Sitemap/Setting.php:549
+msgid "Locality"
+msgstr "市区町村"
+
+#: src/Tarosky/Sitemap/Setting.php:551
+msgid "City or ward."
+msgstr "市区町村。"
+
+#: src/Tarosky/Sitemap/Setting.php:556
+msgid "Street Address"
+msgstr "番地"
+
+#: src/Tarosky/Sitemap/Setting.php:562
+msgid "Country"
+msgstr "国"
+
+#: src/Tarosky/Sitemap/Setting.php:564
+msgid "ISO 3166-1 alpha-2 country code."
+msgstr "ISO 3166-1 alpha-2 の国コード（例：JP）。"
+
+#: src/Tarosky/Sitemap/Setting.php:634
 msgid "Preview: "
 msgstr "プレビュー："
+
+#~ msgid "Attachment ID of the publisher. Default is site icon."
+#~ msgstr "発行者ロゴの添付ファイルID。デフォルトはサイトアイコンになります。"

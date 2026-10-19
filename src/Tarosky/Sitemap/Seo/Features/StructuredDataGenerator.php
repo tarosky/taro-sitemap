@@ -66,11 +66,15 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 */
 	public function get_json_ld() {
 		$json_lds = [];
-		// Front page: output WebSite schema.
+		// Front page: output WebSite and Organization schema.
 		if ( is_front_page() ) {
 			$website_json_ld = $this->get_website_structure();
 			if ( $website_json_ld ) {
 				$json_lds[] = $website_json_ld;
+			}
+			$organization_json_ld = $this->get_organization_structure();
+			if ( $organization_json_ld ) {
+				$json_lds[] = $organization_json_ld;
 			}
 		}
 		// If this is singular (exclude front page to avoid Article on homepage).
@@ -223,18 +227,124 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	}
 
 	/**
-	 * @param $post
+	 * Get Organization structured data for front page.
 	 *
-	 * @return mixed|null
+	 * Returns an empty array unless the Organization output is enabled.
+	 *
+	 * @see https://developers.google.com/search/docs/appearance/structured-data/organization
+	 * @return array
 	 */
-	public function get_publisher_structure( $post ) {
-		$publisher = [
+	public function get_organization_structure() {
+		if ( ! $this->is_organization_enabled() ) {
+			return [];
+		}
+		$base        = $this->get_organization_base();
+		$json        = array_merge( [
+			'@context' => 'https://schema.org',
+			'@type'    => $this->get_organization_type(),
+			'@id'      => $this->build_organization_id( $base['url'] ),
+		], $base );
+		$description = trim( (string) $this->option( 'jsonld_organization_description' ) );
+		if ( $description ) {
+			$json['description'] = $description;
+		}
+		$same_as = $this->get_organization_same_as();
+		if ( ! empty( $same_as ) ) {
+			$json['sameAs'] = $same_as;
+		}
+		$address = $this->get_organization_address();
+		if ( ! empty( $address ) ) {
+			$json['address'] = $address;
+		}
+		$parent = $this->get_parent_organization();
+		if ( ! empty( $parent ) ) {
+			$json['parentOrganization'] = $parent;
+		}
+		/**
+		 * Filters the Organization structured data for the front page.
+		 *
+		 * @param array $json Organization structured data.
+		 * @return array Filtered Organization structured data.
+		 *
+		 * @hook tsmap_json_ld_organization_structure
+		 */
+		return apply_filters( 'tsmap_json_ld_organization_structure', $json );
+	}
+
+	/**
+	 * Is Organization output enabled?
+	 *
+	 * @return bool
+	 */
+	public function is_organization_enabled() {
+		return (bool) $this->option( 'jsonld_organization' );
+	}
+
+	/**
+	 * Get the schema type of the organization.
+	 *
+	 * @return string
+	 */
+	public function get_organization_type() {
+		$type = $this->option( 'jsonld_organization_type' );
+		return in_array( $type, [ 'NewsMediaOrganization', 'Corporation' ], true ) ? $type : 'Organization';
+	}
+
+	/**
+	 * Build the @id of an Organization node from its URL.
+	 *
+	 * The same organization gets the same @id across sites,
+	 * e.g. media sites can refer to their publishing company.
+	 *
+	 * @param string $url Organization URL.
+	 * @return string
+	 */
+	public function build_organization_id( $url ) {
+		return trailingslashit( $url ) . '#organization';
+	}
+
+	/**
+	 * Get parent organization reference.
+	 *
+	 * @return array Empty array if parent URL is not set.
+	 */
+	protected function get_parent_organization() {
+		$url = trim( (string) $this->option( 'jsonld_organization_parent_url' ) );
+		if ( ! preg_match( '#^https?://.+#', $url ) ) {
+			return [];
+		}
+		$parent = [
+			'@type' => 'Organization',
+			'@id'   => $this->build_organization_id( $url ),
+			'url'   => $url,
+		];
+		$name   = trim( (string) $this->option( 'jsonld_organization_parent_name' ) );
+		if ( $name ) {
+			$parent['name'] = $name;
+		}
+		return $parent;
+	}
+
+	/**
+	 * Get name, url and logo of the organization.
+	 *
+	 * Shared by Organization and Article publisher.
+	 *
+	 * @return array
+	 */
+	protected function get_organization_base() {
+		$base = [
 			'name' => get_bloginfo( 'name' ),
 			'url'  => home_url( '/' ),
 		];
-		$site_icon = get_site_icon_url( 'full' );
-		if ( $site_icon ) {
-			$publisher['logo'] = $site_icon;
+		// Fallback logo: site logo, then site icon.
+		$site_logo = get_theme_mod( 'custom_logo' );
+		$logo      = $site_logo ? wp_get_attachment_image_url( $site_logo, 'full' ) : '';
+		if ( ! $logo ) {
+			$logo = get_site_icon_url( 'full' );
+		}
+		if ( $logo ) {
+			$base['logo'] = $logo;
 		}
 		foreach ( [ 'name', 'url', 'logo' ] as $key ) {
 			$option_key = 'jsonld_publisher_' . $key;
@@ -245,9 +355,63 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 				$option = $this->option( $option_key );
 			}
 			if ( $option ) {
-				$publisher[ $key ] = $option;
+				$base[ $key ] = $option;
 			}
 		}
+		return $base;
+	}
+
+	/**
+	 * Get sameAs URLs from the setting (one URL per line).
+	 *
+	 * @return string[]
+	 */
+	protected function get_organization_same_as() {
+		$lines = preg_split( '/\R/u', (string) $this->option( 'jsonld_organization_same_as' ) );
+		$urls  = array_filter( array_map( 'trim', $lines ), function ( $line ) {
+			return (bool) preg_match( '#^https?://.+#', $line );
+		} );
+		return array_values( array_unique( $urls ) );
+	}
+
+	/**
+	 * Get PostalAddress of the organization.
+	 *
+	 * @return array Empty array if no address field is set.
+	 */
+	protected function get_organization_address() {
+		$address = [];
+		foreach ( [
+			'postalCode'      => 'postal_code',
+			'addressRegion'   => 'region',
+			'addressLocality' => 'locality',
+			'streetAddress'   => 'street',
+			'addressCountry'  => 'country',
+		] as $property => $key ) {
+			$value = trim( (string) $this->option( 'jsonld_organization_' . $key ) );
+			if ( $value ) {
+				$address[ $property ] = $value;
+			}
+		}
+		if ( empty( $address ) ) {
+			return [];
+		}
+		return array_merge( [ '@type' => 'PostalAddress' ], $address );
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return mixed|null
+	 */
+	public function get_publisher_structure( $post ) {
+		$base      = $this->get_organization_base();
+		$publisher = [ '@type' => $this->get_organization_type() ];
+		if ( $this->is_organization_enabled() ) {
+			// Refer to the Organization node on the front page.
+			$publisher['@id'] = $this->build_organization_id( $base['url'] );
+		}
+		$publisher = array_merge( $publisher, $base );
 		/**
 		 * Filters the publisher structure for JSON-LD structured data.
 		 *
