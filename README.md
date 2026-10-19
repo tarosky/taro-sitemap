@@ -97,15 +97,15 @@ Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap).
 
 ## Changelog
 
-### 2.6.0
+### 3.0.0
 
+* **Breaking:** Requires PHP 8.1 or later.
 * Add Organization structured data (JSON-LD) on the front page with description, sameAs, address and parent organization.
 * Add organization type setting (Organization / NewsMediaOrganization / Corporation).
 * Add `@type` to the publisher of Article and refer to the Organization by `@id`.
 * Publisher logo now falls back to the site logo before the site icon.
 * Add filter `tsmap_json_ld_organization_structure`.
 * Add option to enable attachment pages.
-* Bump PHP minimum version to 8.1.
 * Fix typo in the setting section name.
 
 ### 2.4.0
