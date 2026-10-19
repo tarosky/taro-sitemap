@@ -124,7 +124,7 @@ msgid "OGP setting. Displayed on social media."
 msgstr ""
 
 #: src/Tarosky/Sitemap/Setting.php:129
-msgid "Structured Date"
+msgid "Structured Data"
 msgstr ""
 
 #: src/Tarosky/Sitemap/Setting.php:129
