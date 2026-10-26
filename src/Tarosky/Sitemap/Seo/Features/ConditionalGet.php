@@ -6,7 +6,7 @@ namespace Tarosky\Sitemap\Seo\Features;
 use Tarosky\Sitemap\Pattern\AbstractFeaturePattern;
 
 /**
- * Send ETag / Last-Modified and respond 304 to conditional requests.
+ * Send ETag and optionally respond 304 to conditional requests.
  *
  * Lets crawlers like Googlebot reuse cached pages.
  *
@@ -18,7 +18,7 @@ class ConditionalGet extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function is_active(): bool {
-		return (bool) $this->option( 'conditional_get' );
+		return (bool) $this->option( 'etag' );
 	}
 
 	/**
@@ -30,7 +30,7 @@ class ConditionalGet extends AbstractFeaturePattern {
 	}
 
 	/**
-	 * Send headers and exit with 304 if not modified.
+	 * Send ETag and exit with 304 if enabled and not modified.
 	 *
 	 * @return void
 	 */
@@ -39,13 +39,13 @@ class ConditionalGet extends AbstractFeaturePattern {
 		if ( ! $post || headers_sent() ) {
 			return;
 		}
-		$etag          = $this->get_etag( $post );
-		$last_modified = $this->get_last_modified( $post );
+		$etag = $this->get_etag( $post );
 		header( 'ETag: ' . $etag );
-		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $last_modified ) . ' GMT' );
-		$if_none_match     = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) : '';
-		$if_modified_since = isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ? wp_unslash( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) : '';
-		if ( $this->is_not_modified( $etag, $last_modified, $if_none_match, $if_modified_since ) ) {
+		if ( ! $this->option( 'etag_304' ) ) {
+			return;
+		}
+		$if_none_match = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) : '';
+		if ( $this->is_not_modified( $etag, $if_none_match ) ) {
 			status_header( 304 );
 			exit;
 		}
@@ -70,16 +70,14 @@ class ConditionalGet extends AbstractFeaturePattern {
 			return null;
 		}
 		/**
-		 * Filters whether to handle conditional requests for the post.
-		 *
-		 * Return false for posts whose HTML changes without updating the post itself.
+		 * Filters whether to send ETag for the post.
 		 *
 		 * @param bool     $should_handle Default true.
 		 * @param \WP_Post $post          Post object.
 		 *
-		 * @hook tsmap_conditional_get_enabled
+		 * @hook tsmap_etag_enabled
 		 */
-		if ( ! apply_filters( 'tsmap_conditional_get_enabled', true, $post ) ) {
+		if ( ! apply_filters( 'tsmap_etag_enabled', true, $post ) ) {
 			return null;
 		}
 		return $post;
@@ -113,64 +111,22 @@ class ConditionalGet extends AbstractFeaturePattern {
 	}
 
 	/**
-	 * Get last modified timestamp of the post, including approved comments.
+	 * Does If-None-Match match the current ETag? (RFC 9110 13.1.2)
 	 *
-	 * @param \WP_Post $post Post object.
-	 * @return int UNIX timestamp.
-	 */
-	public function get_last_modified( $post ) {
-		$last_modified = (int) strtotime( $post->post_modified_gmt . ' UTC' );
-		if ( 0 < $post->comment_count ) {
-			$comments = get_comments( [
-				'post_id' => $post->ID,
-				'status'  => 'approve',
-				'number'  => 1,
-				'orderby' => 'comment_date_gmt',
-				'order'   => 'DESC',
-			] );
-			if ( $comments ) {
-				$last_modified = max( $last_modified, (int) strtotime( $comments[0]->comment_date_gmt . ' UTC' ) );
-			}
-		}
-		/**
-		 * Filters the last modified timestamp of the post.
-		 *
-		 * @param int      $last_modified UNIX timestamp.
-		 * @param \WP_Post $post          Post object.
-		 *
-		 * @hook tsmap_last_modified
-		 */
-		return (int) apply_filters( 'tsmap_last_modified', $last_modified, $post );
-	}
-
-	/**
-	 * Is the resource not modified? (RFC 9110 13.2.2)
-	 *
-	 * If-None-Match takes precedence over If-Modified-Since.
-	 *
-	 * @param string $etag              Current ETag.
-	 * @param int    $last_modified     Current last modified timestamp.
-	 * @param string $if_none_match     If-None-Match header.
-	 * @param string $if_modified_since If-Modified-Since header.
+	 * @param string $etag          Current ETag.
+	 * @param string $if_none_match If-None-Match header.
 	 * @return bool
 	 */
-	public function is_not_modified( $etag, $last_modified, $if_none_match, $if_modified_since ) {
-		if ( '' !== trim( $if_none_match ) ) {
-			if ( '*' === trim( $if_none_match ) ) {
+	public function is_not_modified( $etag, $if_none_match ) {
+		if ( '*' === trim( $if_none_match ) ) {
+			return true;
+		}
+		// Weak comparison: ignore W/ prefix.
+		$current = preg_replace( '#^W/#', '', $etag );
+		foreach ( explode( ',', $if_none_match ) as $tag ) {
+			if ( preg_replace( '#^W/#', '', trim( $tag ) ) === $current ) {
 				return true;
 			}
-			// Weak comparison: ignore W/ prefix.
-			$current = preg_replace( '#^W/#', '', $etag );
-			foreach ( explode( ',', $if_none_match ) as $tag ) {
-				if ( preg_replace( '#^W/#', '', trim( $tag ) ) === $current ) {
-					return true;
-				}
-			}
-			return false;
-		}
-		if ( '' !== trim( $if_modified_since ) ) {
-			$since = strtotime( $if_modified_since );
-			return false !== $since && $last_modified <= $since;
 		}
 		return false;
 	}

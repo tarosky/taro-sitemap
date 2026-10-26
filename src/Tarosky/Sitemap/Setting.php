@@ -345,11 +345,18 @@ class Setting extends Singleton {
 				'label'   => __( 'Enable WordPress attachment pages instead of redirecting them to media files.', 'tsmap' ),
 			],
 			[
-				'id'      => 'conditional_get',
+				'id'      => 'etag',
 				'section' => 'http',
-				'title'   => __( 'ETag / Last-Modified', 'tsmap' ),
+				'title'   => __( 'ETag', 'tsmap' ),
 				'type'    => 'bool',
-				'label'   => __( 'Send ETag and Last-Modified headers on singular pages and respond 304 Not Modified to conditional requests. Logged-in users, previews and password protected posts are excluded. The ETag changes only when the post or its comments are updated; use filter hooks to take other parts of the page into account.', 'tsmap' ),
+				'label'   => __( 'Send ETag header on singular pages. The page body is always returned. Logged-in users, previews and password protected posts are excluded. The ETag changes only when the post or its comments are updated.', 'tsmap' ),
+			],
+			[
+				'id'      => 'etag_304',
+				'section' => 'http',
+				'title'   => __( '304 Not Modified', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Respond 304 Not Modified without body if If-None-Match matches the ETag. For sites without CDN. Do not enable behind CDNs like CloudFront: pages will stay in the CDN cache until the post is updated.', 'tsmap' ),
 			],
 			[
 				'id'          => 'separator',
