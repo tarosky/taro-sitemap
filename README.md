@@ -85,6 +85,27 @@ add_filter( 'tsmap_json_ld_organization_structure', function( $json ) {
 } );
 ```
 
+#### HTTP Cache (ETag / Last-Modified)
+
+Enable "ETag / Last-Modified" in <code>Admin screen -> Tools -> Sitemap & SEO -> HTTP Cache</code> to send `ETag` and `Last-Modified` headers on singular pages and respond `304 Not Modified` to conditional requests from crawlers ([detail](https://developers.google.com/search/blog/2024/12/crawling-december-caching)).
+
+- Logged-in users, previews and password protected posts are excluded.
+- The ETag is weak and consists of post ID, modified date and comment count. `Last-Modified` also considers the latest approved comment.
+- If the page HTML depends on other things, add them to the ETag or disable the feature per post.
+
+```
+// Add theme version to ETag.
+add_filter( 'tsmap_etag_components', function( $components, $post ) {
+	$components[] = wp_get_theme()->get( 'Version' );
+	return $components;
+}, 10, 2 );
+
+// Disable for specific posts.
+add_filter( 'tsmap_conditional_get_enabled', function( $enabled, $post ) {
+	return 'page' !== $post->post_type;
+}, 10, 2 );
+```
+
 ## Installation
 
 - Download zip and unpack it.
@@ -106,6 +127,7 @@ Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap).
 * Publisher logo now falls back to the site logo before the site icon.
 * Add filter `tsmap_json_ld_organization_structure`.
 * Add option to enable attachment pages.
+* Add option to send ETag / Last-Modified headers and respond 304 to conditional requests.
 * Fix typo in the setting section name.
 
 ### 2.4.0
