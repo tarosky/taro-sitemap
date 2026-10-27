@@ -72,6 +72,8 @@ function tsmap_init() {
 	// 5. Sitemap exclusion.
 	\Tarosky\Sitemap\Seo\Features\PostSitemapExclusion::get_instance();
 	\Tarosky\Sitemap\Seo\Features\NewsSitemapExclusion::get_instance();
+	// 6. HTTP cache.
+	\Tarosky\Sitemap\Seo\Features\ConditionalGet::get_instance();
 
 	// Register assets.
 	add_action( 'init', 'tsmap_register_assets' );

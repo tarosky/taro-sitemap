@@ -165,6 +165,7 @@ class Setting extends Singleton {
 			[ 'meta', __( 'Meta', 'tsmap' ), __( 'Additional setting for <code>&lt;head&gt;</code> tag.', 'tsmap' ) ],
 			[ 'ogp', __( 'OGP', 'tsmap' ), __( 'OGP setting. Displayed on social media.', 'tsmap' ) ],
 			[ 'json-ld', __( 'Structured Data', 'tsmap' ), __( 'Display structured data as JSON-LD in <code>&lt;head&gt;</code> tag. Filter hooks <code>tsmap_json_ld</code> is also available.', 'tsmap' ) ],
+			[ 'http', __( 'HTTP Cache', 'tsmap' ), __( 'Let crawlers reuse cached pages with conditional requests.', 'tsmap' ) ],
 		] as list( $key, $title, $description ) ) {
 			add_settings_section( 'tsmap_setting_' . $key, $title, function () use ( $description ) {
 				printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
@@ -342,6 +343,20 @@ class Setting extends Singleton {
 				'title'   => __( 'Attachment Pages', 'tsmap' ),
 				'type'    => 'bool',
 				'label'   => __( 'Enable WordPress attachment pages instead of redirecting them to media files.', 'tsmap' ),
+			],
+			[
+				'id'      => 'etag',
+				'section' => 'http',
+				'title'   => __( 'ETag', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Send ETag header on singular pages. The page body is always returned. Logged-in users, previews and password protected posts are excluded. The ETag changes only when the post or its comments are updated.', 'tsmap' ),
+			],
+			[
+				'id'      => 'etag_304',
+				'section' => 'http',
+				'title'   => __( '304 Not Modified', 'tsmap' ),
+				'type'    => 'bool',
+				'label'   => __( 'Respond 304 Not Modified without body if If-None-Match matches the ETag. For sites without CDN. Do not enable behind CDNs like CloudFront: pages will stay in the CDN cache until the post is updated.', 'tsmap' ),
 			],
 			[
 				'id'          => 'separator',

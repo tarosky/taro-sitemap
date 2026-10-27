@@ -85,6 +85,30 @@ add_filter( 'tsmap_json_ld_organization_structure', function( $json ) {
 } );
 ```
 
+#### HTTP Cache (ETag)
+
+Googlebot caches pages with `ETag` and sends `If-None-Match` when recrawling. If the ETag matches, the page body need not be transferred again ([detail](https://developers.google.com/search/blog/2024/12/crawling-december-caching)).
+
+Settings are in <code>Admin screen -> Tools -> Sitemap & SEO -> HTTP Cache</code>.
+
+- **ETag**: Send `ETag` header on singular pages. The body is always returned. If the site is behind a CDN like CloudFront, the CDN responds `304` to crawlers.
+- **304 Not Modified**: Respond `304` without body if `If-None-Match` matches. For sites without CDN only. Behind CloudFront, the CDN revalidates expired cache with `If-None-Match` and keeps the stale page as long as the origin returns `304`.
+
+Logged-in users, previews and password protected posts are excluded. The ETag is weak and consists of post ID, modified date and comment count. If the page HTML depends on other things, add them to the ETag or disable it per post.
+
+```
+// Add theme version to ETag.
+add_filter( 'tsmap_etag_components', function( $components, $post ) {
+	$components[] = wp_get_theme()->get( 'Version' );
+	return $components;
+}, 10, 2 );
+
+// Disable for specific posts.
+add_filter( 'tsmap_etag_enabled', function( $enabled, $post ) {
+	return 'page' !== $post->post_type;
+}, 10, 2 );
+```
+
 ## Installation
 
 - Download zip and unpack it.
@@ -106,6 +130,7 @@ Feel free to contact us in [GitHub](https://github.com/tarosky/tarosky-sitemap).
 * Publisher logo now falls back to the site logo before the site icon.
 * Add filter `tsmap_json_ld_organization_structure`.
 * Add option to enable attachment pages.
+* Add options to send ETag header and respond 304 to conditional requests.
 * Fix typo in the setting section name.
 
 ### 2.4.0
