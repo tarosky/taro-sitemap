@@ -46,6 +46,34 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	}
 
 	/**
+	 * Get author structures from Virtual Member.
+	 *
+	 * @param \WP_Post $post Post object.
+	 * @return array
+	 */
+	protected function get_virtual_member_authors( $post ) {
+		$integration = $this->get_virtual_member_integration();
+		$members     = [];
+		foreach ( $integration->get_members( $post ) as $member ) {
+			$j = $integration->get_profile_schema( $member );
+			if ( ! empty( $j ) ) {
+				$members[] = $j;
+			}
+		}
+		if ( empty( $members ) ) {
+			// Try to get default member.
+			$default = $integration->get_default_member();
+			if ( $default ) {
+				$j = $integration->get_profile_schema( $default );
+				if ( ! empty( $j ) ) {
+					$members[] = $j;
+				}
+			}
+		}
+		return $members;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected function is_active(): bool {
@@ -148,7 +176,7 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	 * @return array
 	 */
 	public function get_article_structure( $post ) {
-		$json   = [
+		$json = [
 			'@context'         => 'http://schema.org',
 			'@type'            => /**
 			 * Filters the article type for JSON-LD structured data.
@@ -170,6 +198,9 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 			'author'           => $this->get_authors_structure( $post ),
 			'publisher'        => $this->get_publisher_structure( $post ),
 		];
+		if ( empty( $json['author'] ) ) {
+			unset( $json['author'] );
+		}
 		$images = [];
 		if ( has_post_thumbnail( $post ) ) {
 			$images[] = wp_get_attachment_image_url( get_post_thumbnail_id( $post ), 'full' );
@@ -183,11 +214,27 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 	/**
 	 * @param \WP_Post $post
 	 *
-	 * @return array
+	 * @return array Empty array if no author can be determined.
 	 */
 	public function get_authors_structure( $post ) {
+		// If virtual member exists, set author.
+		$members = $this->get_virtual_member_authors( $post );
+		if ( ! empty( $members ) ) {
+			return $members;
+		}
 		$author = get_userdata( $post->post_author );
-		$json   = [
+		if ( ! $author ) {
+			/**
+			 * Filters the fallback author when the post author does not exist.
+			 *
+			 * @param array    $author Fallback author structure. Default is the publisher. Return an empty array to omit author.
+			 * @param \WP_Post $post   Post object.
+			 *
+			 * @hook tsmap_json_ld_author_fallback
+			 */
+			return apply_filters( 'tsmap_json_ld_author_fallback', $this->get_publisher_structure( $post ), $post );
+		}
+		$json = [
 			/**
 			 * Filters the author type for JSON-LD structured data.
 			 *
@@ -200,28 +247,6 @@ class StructuredDataGenerator extends AbstractFeaturePattern {
 		];
 		if ( preg_match( '#^https?://.+#', $author->user_url ) ) {
 			$json['url'] = $author->user_url;
-		}
-		// If virtual member exists, set author.
-		$integration = $this->get_virtual_member_integration();
-		$members     = [];
-		foreach ( $integration->get_members( $post ) as $member ) {
-			$j = $integration->get_profile_schema( $member );
-			if ( ! empty( $j ) ) {
-				$members[] = $j;
-			}
-		}
-		if ( empty( $members ) ) {
-			// Try to get default member.
-			$default = $integration->get_default_member();
-			if ( $default ) {
-				$j = $integration->get_profile_schema( $default );
-				if ( ! empty( $j ) ) {
-					$members[] = $j;
-				}
-			}
-		}
-		if ( ! empty( $members ) ) {
-			$json = $members;
 		}
 		return $json;
 	}
