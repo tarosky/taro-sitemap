@@ -7,6 +7,7 @@
 		"start": "wp-env start",
 		"update": "wp-env start --update",
 		"stop": "wp-env stop",
+		"destroy": "wp-env destroy",
 		"cli": "wp-env run cli wp",
 		"cli:test": "wp-env run tests-cli wp",
 		"test": "RESULT=${PWD##*/} && wp-env run tests-cli ./wp-content/plugins/$RESULT/vendor/bin/phpunit -c ./wp-content/plugins/$RESULT/phpunit.xml.dist",
