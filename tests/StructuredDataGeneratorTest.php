@@ -431,6 +431,112 @@ class StructuredDataGeneratorTest extends WP_UnitTestCase {
 		$this->assertEquals( 'Organization', $author['@type'] );
 	}
 
+	/**
+	 * When post_author is 0, falls back to the publisher structure.
+	 */
+	public function test_authors_structure_falls_back_to_publisher_when_no_author() {
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => 0,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertEquals( $this->generator->get_publisher_structure( $post ), $author );
+	}
+
+	/**
+	 * When the post author has been deleted, falls back to the publisher structure.
+	 */
+	public function test_authors_structure_falls_back_to_publisher_when_author_deleted() {
+		// Delete the user first: wp_delete_user() without reassign also deletes their posts.
+		$user_id = self::factory()->user->create();
+		wp_delete_user( $user_id );
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => $user_id,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertEquals( $this->generator->get_publisher_structure( $post ), $author );
+	}
+
+	/**
+	 * When post_author is 0 but a default virtual member exists, the member is used.
+	 */
+	public function test_authors_structure_uses_default_member_when_no_author() {
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => 0,
+		] );
+		$post = get_post( $post_id );
+
+		$default_member = self::factory()->post->create_and_get( [ 'post_type' => 'post', 'post_status' => 'publish' ] );
+		$default_schema = [ '@type' => 'Person', 'name' => 'Default Member' ];
+
+		$this->inject_virtual_member_mock( [], $default_member, [ $default_member->ID => $default_schema ] );
+
+		$author = $this->generator->get_authors_structure( $post );
+
+		$this->assertCount( 1, $author );
+		$this->assertEquals( $default_schema, $author[0] );
+	}
+
+	/**
+	 * The tsmap_json_ld_author_type filter is not applied when the author does not exist.
+	 */
+	public function test_author_type_filter_not_applied_when_no_author() {
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => 0,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		$called   = false;
+		$callback = function ( $type ) use ( &$called ) {
+			$called = true;
+			return $type;
+		};
+		add_filter( 'tsmap_json_ld_author_type', $callback );
+
+		$this->generator->get_authors_structure( $post );
+
+		remove_filter( 'tsmap_json_ld_author_type', $callback );
+
+		$this->assertFalse( $called, 'Author type filter should not receive a missing user.' );
+	}
+
+	/**
+	 * When tsmap_json_ld_author_fallback returns an empty array, the article has no author key.
+	 */
+	public function test_article_structure_omits_author_when_fallback_is_empty() {
+		$post_id = self::factory()->post->create( [
+			'post_status' => 'publish',
+			'post_author' => 0,
+		] );
+		$post = get_post( $post_id );
+
+		$this->inject_virtual_member_mock( [], null );
+
+		add_filter( 'tsmap_json_ld_author_fallback', '__return_empty_array' );
+
+		$article = $this->generator->get_article_structure( $post );
+
+		remove_filter( 'tsmap_json_ld_author_fallback', '__return_empty_array' );
+
+		$this->assertArrayNotHasKey( 'author', $article );
+		$this->assertArrayHasKey( 'publisher', $article );
+	}
+
 	// -----------------------------------------------------------------------
 	// Private helpers
 	// -----------------------------------------------------------------------
