@@ -32,6 +32,21 @@ class PostCanonicalTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Invalid input keeps the current value, empty input deletes it.
+	 */
+	public function test_save_canonical() {
+		$post_id = self::factory()->post->create();
+		$this->feature->save_canonical( $post_id, 'https://example.com/original' );
+		$this->assertEquals( 'https://example.com/original', get_post_meta( $post_id, '_tsmap_canonical', true ) );
+
+		$this->feature->save_canonical( $post_id, '/relative/path' );
+		$this->assertEquals( 'https://example.com/original', get_post_meta( $post_id, '_tsmap_canonical', true ), 'Invalid input keeps current value.' );
+
+		$this->feature->save_canonical( $post_id, '  ' );
+		$this->assertEquals( '', get_post_meta( $post_id, '_tsmap_canonical', true ), 'Empty input deletes value.' );
+	}
+
+	/**
 	 * Custom canonical overrides the permalink only for active post types.
 	 */
 	public function test_canonical_url() {

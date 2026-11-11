@@ -40,11 +40,26 @@ class PostCanonical extends AbstractFeaturePattern {
 	 * {@inheritDoc}
 	 */
 	protected function do_save( $post ): void {
-		$url = $this->sanitize( (string) filter_input( INPUT_POST, $this->meta_key() ) );
+		$this->save_canonical( $post->ID, (string) filter_input( INPUT_POST, $this->meta_key() ) );
+	}
+
+	/**
+	 * Save canonical URL from raw input.
+	 *
+	 * Empty input deletes the value. Invalid input keeps the current value.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $input   Raw input.
+	 * @return void
+	 */
+	public function save_canonical( $post_id, $input ) {
+		if ( '' === trim( $input ) ) {
+			delete_post_meta( $post_id, $this->meta_key() );
+			return;
+		}
+		$url = $this->sanitize( $input );
 		if ( $url ) {
-			update_post_meta( $post->ID, $this->meta_key(), $url );
-		} else {
-			delete_post_meta( $post->ID, $this->meta_key() );
+			update_post_meta( $post_id, $this->meta_key(), $url );
 		}
 	}
 
