@@ -3,45 +3,39 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tarosky Sitemap nightly\n"
-"Report-Msgid-Bugs-To: https://github.com/tarosky/taro-sitemap/issues\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/taro-sitemap\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: TAROSKY INC <info@tarosky.co.jp>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-26T02:27:19+00:00\n"
+"POT-Creation-Date: 2026-11-11T07:50:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: tsmap\n"
 
 #. Plugin Name of the plugin
-#: taro-sitemap.php
 msgid "Tarosky Sitemap"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: taro-sitemap.php
 msgid "https://wordpress.org/extend/plugins/taro-sitemap"
 msgstr ""
 
 #. Description of the plugin
-#: taro-sitemap.php
 msgid "Yet another sitemap plugin with more than 200,000 posts."
 msgstr ""
 
 #. Author of the plugin
-#: taro-sitemap.php
 msgid "Tarosky INC"
 msgstr ""
 
 #. Author URI of the plugin
-#: taro-sitemap.php
 msgid "https://tarosky.co.jp"
 msgstr ""
 
 #. translators: %s search query.
 #: src/Tarosky/Sitemap/Seo/Features/AutoDescription.php:132
-#, php-format
 msgid "Search results for: %s"
 msgstr ""
 
@@ -51,6 +45,14 @@ msgstr ""
 
 #: src/Tarosky/Sitemap/Seo/Features/NewsSitemapExclusion.php:46
 msgid "Exclude this post from news sitemap"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/PostCanonical.php:57
+msgid "Canonical URL"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Seo/Features/PostCanonical.php:60
+msgid "Leave empty to use the permalink."
 msgstr ""
 
 #: src/Tarosky/Sitemap/Seo/Features/PostDescription.php:58
@@ -92,7 +94,6 @@ msgstr ""
 
 #. translators: %1$s is URL, %2$s is robotx.txt url.
 #: src/Tarosky/Sitemap/Setting.php:91
-#, php-format
 msgid "The sitemap URL are listed below. You should register these URLs at <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Google Search Console</a>. They also appear in <a href=\"%2$s\">robots.txt</a>."
 msgstr ""
 
@@ -313,249 +314,257 @@ msgid "Post Type Archive"
 msgstr ""
 
 #: src/Tarosky/Sitemap/Setting.php:343
-msgid "Attachment Pages"
+msgid "Canonical For Posts"
 msgstr ""
 
 #: src/Tarosky/Sitemap/Setting.php:345
+msgid "Each post in checked post types will have canonical URL field."
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:351
+msgid "Attachment Pages"
+msgstr ""
+
+#: src/Tarosky/Sitemap/Setting.php:353
 msgid "Enable WordPress attachment pages instead of redirecting them to media files."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:350
+#: src/Tarosky/Sitemap/Setting.php:358
 msgid "ETag"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:352
+#: src/Tarosky/Sitemap/Setting.php:360
 msgid "Send ETag header on singular pages. The page body is always returned. Logged-in users, previews and password protected posts are excluded. The ETag changes only when the post or its comments are updated."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:357
+#: src/Tarosky/Sitemap/Setting.php:365
 msgid "304 Not Modified"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:359
+#: src/Tarosky/Sitemap/Setting.php:367
 msgid "Respond 304 Not Modified without body if If-None-Match matches the ETag. For sites without CDN. Do not enable behind CDNs like CloudFront: pages will stay in the CDN cache until the post is updated."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:364
+#: src/Tarosky/Sitemap/Setting.php:372
 msgid "Separator"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:366
+#: src/Tarosky/Sitemap/Setting.php:374
 msgid "Separator for document title."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:367
+#: src/Tarosky/Sitemap/Setting.php:375
 msgid "Default. -"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:372
+#: src/Tarosky/Sitemap/Setting.php:380
 msgid "Post Description"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:374
+#: src/Tarosky/Sitemap/Setting.php:382
 msgid "Each post in checked post type will have post description field."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:380
+#: src/Tarosky/Sitemap/Setting.php:388
 msgid "Description"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:382
+#: src/Tarosky/Sitemap/Setting.php:390
 msgid "The strategy for display description."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:385
+#: src/Tarosky/Sitemap/Setting.php:393
 msgid "Do nothing"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:389
+#: src/Tarosky/Sitemap/Setting.php:397
 msgid "Automatic Generate"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:393
+#: src/Tarosky/Sitemap/Setting.php:401
 msgid "Display if specified(excerpt, description, etc.)"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:401
+#: src/Tarosky/Sitemap/Setting.php:409
 msgid "Front page"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:403
+#: src/Tarosky/Sitemap/Setting.php:411
 msgid "Description for front page."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:408
+#: src/Tarosky/Sitemap/Setting.php:416
 msgid "Render OGP"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:410
+#: src/Tarosky/Sitemap/Setting.php:418
 msgid "Display OGP in head tag."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:415
+#: src/Tarosky/Sitemap/Setting.php:423
 msgid "Default Image"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:417
+#: src/Tarosky/Sitemap/Setting.php:425
 msgid "Attachment ID of default image. This image is used for page without featured image.."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:422
+#: src/Tarosky/Sitemap/Setting.php:430
 msgid "Facebook App ID"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:424
+#: src/Tarosky/Sitemap/Setting.php:432
 msgid "Facebook App ID. Required for Facebook page and retargeting ad"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:429
+#: src/Tarosky/Sitemap/Setting.php:437
 msgid "Facebook Page URL"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:431
+#: src/Tarosky/Sitemap/Setting.php:439
 msgid "Displayed as Author of this site in Facebook."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:436
+#: src/Tarosky/Sitemap/Setting.php:444
 msgid "X(ex-Twitter) screen name"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:438
+#: src/Tarosky/Sitemap/Setting.php:446
 msgid "e.g. @elonmask"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:443
+#: src/Tarosky/Sitemap/Setting.php:451
 msgid "X card size"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:445
+#: src/Tarosky/Sitemap/Setting.php:453
 msgid "Card size shared on X."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:460
+#: src/Tarosky/Sitemap/Setting.php:468
 msgid "Article Post Type"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:463
+#: src/Tarosky/Sitemap/Setting.php:471
 msgid "Checked post type will display JSON-LD in head tag."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:468
+#: src/Tarosky/Sitemap/Setting.php:476
 msgid "Publisher Name"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:470
+#: src/Tarosky/Sitemap/Setting.php:478
 msgid "Publisher name of article. Default is site name."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:476
+#: src/Tarosky/Sitemap/Setting.php:484
 msgid "Publisher URL"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:478
+#: src/Tarosky/Sitemap/Setting.php:486
 msgid "Publisher URL of article. Default is site URL."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:484
+#: src/Tarosky/Sitemap/Setting.php:492
 msgid "Publisher Logo"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:486
+#: src/Tarosky/Sitemap/Setting.php:494
 msgid "Attachment ID of the publisher. Default is site logo, then site icon."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:491
+#: src/Tarosky/Sitemap/Setting.php:499
 msgid "Organization"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:493
+#: src/Tarosky/Sitemap/Setting.php:501
 msgid "Display Organization JSON-LD on the front page. Publisher name, URL and logo are used as the organization's."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:498
+#: src/Tarosky/Sitemap/Setting.php:506
 msgid "Organization Type"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:500
+#: src/Tarosky/Sitemap/Setting.php:508
 msgid "Schema type of the organization. Also used for the publisher of articles."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:507
+#: src/Tarosky/Sitemap/Setting.php:515
 msgid "NewsMediaOrganization (Media site)"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:511
+#: src/Tarosky/Sitemap/Setting.php:519
 msgid "Corporation (Company site)"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:519
+#: src/Tarosky/Sitemap/Setting.php:527
 msgid "Organization Description"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:521
+#: src/Tarosky/Sitemap/Setting.php:529
 msgid "Description of the organization."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:526
+#: src/Tarosky/Sitemap/Setting.php:534
 msgid "Organization sameAs"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:528
+#: src/Tarosky/Sitemap/Setting.php:536
 msgid "URLs of other pages about the organization (e.g. Wikipedia, social accounts). One URL per line."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:534
+#: src/Tarosky/Sitemap/Setting.php:542
 msgid "Parent Organization Name"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:536
+#: src/Tarosky/Sitemap/Setting.php:544
 msgid "e.g. The publishing company of this media."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:541
+#: src/Tarosky/Sitemap/Setting.php:549
 msgid "Parent Organization URL"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:543
+#: src/Tarosky/Sitemap/Setting.php:551
 msgid "Official URL of the parent organization. Required to output parentOrganization. Use the same URL as the parent site's Publisher URL to link them."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:549
+#: src/Tarosky/Sitemap/Setting.php:557
 msgid "Postal Code"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:551
+#: src/Tarosky/Sitemap/Setting.php:559
 msgid "Address of the organization."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:557
+#: src/Tarosky/Sitemap/Setting.php:565
 msgid "Region"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:559
+#: src/Tarosky/Sitemap/Setting.php:567
 msgid "State or prefecture."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:564
+#: src/Tarosky/Sitemap/Setting.php:572
 msgid "Locality"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:566
+#: src/Tarosky/Sitemap/Setting.php:574
 msgid "City or ward."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:571
+#: src/Tarosky/Sitemap/Setting.php:579
 msgid "Street Address"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:577
+#: src/Tarosky/Sitemap/Setting.php:585
 msgid "Country"
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:579
+#: src/Tarosky/Sitemap/Setting.php:587
 msgid "ISO 3166-1 alpha-2 country code."
 msgstr ""
 
-#: src/Tarosky/Sitemap/Setting.php:649
+#: src/Tarosky/Sitemap/Setting.php:657
 msgid "Preview: "
 msgstr ""

@@ -338,6 +338,14 @@ class Setting extends Singleton {
 				],
 			],
 			[
+				'id'      => 'canonical_posts',
+				'section' => 'canonical',
+				'title'   => __( 'Canonical For Posts', 'tsmap' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Each post in checked post types will have canonical URL field.', 'tsmap' ),
+				'options' => $post_types,
+			],
+			[
 				'id'      => 'attachment_pages_enabled',
 				'section' => 'canonical',
 				'title'   => __( 'Attachment Pages', 'tsmap' ),

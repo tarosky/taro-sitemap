@@ -638,3 +638,19 @@ msgstr "ISO 3166-1 alpha-2 の国コード（例：JP）。"
 #: src/Tarosky/Sitemap/Setting.php:649
 msgid "Preview: "
 msgstr "プレビュー："
+
+#: src/Tarosky/Sitemap/Setting.php
+msgid "Canonical For Posts"
+msgstr "投稿のカノニカル"
+
+#: src/Tarosky/Sitemap/Setting.php
+msgid "Each post in checked post types will have canonical URL field."
+msgstr "チェックした投稿タイプの各投稿にカノニカルURLの入力欄を追加します。"
+
+#: src/Tarosky/Sitemap/Seo/Features/PostCanonical.php
+msgid "Canonical URL"
+msgstr "カノニカルURL"
+
+#: src/Tarosky/Sitemap/Seo/Features/PostCanonical.php
+msgid "Leave empty to use the permalink."
+msgstr "空欄の場合はパーマリンクを使います。"
